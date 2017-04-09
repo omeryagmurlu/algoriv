@@ -1,0 +1,1 @@
+console.error("SyntaxError: /home/omer/TSA Software Development/Software/app/containers/main.view.container.js: Unexpected token (11:2) while parsing file: /home/omer/TSA Software Development/Software/app/containers/main.view.container.js");
