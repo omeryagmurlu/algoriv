@@ -83,12 +83,6 @@ export default class Animator {
 	}
 
 	advanceTo(frame) {
-		if (frame === -1) {
-			this.frameIndex = -1;
-			this.pushDirectives({});
-			return;
-		}
-
 		this.didEnd = false;
 		if (frame > this.frames.length - 1) {
 			this.didEnd = true;
@@ -96,11 +90,14 @@ export default class Animator {
 			return;
 		}
 
+		const payload = (frame !== -1) ? this.frames[frame] : {};
+
 		this.frameIndex = frame;
-		this.pushDirectives(this.frames[frame]);
+		this.calculateProgress();
+		this.pushDirectives(payload);
 	}
 
 	calculateProgress() {
-
+		this.progress = Math.round((this.frameIndex / (this.frames.length - 1)) * 100);
 	}
 }
