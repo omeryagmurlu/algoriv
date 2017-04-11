@@ -1,6 +1,5 @@
 import React from 'react';
-import ClassNames from 'classnames';
 
-const Example = props => <div className="Example" > </div>;
+const Example = props => <div className="Example" > Example </div>;
 
 export default Example;
