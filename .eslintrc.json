@@ -6,6 +6,7 @@
     "node": true
   },
   "rules": {
+    "no-underscore-dangle": "off",
     "no-tabs": "off",
     "indent": ["error", "tab"],
     "arrow-parens": ["off"],
