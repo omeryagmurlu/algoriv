@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InputRange from 'react-input-range';
 import { Line } from 'rc-progress';
 
 import Header from './header.component';
@@ -11,34 +10,34 @@ const AlgorithmView = props => (
 		<Header algorithm={props.algorithm} />
 		<AlgorithmDetail algorithm={props.algorithm} />
 		<footer>
-			<InputRange
+			<div
 				maxValue={10}
 				minValue={0}
-				value={props.animationControls.speed}
-				onChange={props.animationControls.changeSpeed}
+				value={props.speed}
+				onChange={props.onChangeSpeed}
 			/>
-			<button id="toBegin" onClick={props.animationControls.toBegin} />
-			<button id="stepForward" onClick={props.animationControls.stepForward} />
-			<button id="pauseRestart" onClick={props.animationControls.pauseRestart} />
-			<button id="stepBackward" onClick={props.animationControls.stepBackward} />
-			<button id="toEnd" onClick={props.animationControls.toEnd} />
-			<Line percent={props.animationControls.progress} strokeWidth="4" strokeColor="#D3D3D3" />
+			<button id="toBegin" onClick={props.onToBegin} />
+			<button id="stepBackward" onClick={props.onStepBackward} />
+			<button id="pauseRestart" onClick={props.onPauseRestart} />
+			<button id="stepForward" onClick={props.onStepForward} />
+			<button id="toEnd" onClick={props.onToEnd} />
+			<Line percent={props.progress} strokeWidth="4" strokeColor="#D3D3D3" />
 		</footer>
 	</div>
 );
 
 AlgorithmView.propTypes = {
 	algorithm: PropTypes.object.isRequired,
-	animationControls: PropTypes.shape({
-		speed: PropTypes.number.isRequired,
-		changeSpeed: PropTypes.func.isRequired,
-		progress: PropTypes.number.isRequired,
-		toBegin: PropTypes.func.isRequired,
-		stepForward: PropTypes.func.isRequired,
-		pauseRestart: PropTypes.func.isRequired,
-		stepBackward: PropTypes.func.isRequired,
-		toEnd: PropTypes.func.isRequired,
-	}).isRequired
+	speed: PropTypes.number.isRequired,
+	progress: PropTypes.number.isRequired,
+	// isPaused: PropTypes.boolean.isRequired,
+
+	onChangeSpeed: PropTypes.func.isRequired,
+	onToBegin: PropTypes.func.isRequired,
+	onStepForward: PropTypes.func.isRequired,
+	onPauseRestart: PropTypes.func.isRequired,
+	onStepBackward: PropTypes.func.isRequired,
+	onToEnd: PropTypes.func.isRequired
 };
 
 export default AlgorithmView;

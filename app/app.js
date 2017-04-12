@@ -12,13 +12,13 @@ class App extends Component {
 		};
 	}
 
-	changeView(view) {
+	changeView = (view) => {
 		this.setState({ view });
 	}
 
 	render() {
 		return React.createElement(this.state.view, {
-			changeView: this.changeView.bind(this)
+			changeView: this.changeView
 		});
 	}
 }

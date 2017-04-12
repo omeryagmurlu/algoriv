@@ -6,7 +6,7 @@ const MainView = props => (
 		{AlgorithmsList.map(group => (
 			<nav key={group.title} >
 				<header>{group.title}</header>
-				{group.algorithms.map(alg => (
+				{group.algorithms.map(alg => ( // changing prop FIXME
 					<button key={alg.name} onClick={() => props.changeView(alg.view)}>
 						<header>{alg.name}</header><p>{alg.desc}</p>
 					</button>

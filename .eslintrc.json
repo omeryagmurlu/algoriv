@@ -27,6 +27,8 @@
     "react/prefer-stateless-function": "error"
   },
   "plugins": [
-    "react"
+    "react",
+    "jsx-a11y",
+    "import"
   ]
 }

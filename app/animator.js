@@ -1,64 +1,55 @@
 export default class Animator {
-	constructor(frames, pushDirectives, { frameTime = 1 }) {
-		Object.assign(this, { frames, pushDirectives, frameTime });
+	constructor(frames, changeHandler, frameTime = 1) {
+		Object.assign(this, { frames, changeHandler, frameTime });
 
 		this.frameIndex = -1;
-		this._speed = 1;
-		this.isPaused = true;
+		this.internalSpeed = 1;
+
+		this.didEnd = false;
 
 		this.speed = 5;
 		this.progress = 0;
-		this.didEnd = false;
+		this.directives = {};
+		this.isPaused = true;
 	}
 
-	changeSpeed(sp = 5) {
+	getSpeed = () => this.speed
+	getProgress = () => this.progress
+	getDirectives = () => this.directives
+	getIsPaused = () => this.isPaused
+
+	toBegin = () => this.advanceTo(-1)
+	toEnd = () => this.advanceTo(this.frames.length - 1)
+	stepForward = () => this.advance(1)
+	stepBackward = () => this.advance(-1)
+	pauseRestart = () => {
+		this.isPaused = !this.isPaused;
+		if (this.didEnd) {
+			this.didEnd = false;
+			return this.toBegin();
+		}
+		return this.changeHandler();
+	}
+
+	changeSpeed = (sp = 5) => {
 		let speed = sp;
 		if (sp >= 10) { speed = 10; }
 		if (sp <= 0) { speed = 0; }
+
 		this.speed = speed;
 
 		speed -= 5;
 		if (speed === 0) {
-			this._speed = 1;
-			return;
-		}
-
-		if (speed < 0) {
-			this._speed = (-1 * speed) + 1;
-			return;
-		}
-
-		if (speed > 0) {
-			this._speed = 1 / (speed + 1);
+			this.internalSpeed = 1;
+		} else if (speed < 0) {
+			this.internalSpeed = (-1 * speed) + 1;
+		} else if (speed > 0) {
+			this.internalSpeed = 1 / (speed + 1);
 		}
 	}
 
-	toBegin() {
-		this.advanceTo(-1);
-	}
-
-	toEnd() {
-		this.advanceTo(this.frames.length - 1);
-	}
-
-	stepForward() {
-		this.advance();
-	}
-
-	stepBackward() {
-		this.advance(-1);
-	}
-
-	pauseRestart() {
-		this.isPaused = !this.isPaused;
-		if (this.didEnd) {
-			this.didEnd = false;
-			this.toBegin();
-		}
-	}
-
-	mount() {
-		const timeout = fn => setTimeout(fn, (this.frameTime * this._speed) * 1000);
+	mount = () => {
+		const timeout = fn => setTimeout(fn, (this.frameTime * this.internalSpeed) * 1000);
 		const continuation = () => {
 			this.tick();
 			this.timer = timeout(continuation);
@@ -66,7 +57,7 @@ export default class Animator {
 		this.timer = timeout(continuation);
 	}
 
-	unmount() {
+	unmount = () => {
 		clearTimeout(this.timer);
 	}
 
@@ -87,14 +78,16 @@ export default class Animator {
 		if (frame > this.frames.length - 1) {
 			this.didEnd = true;
 			this.isPaused = true;
+			if (frame === this.frames.length) { // we must inform dumbs that animation is paused.
+				this.changeHandler();
+			}
 			return;
 		}
 
-		const payload = (frame !== -1) ? this.frames[frame] : {};
-
+		this.directives = (frame !== -1) ? this.frames[frame] : {};
 		this.frameIndex = frame;
 		this.calculateProgress();
-		this.pushDirectives(payload);
+		this.changeHandler();
 	}
 
 	calculateProgress() {

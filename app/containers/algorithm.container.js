@@ -8,14 +8,13 @@ class AlgorithmContainer extends Component {
 	constructor(props) {
 		super(props);
 
+		this.animator = new Animator(props.steps, this.handleAnimatorChange);
 		this.state = {
-			animationDirectives: {}
+			animationDirectives: this.animator.getDirectives(),
+			speed: this.animator.getSpeed(),
+			progress: this.animator.getProgress(),
+			isPaused: this.animator.getIsPaused()
 		};
-
-		this.animator = new Animator(
-			props.steps,
-			animationDirectives => this.setState({ animationDirectives })
-		);
 	}
 
 	componentDidMount() {
@@ -26,34 +25,39 @@ class AlgorithmContainer extends Component {
 		this.animator.unmount();
 	}
 
+	handleAnimatorChange = () => {
+		this.setState({
+			animationDirectives: this.animator.getDirectives(),
+			speed: this.animator.getSpeed(),
+			progress: this.animator.getProgress(),
+			isPaused: this.animator.getIsPaused()
+		});
+	}
+
 	render() {
+		const { steps, ...propsToPass } = this.props;
 		return (
 			<AlgorithmView
-				inputResolver={this.props.inputResolver}
-				animationControls={{
-					speed: this.animator.speed,
-					// not using state here, can cause problems FIXME
-					changeSpeed: speed => this.animator.changeSpeed(speed),
-					progress: this.animator.progress,
-					didEnd: this.animator.didEnd,
-					toBegin: () => this.animator.toBegin(),
-					stepForward: () => this.animator.stepForward(),
-					pauseRestart: () => this.animator.pauseRestart(),
-					stepBackward: () => this.animator.stepBackward(),
-					toEnd: () => this.animator.toEnd(),
-				}}
+				{...propsToPass}
+
 				animationDirectives={this.state.animationDirectives}
+				speed={this.state.speed}
+				progress={this.state.progress}
+				isPaused={this.state.isPaused}
+
+				onChangeSpeed={this.animator.changeSpeed}
+				onToBegin={this.animator.toBegin}
+				onStepForward={this.animator.stepForward}
+				onPauseRestart={this.animator.pauseRestart}
+				onStepBackward={this.animator.stepBackward}
+				onToEnd={this.animator.toEnd}
 			/>
 		);
 	}
 }
 
 AlgorithmContainer.propTypes = {
-	steps: PropTypes.array.isRequired,
-	inputResolver: PropTypes.func.isRequired,
-	// algorithm: PropTypes.shape({
-	// 	type: PropTypes.string.isRequired
-	// }).isRequired
+	steps: PropTypes.array.isRequired
 };
 
 export default AlgorithmContainer;
