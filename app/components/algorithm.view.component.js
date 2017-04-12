@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Line } from 'rc-progress';
+import Slider from 'rc-slider';
 
 import Header from './header.component';
 import AlgorithmDetail from './algorithm_detail.component';
@@ -8,14 +9,9 @@ import AlgorithmDetail from './algorithm_detail.component';
 const AlgorithmView = props => (
 	<div className="AlgorithmView">
 		<Header algorithm={props.algorithm} />
-		<AlgorithmDetail algorithm={props.algorithm} />
+		<AlgorithmDetail algorithm={props.algorithm} animationDirectives={props.animationDirectives} />
 		<footer>
-			<div
-				maxValue={10}
-				minValue={0}
-				value={props.speed}
-				onChange={props.onChangeSpeed}
-			/>
+			<Slider	max={10} min={0} value={props.speed} onChange={props.onChangeSpeed} />
 			<button id="toBegin" onClick={props.onToBegin} />
 			<button id="stepBackward" onClick={props.onStepBackward} />
 			<button id="pauseRestart" onClick={props.onPauseRestart} />
@@ -27,6 +23,7 @@ const AlgorithmView = props => (
 );
 
 AlgorithmView.propTypes = {
+	animationDirectives: PropTypes.object.isRequired,
 	algorithm: PropTypes.object.isRequired,
 	speed: PropTypes.number.isRequired,
 	progress: PropTypes.number.isRequired,
