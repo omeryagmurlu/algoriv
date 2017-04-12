@@ -5,34 +5,46 @@
   "description": "Visualization of Graph Algorithms",
   "main": "main.js",
   "scripts": {
-    "test": "npm test",
     "start": "electron main.js",
-    "watch": "watchify app/app.js -t babelify -o public/js/bundle.js --debug --verbose"
+    "start-dev": "webpack-dev-server --hot --history-api-fallback --open",
+    "watch": "webpack --config webpack.config.js --watch",
+    "build": "webpack --config webpack.config.js",
+    "product": "webpack -p --config webpack.production.config.js"
   },
   "author": "Omer Erdinc Yagmurlu",
   "license": "MIT",
   "dependencies": {
     "electron": "^1.6.2",
     "electron-reload": "^1.1.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "lodash.isequal": "^4.5.0",
+    "prop-types": "^15.5.6",
     "rc-progress": "^2.1.0",
     "rc-slider": "^7.0.0",
-    "prop-types": "^15.5.6",
-    "lodash.isequal": "^4.5.0"
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   },
   "devDependencies": {
+    "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.1",
+    "babel-loader": "7",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "babelify": "^7.3.0",
+    "css-loader": "^0.28.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
+    "eslint-loader": "^1.7.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
-    "watchify": "^3.9.0"
+    "file-loader": "^0.11.1",
+    "node-sass": "^4.5.2",
+    "react-hot-loader": "next",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.16.1",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.3.3",
+    "webpack-dev-server": "^2.4.2"
   }
 }

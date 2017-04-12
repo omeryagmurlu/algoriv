@@ -46,6 +46,7 @@ export default class Animator {
 		} else if (speed > 0) {
 			this.internalSpeed = 1 / (speed + 1);
 		}
+		this.changeHandler();
 	}
 
 	mount = () => {

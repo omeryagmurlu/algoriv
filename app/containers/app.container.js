@@ -1,8 +1,5 @@
-// React libraries
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-
-import MainView from './components/main.view.component';
+import MainView from '../components/main.view.component';
 
 class App extends Component {
 	constructor(props) {
@@ -23,8 +20,4 @@ class App extends Component {
 	}
 }
 
-// Render to index.html
-ReactDOM.render(
-	<App />,
-    document.getElementById('content')
-);
+export default App;
