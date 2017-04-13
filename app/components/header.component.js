@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = props => (
 	<header className="Header">
-		{props.algorithm.name}
+		{props.name}
 	</header>
 );
 

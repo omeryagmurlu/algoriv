@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AlgorithmView from '../components/algorithm.view.component';
 import Animator from '../animator';
 
-class AlgorithmContainer extends Component {
+class AnimatorContainer extends Component {
 	constructor(props) {
 		super(props);
 
@@ -41,23 +41,23 @@ class AlgorithmContainer extends Component {
 				{...propsToPass}
 
 				animationDirectives={this.state.animationDirectives}
-				speed={this.state.speed}
-				progress={this.state.progress}
-				isPaused={this.state.isPaused}
+				animationSpeed={this.state.speed}
+				animationProgress={this.state.progress}
+				animationIsPaused={this.state.isPaused}
 
-				onChangeSpeed={this.animator.changeSpeed}
-				onToBegin={this.animator.toBegin}
-				onStepForward={this.animator.stepForward}
-				onPauseRestart={this.animator.pauseRestart}
-				onStepBackward={this.animator.stepBackward}
-				onToEnd={this.animator.toEnd}
+				onAnimationChangeSpeed={this.animator.changeSpeed}
+				onAnimationToBegin={this.animator.toBegin}
+				onAnimationStepForward={this.animator.stepForward}
+				onAnimationPauseRestart={this.animator.pauseRestart}
+				onAnimationStepBackward={this.animator.stepBackward}
+				onAnimationToEnd={this.animator.toEnd}
 			/>
 		);
 	}
 }
 
-AlgorithmContainer.propTypes = {
+AnimatorContainer.propTypes = {
 	steps: PropTypes.array.isRequired
 };
 
-export default AlgorithmContainer;
+export default AnimatorContainer;

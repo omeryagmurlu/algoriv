@@ -16,31 +16,8 @@ export const AlgorithmsMap = {
 	},
 	BFS: {
 		name: 'BFS',
-		type: 'graph',
 		desc: 'Visualise Breadth-First Search Algorithm',
-		view: BFS,
-		steps: [
-			v => `Run BFS from vertex ${v}`,
-			q => `Queue is not empty, contains vertexes ${q.join(', ')}`,
-			v => `Processing vertex ${v}`,
-			v => `Mark vertex ${v} visited`,
-			(u, v) => `Processing the neighbour ${u} of vertex ${v}`,
-			u => `Vertex ${u} is visited`,
-			u => `Vertex ${u} is not visited, push to queue`
-		],
-		code: [
-			'BFS(s):',
-			'  Q = {s}; // FIFO',
-			'  while Q is not empty',
-			'    v = Q.front(); Q.pop();',
-			'    mark v visited',
-			'    for each neighbour u of v',
-			'      if u is visited already, continue;',
-			'      else, Q.push(u);'
-		],
-		input: {
-			fields: ['startVertex', 'graph']
-		}
+		view: BFS
 	},
 	DFS: {
 		name: 'DFS',

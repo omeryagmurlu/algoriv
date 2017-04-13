@@ -2,14 +2,14 @@ export default class Animator {
 	constructor(frames, changeHandler, frameTime = 1) {
 		Object.assign(this, { frames, changeHandler, frameTime });
 
-		this.frameIndex = -1;
+		this.frameIndex = 0;
 		this.internalSpeed = 1;
 
 		this.didEnd = false;
 
-		this.speed = 5;
+		this.speed = 50;
 		this.progress = 0;
-		this.directives = {};
+		this.directives = this.frames[0];
 		this.isPaused = true;
 	}
 
@@ -18,7 +18,7 @@ export default class Animator {
 	getDirectives = () => this.directives
 	getIsPaused = () => this.isPaused
 
-	toBegin = () => this.advanceTo(-1)
+	toBegin = () => this.advanceTo(0)
 	toEnd = () => this.advanceTo(this.frames.length - 1)
 	stepForward = () => this.advance(1)
 	stepBackward = () => this.advance(-1)
@@ -31,14 +31,15 @@ export default class Animator {
 		return this.changeHandler();
 	}
 
-	changeSpeed = (sp = 5) => {
+	changeSpeed = (sp = 50) => {
 		let speed = sp;
-		if (sp >= 10) { speed = 10; }
+		if (sp >= 100) { speed = 100; }
 		if (sp <= 0) { speed = 0; }
 
 		this.speed = speed;
 
-		speed -= 5;
+		speed -= 50;
+		speed /= 10;
 		if (speed === 0) {
 			this.internalSpeed = 1;
 		} else if (speed < 0) {
@@ -85,8 +86,8 @@ export default class Animator {
 			return;
 		}
 
-		this.directives = (frame !== -1) ? this.frames[frame] : {};
-		this.frameIndex = frame;
+		this.directives = (frame > 0) ? this.frames[frame] : this.frames[0];
+		this.frameIndex = (frame > 0) ? frame : 0;
 		this.calculateProgress();
 		this.changeHandler();
 	}
