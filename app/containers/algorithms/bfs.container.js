@@ -1,6 +1,6 @@
-import AlgorithmFactory from '../algorithm.factory';
+import { GraphAlgorithmFactory } from '../algorithm.factory';
 
-const BFS = AlgorithmFactory({
+const BFS = GraphAlgorithmFactory({
 	name: 'BFS',
 	steps: [
 		v => `Run BFS from vertex ${v}`,
@@ -33,15 +33,13 @@ const BFS = AlgorithmFactory({
 			[4]
 		]
 	},
-	logic: (graph, startVertex, snapFactory) => {
-		const steps = [];
+	logic: (st, graph, snapFactory) => {
 		const q = [];
 		const vis = Array(graph.nodeCount).fill(false);
 
-		const snap = snapFactory(steps, vis, q);
+		const snap = snapFactory(vis, q);
 
 		snap([], undefined);
-		const st = startVertex;
 		q.push(st);
 		snap([0, 1], BFS.steps[0](st), st);
 		while (q.length !== 0) {
@@ -61,8 +59,6 @@ const BFS = AlgorithmFactory({
 			});
 		}
 		snap([], BFS.steps[7](st));
-
-		return steps;
 	}
 });
 

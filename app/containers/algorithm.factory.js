@@ -7,8 +7,8 @@ const snapshot = (payload, object) => {
 	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
 };
 
-const snap = (graph) => (steps, vis, q) =>
-	(highlightCode, explanation, currentNode, currentEdge) => snapshot(steps, {
+const snapFactoryFactory = (graph, frames) => (vis, q) =>
+	(highlightCode, explanation, currentNode, currentEdge) => snapshot(frames, {
 		code: [highlightCode],
 		explanation: [explanation],
 		// graph: {
@@ -43,9 +43,14 @@ const snap = (graph) => (steps, vis, q) =>
 		]
 	});
 
-const AlgorithmFactory = (opti) => {
-	const Proto = class extends Component {
-		static mainLogic = opti.mainLogic
+export const AlgorithmFactory = (opti) => {
+	const AlgorithmPrototype = class extends Component {
+		static logic = (...params) => {
+			const frames = [];
+			opti.mainLogic(...params, frames);
+			return frames;
+		}
+
 		static steps = opti.steps
 		static code = opti.code
 
@@ -53,6 +58,7 @@ const AlgorithmFactory = (opti) => {
 			super(props);
 
 			this.state = opti.initialState;
+			this.state.frames = AlgorithmPrototype.logic(...opti.inputFields.map(x => this.state[x]));
 		}
 
 		inputChange = {
@@ -63,7 +69,7 @@ const AlgorithmFactory = (opti) => {
 						prevState[key] = newState[key];
 					}
 				});
-				return prevState;
+				return { ...prevState }; // just wanted to renew the reference
 			}))
 		}
 
@@ -71,71 +77,40 @@ const AlgorithmFactory = (opti) => {
 			return (
 				<AnimatorContainer
 					{...this.props}
-					{...opti.passDown}
+					{...opti.passDown(this)}
 
-					steps={this.state.steps}
+					frames={this.state.frames}
 
 					algorithmName={opti.name}
-					algorithmCode={Proto.code}
+					algorithmCode={AlgorithmPrototype.code}
 					algorithmInputChange={this.inputChange}
 				/>
 			);
 		}
 	};
 
-	console.log(Proto);
+	console.log(AlgorithmPrototype);
 
-	return Proto;
+	return AlgorithmPrototype;
 };
 
-const GraphAlgorithmFactory = (opti) => {
-	const Proto = class extends Component {
-		static mainLogic = (startVertex, graph) => opti.logic(graph, startVertex, snap(graph))
-		static steps = opti.steps
-		static code = opti.code
-
-		constructor(props) {
-			super(props);
-
-			this.state = {
-				startVertex: 0,
-				graph: opti.defaultGraph,
-				steps: {}
-			};
-			this.state.steps = Proto.mainLogic(this.state.startVertex, this.state.graph);
-		}
-
-		inputChange = {
-			fields: ['startVertex', 'graph'],
-			handler: (startVertex, graph) => this.setState(prevState => {
-				const newSteps = Proto.mainLogic(startVertex, graph);
-				return {
-					startVertex,
-					graph: _isEqual(prevState.graph, graph) ? prevState.graph : graph,
-					steps: _isEqual(prevState.steps, newSteps) ? prevState.steps : newSteps
-				};
-			})
-		}
-
-		render() {
-			return (
-				<AnimatorContainer
-					{...this.props}
-
-					steps={this.state.steps}
-
-					algorithmName={opti.name}
-					algorithmCode={Proto.code}
-					algorithmGraph={this.state.graph}
-					algorithmInputChange={this.inputChange}
-				/>
-			);
-		}
+export const GraphAlgorithmFactory = opti => {
+	const { logic, defaultGraph, ...passOpti } = opti;
+	passOpti.mainLogic = (startVertex, graph, frames) =>
+		logic(startVertex, graph, snapFactoryFactory(graph, frames));
+	passOpti.initialState = {
+		startVertex: 0,
+		graph: defaultGraph
 	};
+	passOpti.inputFields = ['startVertex', 'graph'];
+	passOpti.inputHandler = callback => (startVertex, graph) => { // FIXME mv up
+		const frames = [];
+		passOpti.mainLogic(startVertex, graph, frames);
+		callback({ startVertex, graph, frames });
+	};
+	passOpti.passDown = that => ({
+		algorithmGraph: that.state.graph
+	});
 
-	console.log(Proto);
-
-	return Proto;
+	return AlgorithmFactory(passOpti);
 };
-
-export default GraphAlgorithmFactory;

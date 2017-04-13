@@ -8,7 +8,7 @@ class AnimatorContainer extends Component {
 	constructor(props) {
 		super(props);
 
-		this.animator = new Animator(props.steps, this.handleAnimatorChange);
+		this.animator = new Animator(props.frames, this.handleAnimatorChange);
 		this.state = {
 			animationDirectives: this.animator.getDirectives(),
 			speed: this.animator.getSpeed(),
@@ -35,7 +35,7 @@ class AnimatorContainer extends Component {
 	}
 
 	render() {
-		const { steps, ...propsToPass } = this.props;
+		const { frames, ...propsToPass } = this.props;
 		return (
 			<AlgorithmView
 				{...propsToPass}
@@ -57,7 +57,7 @@ class AnimatorContainer extends Component {
 }
 
 AnimatorContainer.propTypes = {
-	steps: PropTypes.array.isRequired
+	frames: PropTypes.array.isRequired
 };
 
 export default AnimatorContainer;
