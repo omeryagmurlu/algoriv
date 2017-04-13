@@ -6,7 +6,6 @@ import TableView from 'rc-table';
 import { style } from '../styles/table.scss';
 
 const Table = props => {
-	console.log(props);
 	return (
 		<div className={style}>
 			<TableView
