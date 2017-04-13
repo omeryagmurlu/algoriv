@@ -33,7 +33,7 @@ const BFS = GraphAlgorithmFactory({
 			[4]
 		]
 	},
-	logic: (st, graph, snapFactory) => {
+	logic: ({ startVertex: st, graph }, snapFactory) => {
 		const q = [];
 		const vis = Array(graph.nodeCount).fill(false);
 
