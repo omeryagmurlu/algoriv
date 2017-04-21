@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableView from 'rc-table';
 // import 'rc-table/assets/index.css';
 
-import { style } from '../styles/table.scss';
+import { style } from '../../styles/table.scss';
 
 const Table = props => {
 	return (
@@ -11,13 +11,13 @@ const Table = props => {
 			<TableView
 				emptyText={''}
 				style={{
-					width: props.table.width
+					width: props.width
 				}}
-				columns={props.table.columns.map(obj => {
+				columns={props.columns.map(obj => {
 					obj.key = obj.dataIndex = obj.title;
 					return obj;
 				})}
-				data={props.table.data.map((obj, i) => {
+				data={props.data.map((obj, i) => {
 					obj.key = i;
 					return obj;
 				})}
@@ -27,11 +27,15 @@ const Table = props => {
 };
 
 Table.propTypes = {
-	table: PropTypes.object.isRequired
+	width: PropTypes.number.isRequired,
+	columns: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string
+	})).isRequired,
+	data: PropTypes.array.isRequired
 };
 
 // Table.defaultProps = {
-// 	table: ''
+// 	data: ''
 // };
 
 export default Table;

@@ -1,37 +1,40 @@
 import React, { Component } from 'react';
-import _isEqual from 'lodash.isequal';
-import _mapValues from 'lodash.mapvalues';
+import _pickBy from 'lodash.pickby';
 
 import AnimatorContainer from './animator.container';
 
-export const AlgorithmFactory = opts => class AlgorithmPrototype extends Component {
-	static logic = input => {
-		const output = { frames: [] }; // Frames is a necessary output
-		opts.logic({ input, output });
-		return output;
-	}
+export const snapshot = (payload, object) => {
+	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
+};
 
-	static steps = opts.steps
-	static code = opts.code
+export const snapWrapperProxy = (frames) =>
+	prototype => (...outerParams) => {
+		const instance = prototype(...outerParams);
+		return (...innerParams) => snapshot(frames, instance(...innerParams));
+	};
+
+const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !== 'undefined'));
+
+const AlgorithmFactory = opts => class AlgorithmPrototype extends Component {
+	static logic = input => {
+		const frames = [];
+		opts.logic(input, snapWrapperProxy(frames));
+		return frames;
+	}
 
 	constructor(props) {
 		super(props);
 
-		this.state = opts.initialInput;
-		Object.assign(this.state, AlgorithmPrototype.logic(opts.initialInput));
+		this.state = opts.input;
+		this.state.frames = AlgorithmPrototype.logic(opts.input);
 	}
 
 	inputChange = {
-		fields: opts.inputFields,
+		fields: Object.keys(opts.input),
 		handler: input => this.setState(prevState => {
-			const newState = { ...input };
-			Object.assign(newState,	AlgorithmPrototype.logic(input));
-			Object.keys(newState).forEach(key => {
-				if (!_isEqual(newState[key], prevState[key])) {
-					prevState[key] = newState[key];
-				}
-			});
-			return { ...prevState }; // just wanted to renew the reference
+			const newState = { ...prevState, ...input };
+			newState.frames = AlgorithmPrototype.logic(filterObjectByKeys(newState, opts.input));
+			return newState;
 		})
 	}
 
@@ -39,41 +42,15 @@ export const AlgorithmFactory = opts => class AlgorithmPrototype extends Compone
 		return (
 			<AnimatorContainer
 				{...this.props}
-				{..._mapValues(opts.outputFields, v => this.state[v])}
 
 				frames={this.state.frames}
 
-				algorithmName={opts.name}
-				algorithmCode={AlgorithmPrototype.code}
+				algorithmStatic={opts.modules(filterObjectByKeys(this.state, opts.input))}
+				algorithmInfo={opts.info}
 				algorithmInputChange={this.inputChange}
 			/>
 		);
 	}
 };
 
-export const GraphAlgorithmFactory = ({
-	logic,
-	defaultGraph,
-	initialInput = {},
-	inputFields = {},
-	outputFields = {},
-	...passOpts
-}) => AlgorithmFactory({
-	logic: ({ input, output: { frames, ...output } }) =>
-		logic({ input, output }, snapFactoryFactory(frames)),
-	initialInput: {
-		startVertex: 0,
-		graph: defaultGraph,
-		...initialInput,
-	},
-	inputFields: {
-		startVertex: 'startVertex',
-		graph: 'graph',
-		...inputFields,
-	},
-	outputFields: {
-		algorithmGraph: 'graph',
-		...outputFields,
-	},
-	...passOpts,
-});
+export default AlgorithmFactory;

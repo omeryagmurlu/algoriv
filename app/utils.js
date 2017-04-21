@@ -6,16 +6,9 @@ export const map = (thing, cb) =>
 export const flatten = (ary) => ary.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []); // http://stackoverflow.com/a/27267762/3873452
 
 export const typee = (type, data = {}) => ({
-	[type]: data
+	type,
+	data
 });
-
-export const snapshot = (payload, object) => {
-	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
-};
-
-export const snapFactoryFactory = (frames, cb) =>
-	(...commonParams) => (...params) =>
-		snapshot(frames, cb(...commonParams, ...params));
 
 	//
 	// export const snapFactoryFactory = (frames, cb) => (vis, q) =>

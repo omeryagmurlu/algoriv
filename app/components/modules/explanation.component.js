@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { style } from '../styles/explanation.scss';
+import { style } from '../../styles/explanation.scss';
 
 const Explanation = props => {
 	return (
 		<div className={style}>
-			{props.explanation}
+			{props.text}
 		</div>
 	);
 };
 
 Explanation.propTypes = {
-	explanation: PropTypes.string
+	text: PropTypes.string
 };
 
 Explanation.defaultProps = {
-	explanation: ''
+	text: ''
 };
 
 export default Explanation;

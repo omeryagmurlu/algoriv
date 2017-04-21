@@ -21,7 +21,7 @@ const AlgorithmView = props => {
 	} = props;
 	return (
 		<div className="AlgorithmView">
-			<Header name={props.algorithmName} />
+			<Header info={props.algorithmInfo} />
 			<AlgorithmInner
 				{...passProps}
 			/>
@@ -44,7 +44,6 @@ const AlgorithmView = props => {
 };
 
 AlgorithmView.propTypes = {
-	animationDirectives: PropTypes.object.isRequired,
 	animationSpeed: PropTypes.number.isRequired,
 	animationProgress: PropTypes.number.isRequired,
 	// animationIsPaused: PropTypes.boolean.isRequired,
@@ -55,17 +54,11 @@ AlgorithmView.propTypes = {
 	onAnimationStepBackward: PropTypes.func.isRequired,
 	onAnimationToEnd: PropTypes.func.isRequired,
 
-	algorithmName: PropTypes.string.isRequired,
-	algorithmGraph: PropTypes.object.isRequired,
-	algorithmCode: PropTypes.arrayOf(PropTypes.string),
+	algorithmInfo: PropTypes.object.isRequired,
 	algorithmInputChange: PropTypes.shape({
-		fields: PropTypes.objectOf(PropTypes.string).isRequired,
+		fields: PropTypes.arrayOf(PropTypes.string).isRequired,
 		handler: PropTypes.func.isRequired
 	}).isRequired
-};
-
-AlgorithmView.defaultProps = {
-	algorithmCode: []
 };
 
 export default AlgorithmView;

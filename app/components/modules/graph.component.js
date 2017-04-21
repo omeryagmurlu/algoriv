@@ -52,8 +52,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import chroma from 'chroma-js';
 
-import { flatten } from '../utils';
-import { style } from '../styles/graph.scss';
+import { flatten } from '../../utils';
+import { style } from '../../styles/graph.scss';
 
 class Graph extends Component {
 
@@ -64,22 +64,22 @@ class Graph extends Component {
 
 	constructor(props) {
 		super(props);
-		this.graphId = `graph${this.props.index}`;
+		this.graphId = `graph${this.props.id}`;
 	}
 
 	componentDidMount() {
 		this.sigma = new sigma({ // eslint-disable-line new-cap
 			container: this.graphId,
 			graph: {
-				nodes: Array(this.props.algorithmGraph.nodeCount).fill(1).map((v, i) => ({
+				nodes: Array(this.props.nodeCount).fill(1).map((v, i) => ({
 					id: i,
 					label: `${i}`,
 					size: 1,
 					color: Graph.defaultColor,
-					x: 100 * Math.cos((2 * i * Math.PI) / this.props.algorithmGraph.nodeCount),
-					y: 100 * Math.sin((2 * i * Math.PI) / this.props.algorithmGraph.nodeCount),
+					x: 100 * Math.cos((2 * i * Math.PI) / this.props.nodeCount),
+					y: 100 * Math.sin((2 * i * Math.PI) / this.props.nodeCount),
 				})),
-				edges: flatten(this.props.algorithmGraph.edges.map((negs, v) => negs.map((u) => ({
+				edges: flatten(this.props.edges.map((negs, v) => negs.map((u) => ({
 					id: `${v}${u}`,
 					source: v,
 					target: u,
@@ -94,6 +94,7 @@ class Graph extends Component {
 			strongGravityMode: true,
 			startingIterations: 10000
 		});
+		setTimeout(() => this.sigma.stopForceAtlas2(), 1000);
 		this.colorTemp = {
 			edges: {},
 			nodes: {}
@@ -101,43 +102,52 @@ class Graph extends Component {
 		this.purgeStack = [];
 	}
 
-	componentWillUpdate({ graph: { currentNode, currentEdge, futureNodes, pastNodes } }) {
+	componentWillUpdate({ currentNode, currentEdge, futureNodes, pastNodes }) {
 		while (this.purgeStack.length !== 0) {
 			this.purgeStack.pop()();
 		}
 
+		if (currentNode) this.colorizeThing(currentNode, Graph.currentColor, 'nodes');
 		futureNodes.forEach(v => this.colorizeThing(v, Graph.futureColor, 'nodes'));
 		pastNodes.forEach(v => this.colorizeThing(v, Graph.pastColor, 'nodes'));
-		if (currentNode) this.colorizeThing(currentNode, Graph.currentColor, 'nodes');
 		if (currentEdge) {
-			const bidirectional = currentEdge.splice(2, 1)[0];
 			this.colorizeThing(currentEdge.join(''), Graph.currentColor, 'edges');
-			if (bidirectional) {
-				this.colorizeThing(currentEdge.slice(0).reverse().join(''), Graph.currentColor, 'edges');
-			}
+			this.colorizeThing(currentEdge.slice(0).reverse().join(''), Graph.currentColor, 'edges');
 		}
 
 		this.updateGraph();
-		this.sigma.refresh();
 	}
 
 	updateGraph() {
+		const scaleCache = {};
+		const eachTimeCache = {};
+		const anft = () => this.props.animationNextFrameTime;
 		Object.keys(this.colorTemp).forEach(type => Object.keys(this.colorTemp[type]).forEach(id => {
-			console.log(this.sigma.graph[type](id), id);
-			const steps = 50;
-			const eachTime = Math.floor((this.props.animationNextFrameTime * (1.5 / 3)) / steps);
+			const firstCol = this.sigma.graph[type](id).color;
+			const secCol = this.colorTemp[type][id];
 
-			const scale = chroma.scale([
-				this.sigma.graph[type](id).color,
-				this.colorTemp[type][id]
-			]).domain([0, steps - 1]);
+			if (chroma(secCol).hex() === chroma(firstCol).hex()) {
+				return;
+			}
 
-			const timeout = fn => setTimeout(fn, eachTime);
+			const aimedEachTime = 50;
+			const steps = () => Math.floor((anft() * (1.5 / 3)) / aimedEachTime);
+			const eachTime = steps => eachTimeCache[steps * anft()] || (eachTimeCache[steps * anft()] = Math.floor((anft() * (1.5 / 3)) / steps)); // Can use DP here, if slow
+
+			const scale = steps => scaleCache[`${steps}..${firstCol}.${secCol}`] || (scaleCache[`${steps}..${firstCol}.${secCol}`] = chroma.scale([
+				firstCol,
+				secCol
+			]).domain([0, steps - 1]));
+
+			const timeout = fn => setTimeout(fn, eachTime(steps()));
 			const fn = i => () => {
-				if (i === steps) {
+				if (i >= steps()) {
+					console.log('done', eachTime(steps()), steps())
 					return;
 				}
-				this.sigma.graph[type](id).color = scale(i).hex();
+				// console.log('working', eachTime(steps()), steps(), scale(steps())(i).hex())
+				this.sigma.graph[type](id).color = scale(steps())(i).hex();
+				this.sigma.refresh();
 				timeout(fn(i + 1));
 			};
 			timeout(fn(0));
@@ -160,10 +170,12 @@ class Graph extends Component {
 }
 
 Graph.propTypes = {
-	index: PropTypes.number.isRequired,
-	animationNextFrameTime: PropTypes.number.isRequired,
-	graph: PropTypes.object.isRequired,
-	algorithmGraph: PropTypes.object.isRequired
+	id: PropTypes.string.isRequired,
+
+	nodeCount: PropTypes.number.isRequired,
+	edges: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+
+	animationNextFrameTime: PropTypes.number.isRequired
 };
 
 export default Graph;

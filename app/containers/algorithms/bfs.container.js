@@ -1,4 +1,4 @@
-import { GraphAlgorithmFactory } from '../algorithm.factory';
+import AlgorithmFactory from '../algorithm.factory';
 import { typee } from '../../utils';
 
 const steps = [
@@ -23,42 +23,33 @@ const code = [
 	'            else, Q.push(u);'
 ];
 
-const snap = (vis, q, highlightCode, explanation, currentNode, currentEdge) => ({
-	code: [highlightCode],
-	explanation: [explanation],
-	graph: [{
+const snapProp = (vis, q) => (highlights, text, currentNode, currentEdge) => ({
+	kod: { highlights },
+	explain: { text },
+	graph: {
 		currentNode,
 		currentEdge,
 		pastNodes: vis.map((v, i) =>
 			((v !== true) ? -1 : i)).filter(v => (v !== -1)), // to high
 		futureNodes: q.map(v => v),
-	}],
-	table: [
-		{
-			width: 150,
-			columns: [
-				{ title: 'Node' },
-				{ title: 'Visited' }
-			],
-			data: vis.map((Visited, Node) => ({
-				Visited: Visited.toString(),
-				Node
-			}))
-		},
-		{
-			width: 75,
-			columns: [
-				{ title: 'Queue' }
-			],
-			data: q.map((Queue) => ({
-				Queue
-			}))
-		},
-	]
+	},
+	queue: {
+		data: q.map((Queue) => ({
+			Queue
+		}))
+	},
+	visit: {
+		data: vis.map((Visited, Node) => ({
+			Visited: Visited.toString(),
+			Node
+		}))
+	}
 });
 
-const BFS = GraphAlgorithmFactory({
-	name: 'BFS',
+const BFS = AlgorithmFactory({
+	info: {
+		name: 'BFS'
+	},
 	input: {
 		startVertex: 5,
 		graph: {
@@ -73,7 +64,7 @@ const BFS = GraphAlgorithmFactory({
 			]
 		}
 	},
-	output: ({ graph }) => ({ // tum keyleri iterate etcez, burdakilerin
+	modules: ({ graph }) => ({ // tum keyleri iterate etcez, burdakilerin
 		kod: typee('code', { code }),
 		explain: typee('explanation'),
 		graph: typee('graph', graph),
@@ -92,11 +83,11 @@ const BFS = GraphAlgorithmFactory({
 		}),
 
 	}),
-	logic: ({ input: { startVertex: st, graph } }, snapFactory) => {
+	logic: ({ startVertex: st, graph }, snapWrapper) => {
 		const q = [];
 		const vis = Array(graph.nodeCount).fill(false);
 
-		const snap = snapFactory(vis, q);
+		const snap = snapWrapper(snapProp)(vis, q);
 
 		snap([], undefined);
 		q.push(st);
