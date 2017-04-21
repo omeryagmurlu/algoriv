@@ -11,12 +11,14 @@ export default class Animator {
 		this.progress = 0;
 		this.directives = this.frames[0];
 		this.isPaused = true;
+		this.nextFrameTime = 1000 * frameTime;
 	}
 
 	getSpeed = () => this.speed
 	getProgress = () => this.progress
 	getDirectives = () => this.directives
 	getIsPaused = () => this.isPaused
+	getNextFrameTime = () => this.nextFrameTime
 
 	toBegin = () => this.advanceTo(0)
 	toEnd = () => this.advanceTo(this.frames.length - 1)
@@ -51,8 +53,9 @@ export default class Animator {
 	}
 
 	mount = () => {
-		const timeout = fn => setTimeout(fn, (this.frameTime * this.internalSpeed) * 1000);
+		const timeout = fn => setTimeout(fn, this.nextFrameTime);
 		const continuation = () => {
+			this.nextFrameTime = Math.floor((this.frameTime * this.internalSpeed) * 1000);
 			this.tick();
 			this.timer = timeout(continuation);
 		};

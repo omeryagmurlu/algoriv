@@ -8,32 +8,40 @@ import 'rc-slider/assets/index.css';
 import Header from './header.component';
 import AlgorithmInner from './algorithm_inner.component';
 
-const AlgorithmView = props => (
-	<div className="AlgorithmView">
-		<Header name={props.algorithmName} />
-		<AlgorithmInner
-			algorithmName={props.algorithmName}
-			algorithmCode={props.algorithmCode}
-			algorithmGraph={props.algorithmGraph}
-			algorithmInputChange={props.algorithmInputChange}
-			animationDirectives={props.animationDirectives}
-		/>
-		<footer>
-			<Slider
-				max={100}
-				min={0}
-				value={props.animationSpeed}
-				onChange={props.onAnimationChangeSpeed}
+const AlgorithmView = props => {
+	const {
+		animationSpeed,
+		onAnimationChangeSpeed,
+		onAnimationToBegin,
+		onAnimationToEnd,
+		onAnimationStepBackward,
+		onAnimationPauseRestart,
+		onAnimationStepForward,
+		...passProps
+	} = props;
+	return (
+		<div className="AlgorithmView">
+			<Header name={props.algorithmName} />
+			<AlgorithmInner
+				{...passProps}
 			/>
-			<button id="toBegin" onClick={props.onAnimationToBegin} />
-			<button id="stepBackward" onClick={props.onAnimationStepBackward} />
-			<button id="pauseRestart" onClick={props.onAnimationPauseRestart} />
-			<button id="stepForward" onClick={props.onAnimationStepForward} />
-			<button id="toEnd" onClick={props.onAnimationToEnd} />
-			<Line percent={props.animationProgress} strokeWidth="4" strokeColor="#D3D3D3" />
-		</footer>
-	</div>
-);
+			<footer>
+				<Slider
+					max={100}
+					min={0}
+					value={animationSpeed}
+					onChange={onAnimationChangeSpeed}
+				/>
+				<button id="toBegin" onClick={onAnimationToBegin} />
+				<button id="stepBackward" onClick={onAnimationStepBackward} />
+				<button id="pauseRestart" onClick={onAnimationPauseRestart} />
+				<button id="stepForward" onClick={onAnimationStepForward} />
+				<button id="toEnd" onClick={onAnimationToEnd} />
+				<Line percent={props.animationProgress} strokeWidth="4" strokeColor="#D3D3D3" />
+			</footer>
+		</div>
+	);
+};
 
 AlgorithmView.propTypes = {
 	animationDirectives: PropTypes.object.isRequired,
@@ -51,7 +59,7 @@ AlgorithmView.propTypes = {
 	algorithmGraph: PropTypes.object.isRequired,
 	algorithmCode: PropTypes.arrayOf(PropTypes.string),
 	algorithmInputChange: PropTypes.shape({
-		fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+		fields: PropTypes.objectOf(PropTypes.string).isRequired,
 		handler: PropTypes.func.isRequired
 	}).isRequired
 };

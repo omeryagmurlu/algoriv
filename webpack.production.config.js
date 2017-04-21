@@ -9,6 +9,11 @@ module.exports = {
 	module: {
 		rules: [
 			{
+				test: /sigma.*\.js?$/, // the test to only select sigma files
+				exclude: ['app'], // you ony need to check node_modules, so remove your application files
+				use: ['script-loader'] // loading as script
+			},
+			{
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				use: [

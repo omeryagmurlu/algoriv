@@ -15,16 +15,17 @@ import { flatten } from '../utils';
 const components = {
 	code: require('./code.component').default,
 	explanation: require('./explanation.component').default,
-	// graph: require('./graph.component').default,
+	graph: require('./graph.component').default,
 	table: require('./table.component').default
 };
 
 const AlgorithmInner = props => {
-	const rule = props.animationDirectives;
+	const { animationDirectives: rule, ...passProps } = props;
 	const modules = flatten(Object.keys(rule).map(type =>
 		rule[type].map((specifics, i) =>
 			React.createElement(components[type], {
-				...props,
+				index: i,
+				...passProps,
 				key: type + i, // eslint-disable-line react/no-array-index-key
 				[type]: specifics
 			}))));

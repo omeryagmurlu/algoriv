@@ -1,52 +1,14 @@
 import React, { Component } from 'react';
 import _isEqual from 'lodash.isequal';
+import _mapValues from 'lodash.mapvalues';
 
 import AnimatorContainer from './animator.container';
 
-const snapshot = (payload, object) => {
-	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
-};
-
-const snapFactoryFactory = (frames) => (vis, q) =>
-	(highlightCode, explanation, currentNode, currentEdge) => snapshot(frames, {
-		code: [highlightCode],
-		explanation: [explanation],
-		// graph: {
-		// 	currentNode,
-		// 	currentEdge,
-		// 	pastNodes: vis.map((v, i) =>
-		//		((v !== true) ? -1 : i)).filter(v => (v !== -1)), // to high
-		// 	futureNodes: new Set(q),
-		// },
-		table: [
-			{
-				width: 150,
-				columns: [
-					{ title: 'Node' },
-					{ title: 'Visited' }
-				],
-				data: vis.map((Visited, Node) => ({
-					Visited: Visited.toString(),
-					Node
-				}))
-			},
-			{
-				width: 75,
-				columns: [
-					{ title: 'Queue' }
-				],
-				data: q.map((Queue) => ({
-					Queue
-				}))
-			},
-		]
-	});
-
 export const AlgorithmFactory = opts => class AlgorithmPrototype extends Component {
 	static logic = input => {
-		const frames = [];
-		opts.logic(input, frames);
-		return frames;
+		const output = { frames: [] }; // Frames is a necessary output
+		opts.logic({ input, output });
+		return output;
 	}
 
 	static steps = opts.steps
@@ -55,17 +17,15 @@ export const AlgorithmFactory = opts => class AlgorithmPrototype extends Compone
 	constructor(props) {
 		super(props);
 
-		this.state = opts.initialState;
-		this.state.frames = AlgorithmPrototype.logic(opts.inputFields.reduce((acc, v) => {
-			acc[v] = this.state[v];
-			return acc;
-		}, {}));
+		this.state = opts.initialInput;
+		Object.assign(this.state, AlgorithmPrototype.logic(opts.initialInput));
 	}
 
 	inputChange = {
 		fields: opts.inputFields,
 		handler: input => this.setState(prevState => {
-			const newState = { ...input, frames: AlgorithmPrototype.logic(input) };
+			const newState = { ...input };
+			Object.assign(newState,	AlgorithmPrototype.logic(input));
 			Object.keys(newState).forEach(key => {
 				if (!_isEqual(newState[key], prevState[key])) {
 					prevState[key] = newState[key];
@@ -79,7 +39,7 @@ export const AlgorithmFactory = opts => class AlgorithmPrototype extends Compone
 		return (
 			<AnimatorContainer
 				{...this.props}
-				{...opts.passDown(this)}
+				{..._mapValues(opts.outputFields, v => this.state[v])}
 
 				frames={this.state.frames}
 
@@ -91,15 +51,29 @@ export const AlgorithmFactory = opts => class AlgorithmPrototype extends Compone
 	}
 };
 
-export const GraphAlgorithmFactory = ({ logic, defaultGraph, ...passOpts }) => AlgorithmFactory({
-	...passOpts,
-	logic: (input, frames) => logic(input, snapFactoryFactory(frames)),
-	initialState: {
+export const GraphAlgorithmFactory = ({
+	logic,
+	defaultGraph,
+	initialInput = {},
+	inputFields = {},
+	outputFields = {},
+	...passOpts
+}) => AlgorithmFactory({
+	logic: ({ input, output: { frames, ...output } }) =>
+		logic({ input, output }, snapFactoryFactory(frames)),
+	initialInput: {
 		startVertex: 0,
-		graph: defaultGraph
+		graph: defaultGraph,
+		...initialInput,
 	},
-	inputFields: ['startVertex', 'graph'],
-	passDown: that => ({ // FIXME
-		algorithmGraph: that.state.graph
-	})
+	inputFields: {
+		startVertex: 'startVertex',
+		graph: 'graph',
+		...inputFields,
+	},
+	outputFields: {
+		algorithmGraph: 'graph',
+		...outputFields,
+	},
+	...passOpts,
 });

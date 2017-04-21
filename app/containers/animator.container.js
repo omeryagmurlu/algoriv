@@ -13,7 +13,8 @@ class AnimatorContainer extends Component {
 			animationDirectives: this.animator.getDirectives(),
 			speed: this.animator.getSpeed(),
 			progress: this.animator.getProgress(),
-			isPaused: this.animator.getIsPaused()
+			isPaused: this.animator.getIsPaused(),
+			nextFrameTime: this.animator.getNextFrameTime()
 		};
 	}
 
@@ -30,7 +31,8 @@ class AnimatorContainer extends Component {
 			animationDirectives: this.animator.getDirectives(),
 			speed: this.animator.getSpeed(),
 			progress: this.animator.getProgress(),
-			isPaused: this.animator.getIsPaused()
+			isPaused: this.animator.getIsPaused(),
+			nextFrameTime: this.animator.getNextFrameTime()
 		});
 	}
 
@@ -44,6 +46,7 @@ class AnimatorContainer extends Component {
 				animationSpeed={this.state.speed}
 				animationProgress={this.state.progress}
 				animationIsPaused={this.state.isPaused}
+				animationNextFrameTime={this.state.nextFrameTime}
 
 				onAnimationChangeSpeed={this.animator.changeSpeed}
 				onAnimationToBegin={this.animator.toBegin}
