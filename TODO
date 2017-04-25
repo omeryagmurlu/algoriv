@@ -1,2 +1,3 @@
-* Snaps API should be up and running
-* Need some helpers to handel the job of `typee`
+* ~~Snaps API should be up and running~~
+* ~~Need some helpers to handel the job of `typee`~~
+* Find a better name for `modules.js` and its default export `Modules`

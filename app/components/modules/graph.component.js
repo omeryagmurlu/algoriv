@@ -132,17 +132,18 @@ class Graph extends Component {
 
 			const aimedEachTime = 50;
 			const steps = () => Math.floor((anft() * (1.5 / 3)) / aimedEachTime);
-			const eachTime = steps => eachTimeCache[steps * anft()] || (eachTimeCache[steps * anft()] = Math.floor((anft() * (1.5 / 3)) / steps)); // Can use DP here, if slow
+			const eachTime = sps => eachTimeCache[sps * anft()] // Can use DP here, if slow
+				|| (eachTimeCache[sps * anft()] = Math.floor((anft() * (1.5 / 3)) / sps));
 
-			const scale = steps => scaleCache[`${steps}..${firstCol}.${secCol}`] || (scaleCache[`${steps}..${firstCol}.${secCol}`] = chroma.scale([
+			const scale = sps => scaleCache[`${sps}..${firstCol}.${secCol}`] || (scaleCache[`${sps}..${firstCol}.${secCol}`] = chroma.scale([
 				firstCol,
 				secCol
-			]).domain([0, steps - 1]));
+			]).domain([0, sps - 1]));
 
 			const timeout = fn => setTimeout(fn, eachTime(steps()));
 			const fn = i => () => {
 				if (i >= steps()) {
-					console.log('done', eachTime(steps()), steps())
+					// console.log('done', eachTime(steps()), steps())
 					return;
 				}
 				// console.log('working', eachTime(steps()), steps(), scale(steps())(i).hex())

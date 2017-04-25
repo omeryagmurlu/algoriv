@@ -1,5 +1,5 @@
 import AlgorithmFactory from '../algorithm.factory';
-import { typee } from '../../utils';
+import Modules from '../../modules';
 
 const steps = [
 	v => `Run BFS from vertex ${v}`,
@@ -23,29 +23,6 @@ const code = [
 	'            else, Q.push(u);'
 ];
 
-const snapProp = (vis, q) => (highlights, text, currentNode, currentEdge) => ({
-	kod: { highlights },
-	explain: { text },
-	graph: {
-		currentNode,
-		currentEdge,
-		pastNodes: vis.map((v, i) =>
-			((v !== true) ? -1 : i)).filter(v => (v !== -1)), // to high
-		futureNodes: q.map(v => v),
-	},
-	queue: {
-		data: q.map((Queue) => ({
-			Queue
-		}))
-	},
-	visit: {
-		data: vis.map((Visited, Node) => ({
-			Visited: Visited.toString(),
-			Node
-		}))
-	}
-});
-
 const BFS = AlgorithmFactory({
 	info: {
 		name: 'BFS'
@@ -64,30 +41,25 @@ const BFS = AlgorithmFactory({
 			]
 		}
 	},
-	modules: ({ graph }) => ({ // tum keyleri iterate etcez, burdakilerin
-		kod: typee('code', { code }),
-		explain: typee('explanation'),
-		graph: typee('graph', graph),
-		queue: typee('table', {
-			width: 75,
-			columns: [
-				{ title: 'Queue' }
-			]
-		}),
-		visit: typee('table', {
-			width: 150,
-			columns: [
-				{ title: 'Node' },
-				{ title: 'Visited' }
-			]
-		}),
-
+	snap: (vis, q) => (hgs, text, cN, cE) => ({
+		kod: Modules.Code.snap(hgs),
+		explain: Modules.Explanation.snap(text),
+		graph: Modules.VisitedAheadGraph.snap(cE, cN, vis, q),
+		queue: Modules.Queue.snap(q),
+		visit: Modules.VisitedArray.snap(vis)
 	}),
-	logic: ({ startVertex: st, graph }, snapWrapper) => {
+	modules: ({ graph }) => ({
+		kod: Modules.Code.module(code),
+		explain: Modules.Explanation.module(),
+		graph: Modules.VisitedAheadGraph.module(graph),
+		queue: Modules.Queue.module(),
+		visit: Modules.VisitedArray.module()
+	}),
+	logic: ({ startVertex: st, graph }, snapFactory) => {
 		const q = [];
 		const vis = Array(graph.nodeCount).fill(false);
 
-		const snap = snapWrapper(snapProp)(vis, q);
+		const snap = snapFactory(vis, q);
 
 		snap([], undefined);
 		q.push(st);

@@ -7,8 +7,8 @@ export const snapshot = (payload, object) => {
 	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
 };
 
-export const snapWrapperProxy = (frames) =>
-	prototype => (...outerParams) => {
+export const snapFactoryProxy = (frames, prototype) =>
+	(...outerParams) => {
 		const instance = prototype(...outerParams);
 		return (...innerParams) => snapshot(frames, instance(...innerParams));
 	};
@@ -18,7 +18,7 @@ const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !
 const AlgorithmFactory = opts => class AlgorithmPrototype extends Component {
 	static logic = input => {
 		const frames = [];
-		opts.logic(input, snapWrapperProxy(frames));
+		opts.logic(input, snapFactoryProxy(frames, opts.snap));
 		return frames;
 	}
 
