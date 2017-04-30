@@ -1,12 +1,13 @@
-import { typee } from './utils';
+import { typee, ColorList } from './utils';
 
 const exporter = (snap, module) => ({ snap, module });
 
 const Modules = {};
 
 export const GraphModule = Modules.Graph = exporter(
-	(currentEdge, currentNode, pastNodes, futureNodes) =>
-		({ currentNode, currentEdge, pastNodes, futureNodes }),
+	clist => ({
+		colors: clist
+	}),
 	graph => typee('graph', graph)
 );
 
@@ -16,6 +17,15 @@ export const TableModule = Modules.Table = exporter(
 		width,
 		columns: cols.map(v => ({ title: v }))
 	})
+);
+
+// o--o--o--o--o
+
+export const TableFuncModule = Modules.TableFunc = (title, width = 75) => exporter(
+	q => TableModule.snap(q.map(v => ({
+		[title]: v
+	}))),
+	() => TableModule.module(width, [title])
 );
 
 // o--o--o--o--o
@@ -31,11 +41,17 @@ export const ExplanationModule = Modules.Explanation = exporter(
 );
 
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
-	(currentEdge, currentNode, vis, q) => GraphModule.snap(currentEdge, currentNode,
-		vis.map((v, i) =>
-			((v !== true) ? -1 : i)).filter(v => (v !== -1)), // to high
-		q.map(v => v) // FIXME unnecessary
-	),
+	(currentEdge, currentNode, vis, q) => {
+		const clist = new ColorList();
+
+		clist.pushNodes(vis.map((v, i) => ((v !== true) ? -1 : i)).filter(v => (v !== -1))); // to high
+		clist.pushNodes(q.map(v => v));
+		clist.pushNode(currentNode);
+
+		clist.setEdge(currentEdge, 2);
+
+		return GraphModule.snap(clist);
+	},
 	graph => GraphModule.module(graph)
 );
 

@@ -50,17 +50,18 @@ import 'sigma/build/plugins/sigma.layout.forceAtlas2.min';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import chroma from 'chroma-js';
 
-import { flatten } from '../../utils';
+import { flatten, ColorList, animateColor } from '../../utils';
 import { style } from '../../styles/graph.scss';
 
 class Graph extends Component {
 
 	static defaultColor = '#ccc'
-	static currentColor = '#00f'
-	static futureColor = '#0f0'
-	static pastColor = '#f0f'
+	static colors = [
+		'#0f0', // past
+		'#f0f', // future
+		'#00f', // current
+	]
 
 	constructor(props) {
 		super(props);
@@ -95,72 +96,54 @@ class Graph extends Component {
 			startingIterations: 10000
 		});
 		setTimeout(() => this.sigma.stopForceAtlas2(), 1000);
+
 		this.colorTemp = {
 			edges: {},
 			nodes: {}
 		};
-		this.purgeStack = [];
+		this.colorPurgeStack = [];
 	}
 
-	componentWillUpdate({ currentNode, currentEdge, futureNodes, pastNodes }) {
-		while (this.purgeStack.length !== 0) {
-			this.purgeStack.pop()();
-		}
-
-		if (currentNode) this.colorizeThing(currentNode, Graph.currentColor, 'nodes');
-		futureNodes.forEach(v => this.colorizeThing(v, Graph.futureColor, 'nodes'));
-		pastNodes.forEach(v => this.colorizeThing(v, Graph.pastColor, 'nodes'));
-		if (currentEdge) {
-			this.colorizeThing(currentEdge.join(''), Graph.currentColor, 'edges');
-			this.colorizeThing(currentEdge.slice(0).reverse().join(''), Graph.currentColor, 'edges');
-		}
-
-		this.updateGraph();
+	componentWillUpdate({ colors }) {
+		this.updateColors(colors);
 	}
 
-	updateGraph() {
+	updateColors(deadClist) {
+		const clist = ColorList.revive(deadClist);
+		while (this.colorPurgeStack.length !== 0) {
+			this.colorPurgeStack.pop()();
+		}
+
+		clist.forEachEdge((edge, idx) => {
+			this.colorizeThing(edge.join(''), Graph.colors[idx], 'edges');
+			this.colorizeThing(edge.slice(0).reverse().join(''), Graph.colors[idx], 'edges');
+		});
+
+		clist.forEachNode((node, idx) => {
+			this.colorizeThing(node, Graph.colors[idx], 'nodes');
+		});
+
 		const scaleCache = {};
 		const eachTimeCache = {};
-		const anft = () => this.props.animationNextFrameTime;
-		Object.keys(this.colorTemp).forEach(type => Object.keys(this.colorTemp[type]).forEach(id => {
-			const firstCol = this.sigma.graph[type](id).color;
-			const secCol = this.colorTemp[type][id];
 
-			if (chroma(secCol).hex() === chroma(firstCol).hex()) {
-				return;
-			}
-
-			const aimedEachTime = 50;
-			const steps = () => Math.floor((anft() * (1.5 / 3)) / aimedEachTime);
-			const eachTime = sps => eachTimeCache[sps * anft()] // Can use DP here, if slow
-				|| (eachTimeCache[sps * anft()] = Math.floor((anft() * (1.5 / 3)) / sps));
-
-			const scale = sps => scaleCache[`${sps}..${firstCol}.${secCol}`] || (scaleCache[`${sps}..${firstCol}.${secCol}`] = chroma.scale([
-				firstCol,
-				secCol
-			]).domain([0, sps - 1]));
-
-			const timeout = fn => setTimeout(fn, eachTime(steps()));
-			const fn = i => () => {
-				if (i >= steps()) {
-					// console.log('done', eachTime(steps()), steps())
-					return;
+		Object.keys(this.colorTemp).forEach(type =>
+			Object.keys(this.colorTemp[type]).forEach(id => animateColor({
+				remainingTime: () => this.props.animationNextFrameTime,
+				scaleCache,
+				eachTimeCache,
+				firstCol: this.sigma.graph[type](id).color,
+				secCol: this.colorTemp[type][id],
+				callback: col => {
+					this.sigma.graph[type](id).color = col;
+					this.sigma.refresh();
 				}
-				// console.log('working', eachTime(steps()), steps(), scale(steps())(i).hex())
-				this.sigma.graph[type](id).color = scale(steps())(i).hex();
-				this.sigma.refresh();
-				timeout(fn(i + 1));
-			};
-			timeout(fn(0));
-		}));
+			}))
+		);
 	}
-
-	scheduleColorPurge = (thing, type) =>
-		this.purgeStack.push(() => (this.colorTemp[type][thing] = Graph.defaultColor));
 
 	colorizeThing = (thing, color, type) => {
 		this.colorTemp[type][thing] = color;
-		this.scheduleColorPurge(thing, type);
+		this.colorPurgeStack.push(() => (this.colorTemp[type][thing] = Graph.defaultColor));
 	}
 
 	render() {

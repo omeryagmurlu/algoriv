@@ -18,7 +18,7 @@ const code = [
 	'    while Q is not empty',
 	'        v = Q.front(); Q.pop();',
 	'        mark v visited',
-	'        for each neighbour u of v',
+	'        for each neighbour u of v:',
 	'            if u is visited already, continue;',
 	'            else, Q.push(u);'
 ];

@@ -1,3 +1,6 @@
 * ~~Snaps API should be up and running~~
 * ~~Need some helpers to handel the job of `typee`~~
 * Find a better name for `modules.js` and its default export `Modules`
+* IMPLEMENT graph changing using sigma:
+	* a click on empty area -> add node
+	* a click on a node and then on an another node -> add edge (if edges are weighted, ask by means of a popup)
