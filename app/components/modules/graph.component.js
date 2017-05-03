@@ -47,14 +47,41 @@ import 'sigma/src/misc/sigma.misc.bindDOMEvents';
 import 'sigma/src/misc/sigma.misc.drawHovers';
 
 import 'sigma/build/plugins/sigma.layout.forceAtlas2.min';
+import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _isEqual from 'lodash.isequal';
 
 import { flatten, ColorList, animateColor } from '../../utils';
 import { style } from '../../styles/graph.scss';
 
 class Graph extends Component {
+	static node = (i, x, y) => ({
+		id: i,
+		label: `${i}`,
+		size: 1,
+		color: Graph.defaultColor,
+		x,
+		y
+	})
+
+	static edge = (v, u) => ({
+		id: `${v}${u}`,
+		source: v,
+		target: u,
+		color: Graph.defaultColor,
+		size: 1
+	})
+
+	static readGraph = graph => ({
+		nodes: Array(graph.nodeCount).fill(1).map((v, i) => Graph.node(
+			i,
+			100 * Math.cos((2 * i * Math.PI) / graph.nodeCount),
+			100 * Math.sin((2 * i * Math.PI) / graph.nodeCount)
+		)),
+		edges: flatten(graph.edges.map((negs, v) => negs.map((u) => (Graph.edge(v, u))))) // FIXME: check whether u array is
+	})
 
 	static defaultColor = '#ccc'
 	static colors = [
@@ -70,32 +97,32 @@ class Graph extends Component {
 
 	componentDidMount() {
 		this.sigma = new sigma({ // eslint-disable-line new-cap
-			container: this.graphId,
-			graph: {
-				nodes: Array(this.props.nodeCount).fill(1).map((v, i) => ({
-					id: i,
-					label: `${i}`,
-					size: 1,
-					color: Graph.defaultColor,
-					x: 100 * Math.cos((2 * i * Math.PI) / this.props.nodeCount),
-					y: 100 * Math.sin((2 * i * Math.PI) / this.props.nodeCount),
-				})),
-				edges: flatten(this.props.edges.map((negs, v) => negs.map((u) => ({
-					id: `${v}${u}`,
-					source: v,
-					target: u,
-					color: Graph.defaultColor,
-					size: 1
-				}))))
+			renderer: {
+				container: this.graphId,
+				type: 'canvas'
+			},
+			graph: Graph.readGraph(this.props.graph),
+			settings: {
+				singleHover: true,
+				scalingMode: 'inside',
+				zoomMin: 0.0001,
+				zoomMax: 100,
+				maxEdgeSize: 1,
+				defaultEdgeType: 'arrow',
+				minArrowSize: 6,
+				edgeLabelSize: 'proportional'
 			}
 		});
-		this.sigma.startForceAtlas2({
-			worker: true,
-			barnesHutOptimize: false,
-			strongGravityMode: true,
-			startingIterations: 10000
-		});
-		setTimeout(() => this.sigma.stopForceAtlas2(), 1000);
+		this.createGraph(this.props.graph);
+		this.registerEvents();
+
+		this.state = { // state, without react, we dont need to inform it
+			graph: this.props.graph,
+		};
+
+		this.shortMem = {
+			previouslySelectedNode: null
+		};
 
 		this.colorTemp = {
 			edges: {},
@@ -104,8 +131,80 @@ class Graph extends Component {
 		this.colorPurgeStack = [];
 	}
 
+	componentWillReceiveProps({ graph }) {
+		if (!_isEqual(graph, this.state.graph)) {
+			console.log('force update');
+			this.createGraph(graph);
+			this.setState({ graph });
+		}
+	}
+
 	componentWillUpdate({ colors }) {
 		this.updateColors(colors);
+	}
+
+	createGraph(graph) {
+		this.sigma.graph.clear();
+		this.sigma.graph.read(Graph.readGraph(graph));
+		this.forceAtlas();
+	}
+
+	forceAtlas() {
+		this.sigma.startForceAtlas2({
+			worker: true,
+			barnesHutOptimize: false,
+			strongGravityMode: true,
+			startingIterations: 10000
+		});
+		setTimeout(() => this.sigma.killForceAtlas2(), 1000);
+	}
+
+	registerEvents() {
+		if (this.props.algorithmInputChange.fields.includes('graph')) {
+			const notify = () => this.props.algorithmInputChange.handler({
+				graph: JSON.parse(JSON.stringify(this.state.graph)) // I need Immutable.js D:
+			});
+
+			const commonWork = cb => e => {
+				if (e.data.captor.ctrlKey) {
+					return cb(e, JSON.parse(JSON.stringify(this.state)));
+				}
+			};
+
+			this.sigma.bind('clickStage', commonWork((e, state) => {
+				// console.log(e);
+				const id = state.graph.nodeCount;
+				this.sigma.graph.addNode(Graph.node(id, e.data.captor.x, e.data.captor.y));
+				this.forceAtlas();
+
+				state.graph.edges[state.graph.nodeCount] = [];
+				state.graph.nodeCount++;
+
+				this.setState({ graph: state.graph });
+				notify();
+			}));
+
+			this.sigma.bind('clickNode', commonWork((e, state) => {
+				// console.log(e);
+				if (this.shortMem.previouslySelectedNode !== null) {
+					const fromNode = this.shortMem.previouslySelectedNode;
+					const toNode = e.data.node.id;
+
+					if (!this.sigma.graph.edges(`${fromNode}${toNode}`)) {
+						this.sigma.graph.addEdge(Graph.edge(fromNode, toNode));
+						this.forceAtlas();
+
+						state.graph.edges[fromNode].push(toNode);
+						this.setState({ graph: state.graph });
+						notify();
+					}
+
+					this.shortMem.previouslySelectedNode = null;
+					return;
+				}
+				this.shortMem.previouslySelectedNode = e.data.node.id;
+			}));
+		}
 	}
 
 	updateColors(deadClist) {
@@ -116,7 +215,6 @@ class Graph extends Component {
 
 		clist.forEachEdge((edge, idx) => {
 			this.colorizeThing(edge.join(''), Graph.colors[idx], 'edges');
-			this.colorizeThing(edge.slice(0).reverse().join(''), Graph.colors[idx], 'edges');
 		});
 
 		clist.forEachNode((node, idx) => {
@@ -156,8 +254,15 @@ class Graph extends Component {
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
-	nodeCount: PropTypes.number.isRequired,
-	edges: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+	graph: PropTypes.shape({
+		nodeCount: PropTypes.number.isRequired,
+		edges: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+	}).isRequired,
+
+	algorithmInputChange: PropTypes.shape({
+		fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+		handler: PropTypes.func.isRequired
+	}).isRequired,
 
 	animationNextFrameTime: PropTypes.number.isRequired
 };

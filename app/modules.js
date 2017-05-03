@@ -8,7 +8,7 @@ export const GraphModule = Modules.Graph = exporter(
 	clist => ({
 		colors: clist
 	}),
-	graph => typee('graph', graph)
+	(graph, options) => typee('graph', { graph, options })
 );
 
 export const TableModule = Modules.Table = exporter(
@@ -52,7 +52,9 @@ export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 
 		return GraphModule.snap(clist);
 	},
-	graph => GraphModule.module(graph)
+	graph => GraphModule.module(graph, {
+		edgeWeight: true
+	})
 );
 
 export const QueueModule = Modules.Queue = exporter(

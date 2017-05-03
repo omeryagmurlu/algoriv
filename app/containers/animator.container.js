@@ -22,6 +22,17 @@ class AnimatorContainer extends Component {
 		this.animator.mount();
 	}
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.frames === this.props.frames) {
+			return;
+		}
+
+		this.animator.unmount();
+		this.animator = new Animator(newProps.frames, this.handleAnimatorChange);
+		this.handleAnimatorChange();
+		this.animator.mount();
+	}
+
 	componentWillUnmount() {
 		this.animator.unmount();
 	}

@@ -34,16 +34,18 @@ const AlgorithmFactory = opts => class AlgorithmPrototype extends Component {
 		handler: input => this.setState(prevState => {
 			const newState = { ...prevState, ...input };
 			newState.frames = AlgorithmPrototype.logic(filterObjectByKeys(newState, opts.input));
+			console.log(newState.frames.length, prevState.frames.length);
 			return newState;
 		})
 	}
 
 	render() {
+		console.log(this.state);
 		return (
 			<AnimatorContainer
 				{...this.props}
 
-				frames={this.state.frames}
+				frames={JSON.parse(JSON.stringify(this.state.frames))}
 
 				algorithmStatic={opts.modules(filterObjectByKeys(this.state, opts.input))}
 				algorithmInfo={opts.info}
