@@ -8,7 +8,7 @@ const BrowserWindow = electron.BrowserWindow;
 
 let mainWindow;
 const createWindow = () => {
-	BrowserWindow.addDevToolsExtension('/home/omer/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0');
+	// BrowserWindow.addDevToolsExtension('/home/omer/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.0.12_0');
 
 	mainWindow = new BrowserWindow({
 		width: 500,

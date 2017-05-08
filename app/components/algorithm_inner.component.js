@@ -2,6 +2,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import _mapValues from 'lodash.mapvalues';
+import SideDrawer from './side-drawer.component';
 
 // I hate webpack
 // const components = ((comps => comps.reduce((acc, v) => {
@@ -21,26 +23,39 @@ const components = {
 const AlgorithmInner = props => {
 	const { animationDirectives: directives, algorithmStatic: statics, ...passProps } = props;
 
-	const modules = Object.keys(statics).map(moduleId =>
-		React.createElement(components[statics[moduleId].type], {
-			...passProps,
-			id: moduleId,
-			key: moduleId,
-			...statics[moduleId].data,
-			...directives[moduleId]
-		})
+	const parts = _mapValues({
+		main: 0,
+		right: 0,
+		left: 0
+	}, (_, lay) => Object.keys(statics).filter(moduleId =>
+		statics[moduleId].layout === lay).map(moduleId =>
+			React.createElement(components[statics[moduleId].type], {
+				...passProps,
+				id: moduleId,
+				key: moduleId,
+				...statics[moduleId].data,
+				...directives[moduleId]
+			})
+	));
+
+	return (
+		<section
+			style={{
+				display: 'flex',
+				justifyContent: 'space-between'
+			}}
+		>
+			<section>
+				{parts.main}
+			</section>
+			<SideDrawer side="left">
+				{parts.left}
+			</SideDrawer>
+			<SideDrawer side="right">
+				{parts.right}
+			</SideDrawer>
+		</section>
 	);
-
-	// const modules = flatten(Object.keys(rule).map(type =>
-	// 	rule[type].map((specifics, i) =>
-	// 		React.createElement(components[type], {
-	// 			index: i,
-	// 			...passProps,
-	// 			key: type + i, // eslint-disable-line react/no-array-index-key
-	// 			[type]: specifics
-	// 		}))));
-
-	return React.createElement('section', null, ...modules);
 };
 
 AlgorithmInner.propTypes = {

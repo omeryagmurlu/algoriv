@@ -1,0 +1,45 @@
+.par {
+	.container {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+
+		position: relative;
+		> * {
+			position: relative;
+		}
+	}
+
+	.handle {
+		transition-duration: 0.15s;
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	display: flex;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+
+	&.right {
+		right: 0;
+		flex-direction: row-reverse;
+	}
+
+	&.left {
+		left: 0;
+		flex-direction: row;
+	}
+
+	&.active {
+		&.right {
+
+		}
+
+		.handle {
+
+		}
+	}
+}

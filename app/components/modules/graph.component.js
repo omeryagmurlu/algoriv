@@ -104,7 +104,6 @@ class Graph extends Component {
 			graph: Graph.readGraph(this.props.graph),
 			settings: {
 				singleHover: true,
-				scalingMode: 'inside',
 				zoomMin: 0.0001,
 				zoomMax: 100,
 				maxEdgeSize: 1,

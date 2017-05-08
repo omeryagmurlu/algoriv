@@ -1,16 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Line } from 'rc-progress';
-import Slider from 'rc-slider';
+import Slider from 'material-ui/Slider';
+import LinearProgress from 'material-ui/LinearProgress';
+import FlatButton from 'material-ui/FlatButton';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import 'rc-slider/assets/index.css';
+import AvSkipPrevious from 'material-ui/svg-icons/av/skip-previous';
+import AvFastRewind from 'material-ui/svg-icons/av/fast-rewind';
+import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
+import AvPause from 'material-ui/svg-icons/av/pause';
+import AvFastForward from 'material-ui/svg-icons/av/fast-forward';
+import AvSkipNext from 'material-ui/svg-icons/av/skip-next';
 
 import Header from './header.component';
 import AlgorithmInner from './algorithm_inner.component';
 
+injectTapEventPlugin();
+
 const AlgorithmView = props => {
 	const {
 		animationSpeed,
+		animationIsPaused,
 		onAnimationChangeSpeed,
 		onAnimationToBegin,
 		onAnimationToEnd,
@@ -29,15 +39,17 @@ const AlgorithmView = props => {
 				<Slider
 					max={100}
 					min={0}
+					step={1}
 					value={animationSpeed}
-					onChange={onAnimationChangeSpeed}
+					defaultValue={animationSpeed}
+					onChange={(_, v) => onAnimationChangeSpeed(v)}
 				/>
-				<button id="toBegin" onClick={onAnimationToBegin} />
-				<button id="stepBackward" onClick={onAnimationStepBackward} />
-				<button id="pauseRestart" onClick={onAnimationPauseRestart} />
-				<button id="stepForward" onClick={onAnimationStepForward} />
-				<button id="toEnd" onClick={onAnimationToEnd} />
-				<Line percent={props.animationProgress} strokeWidth="4" strokeColor="#D3D3D3" />
+				<FlatButton icon={<AvSkipPrevious />} id="toBegin" onTouchTap={onAnimationToBegin} />
+				<FlatButton icon={<AvFastRewind />} id="stepBackward" onTouchTap={onAnimationStepBackward} />
+				<FlatButton icon={animationIsPaused ? <AvPlayArrow /> : <AvPause />} id="pauseRestart" onTouchTap={onAnimationPauseRestart} />
+				<FlatButton icon={<AvFastForward />} id="stepForward" onTouchTap={onAnimationStepForward} />
+				<FlatButton icon={<AvSkipNext />} id="toEnd" onTouchTap={onAnimationToEnd} />
+				<LinearProgress value={props.animationProgress} mode="determinate" />
 			</footer>
 		</div>
 	);
@@ -46,7 +58,7 @@ const AlgorithmView = props => {
 AlgorithmView.propTypes = {
 	animationSpeed: PropTypes.number.isRequired,
 	animationProgress: PropTypes.number.isRequired,
-	// animationIsPaused: PropTypes.boolean.isRequired,
+	animationIsPaused: PropTypes.bool.isRequired,
 	onAnimationChangeSpeed: PropTypes.func.isRequired,
 	onAnimationToBegin: PropTypes.func.isRequired,
 	onAnimationStepForward: PropTypes.func.isRequired,

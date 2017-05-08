@@ -1,4 +1,10 @@
-import { typee, ColorList } from './utils';
+import { ColorList } from './utils';
+
+const typee = (type, layout, data = {}) => ({
+	type,
+	layout,
+	data
+});
 
 const exporter = (snap, module) => ({ snap, module });
 
@@ -8,23 +14,29 @@ export const GraphModule = Modules.Graph = exporter(
 	clist => ({
 		colors: clist
 	}),
-	(graph, options) => typee('graph', { graph, options })
+	(graph, options) => typee('graph', 'main', { graph, options })
 );
 
 export const TableModule = Modules.Table = exporter(
-	data => ({ data }),
-	(width, cols) => typee('table', {
+	// convert columns to rows
+	columnsData => ({
+		data: Array(columnsData.reduce((acc, v) => Math.max(acc, v.length), 0)).fill(1).map((_, i) =>
+			columnsData.reduce((acc, v) => {
+				acc.push(v[i]);
+				return acc;
+			}, [])
+		)
+	}),
+	(width, columns) => typee('table', 'right', {
 		width,
-		columns: cols.map(v => ({ title: v }))
+		columns
 	})
 );
 
 // o--o--o--o--o
 
 export const TableFuncModule = Modules.TableFunc = (title, width = 75) => exporter(
-	q => TableModule.snap(q.map(v => ({
-		[title]: v
-	}))),
+	q => TableModule.snap([q]),
 	() => TableModule.module(width, [title])
 );
 
@@ -32,12 +44,12 @@ export const TableFuncModule = Modules.TableFunc = (title, width = 75) => export
 
 export const CodeModule = Modules.Code = exporter(
 	highlights => ({ highlights }), // array of indexes
-	code => typee('code', { code })
+	code => typee('code', 'right', { code })
 );
 
 export const ExplanationModule = Modules.Explanation = exporter(
 	text => ({ text }), // string
-	() => typee('explanation')
+	() => typee('explanation', 'right')
 );
 
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
@@ -58,18 +70,16 @@ export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 );
 
 export const QueueModule = Modules.Queue = exporter(
-	q => TableModule.snap(q.map(v => ({
-		Queue: v // Queue is the dataIndex
-	}))),
-	() => TableModule.module(75, ['Queue'])
+	q => TableModule.snap([q]),
+	() => TableModule.module(100, ['Queue'])
 );
 
 export const VisitedArrayModule = Modules.VisitedArray = exporter(
-	vis => TableModule.snap(vis.map((Visited, Node) => ({
-		Visited: Visited.toString(),
-		Node
-	}))),
-	() => TableModule.module(150, ['Node', 'Visited'])
+	vis => TableModule.snap([
+		vis.map((v, i) => i),
+		vis.map(v => v.toString())
+	]),
+	() => TableModule.module(200, ['Node', 'Visited'])
 );
 
 export default Modules;
