@@ -1,0 +1,11 @@
+$drawerHandleWidth: 40px;
+$footerHeight: $drawerHandleWidth;
+$headerHeight: $drawerHandleWidth;
+
+$viewportMargin: 60px;
+
+$moduleMaxWidth: 200px;
+
+@mixin trans($dur: 0.5s) {
+	transition-duration: $dur;
+}

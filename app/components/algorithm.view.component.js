@@ -13,7 +13,7 @@ import AvFastForward from 'material-ui/svg-icons/av/fast-forward';
 import AvSkipNext from 'material-ui/svg-icons/av/skip-next';
 
 import Header from './header.component';
-import AlgorithmInner from './algorithm_inner.component';
+import AlgorithmInner from './algorithm-inner.component';
 
 injectTapEventPlugin();
 

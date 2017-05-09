@@ -13,7 +13,7 @@ import { style } from '../../styles/table.scss';
 // import { trace } from '../../utils';
 
 const Table = props => (
-	<div className={style} style={{ width: props.width }}>
+	<div className={style}>
 		<TableView
 			height={`${props.width}px`}
 		>

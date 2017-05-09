@@ -1,3 +1,5 @@
-.style {
+@import "common";
 
+.style {
+	width: $moduleMaxWidth;
 }

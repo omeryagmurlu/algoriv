@@ -1,5 +1,7 @@
+@import "common";
+
 .style {
-	p {
-		
-	}
+	width: $moduleMaxWidth;
+	text-align: center;
+	font-weight: bold;
 }

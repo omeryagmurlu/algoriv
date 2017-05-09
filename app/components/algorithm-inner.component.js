@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import _mapValues from 'lodash.mapvalues';
 import SideDrawer from './side-drawer.component';
 
+import styles from '../styles/algorithm-inner.scss';
+
 // I hate webpack
 // const components = ((comps => comps.reduce((acc, v) => {
 // 	acc[v] = require(`./${v}.component`);
@@ -39,13 +41,8 @@ const AlgorithmInner = props => {
 	));
 
 	return (
-		<section
-			style={{
-				display: 'flex',
-				justifyContent: 'space-between'
-			}}
-		>
-			<section>
+		<section className={styles.top} >
+			<section className={styles.main}>
 				{parts.main}
 			</section>
 			<SideDrawer side="left">

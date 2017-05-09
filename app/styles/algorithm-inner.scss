@@ -1,0 +1,11 @@
+@import "common";
+
+.top {
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	.main {
+		height: calc(100vh - ( #{$footerHeight} + #{$headerHeight} ));
+		position: relative;
+	}
+}

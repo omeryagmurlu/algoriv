@@ -1,5 +1,11 @@
+@import "common";
+@import 'node_modules/sass-material-colors/sass/sass-material-colors';
+
 .par {
 	.container {
+		@include trans;
+		overflow: scroll;
+		max-width: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -7,11 +13,20 @@
 
 		position: relative;
 		> * {
+			@include trans;
+			margin: 0;
 			position: relative;
 		}
 	}
 
 	.handle {
+		.handleIcon {
+			color: material-color('amber', '500');
+			width: $drawerHandleWidth !important;
+			height: $drawerHandleWidth !important;
+		}
+		background-color: material-color('green', 'a400');
+		width: $drawerHandleWidth;
 		transition-duration: 0.15s;
 		position: relative;
 		display: flex;
@@ -34,12 +49,26 @@
 	}
 
 	&.active {
-		&.right {
+		.container {
+			max-width: 50vw;
+			> * {
+				margin-left: $drawerHandleWidth;
+				margin-right: $drawerHandleWidth;
+				margin-top: $drawerHandleWidth;
+				margin-bottom: 0;
+			}
 
+			> *:last-child {
+				margin-top: 0;
+			}
 		}
 
 		.handle {
-
+			.handleIcon {
+				width: $drawerHandleWidth / 2 !important;
+				height: $drawerHandleWidth / 2 !important;
+			}
+			width: $drawerHandleWidth / 2;
 		}
 	}
 }
