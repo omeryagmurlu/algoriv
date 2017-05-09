@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { style, active, passive } from '../../styles/code.scss';
+import { style, active, passive } from './style.scss';
 
 const Code = props => {
 	const lineTags = Array(props.code.length).fill(passive);

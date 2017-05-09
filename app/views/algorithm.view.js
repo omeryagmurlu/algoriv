@@ -12,8 +12,8 @@ import AvPause from 'material-ui/svg-icons/av/pause';
 import AvFastForward from 'material-ui/svg-icons/av/fast-forward';
 import AvSkipNext from 'material-ui/svg-icons/av/skip-next';
 
-import Header from './header.component';
-import AlgorithmInner from './algorithm-inner.component';
+import Header from 'App/components/header.component';
+import AlgorithmInner from 'App/components/algorithm-inner.component';
 
 injectTapEventPlugin();
 

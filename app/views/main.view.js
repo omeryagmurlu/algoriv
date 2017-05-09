@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlgorithmsList } from '../algorithms';
+import { AlgorithmsList } from 'App/algorithms';
 
 const MainView = props => (
 	<div className="MainView">

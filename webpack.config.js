@@ -17,6 +17,11 @@ module.exports = {
 		hot: true,
 		publicPath: 'http://localhost:8080/public/js'
 	},
+	resolve: {
+		alias: {
+			App: path.resolve(__dirname, 'app')
+		}
+	},
 	module: {
 		rules: [
 			{

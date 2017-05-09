@@ -3,9 +3,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _mapValues from 'lodash.mapvalues';
-import SideDrawer from './side-drawer.component';
+import SideDrawer from 'App/components/side-drawer.component';
 
-import styles from '../styles/algorithm-inner.scss';
+import styles from './style.scss';
 
 // I hate webpack
 // const components = ((comps => comps.reduce((acc, v) => {
@@ -16,10 +16,10 @@ import styles from '../styles/algorithm-inner.scss';
 // ]))
 
 const components = {
-	code: require('./modules/code.component').default,
-	explanation: require('./modules/explanation.component').default,
-	graph: require('./modules/graph.component').default,
-	table: require('./modules/table.component').default
+	code: require('App/components/modules/code.component').default,
+	explanation: require('App/components/modules/explanation.component').default,
+	graph: require('App/components/modules/graph.component').default,
+	table: require('App/components/modules/table.component').default
 };
 
 const AlgorithmInner = props => {

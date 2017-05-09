@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _pickBy from 'lodash.pickby';
 
-import AnimatorContainer from './animator.container';
+import AnimatorContainer from 'App/containers/animator.container';
 
 export const snapshot = (payload, object) => {
 	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference

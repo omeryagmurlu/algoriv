@@ -9,8 +9,7 @@ import {
 	TableRowColumn,
 } from 'material-ui/Table';
 
-import { style } from '../../styles/table.scss';
-// import { trace } from '../../utils';
+import { style } from './style.scss';
 
 const Table = props => (
 	<div className={style}>

@@ -1,12 +1,12 @@
  // Graphs
-import Djikstra from './containers/algorithms/djikstra.container';
-import BFS from './containers/algorithms/bfs.container';
-import DFS from './containers/algorithms/dfs.container';
-import SCC from './containers/algorithms/scc.container';
-import Prim from './containers/algorithms/prim.container';
-import Kruskal from './containers/algorithms/kruskal.container';
-import TopologicalDFS from './containers/algorithms/topological_dfs.container';
-import TopologicalIndegree from './containers/algorithms/topological_indegree.container';
+import Djikstra from 'App/containers/algorithms/djikstra.container';
+import BFS from 'App/containers/algorithms/bfs.container';
+import DFS from 'App/containers/algorithms/dfs.container';
+import SCC from 'App/containers/algorithms/scc.container';
+import Prim from 'App/containers/algorithms/prim.container';
+import Kruskal from 'App/containers/algorithms/kruskal.container';
+import TopologicalDFS from 'App/containers/algorithms/topological_dfs.container';
+import TopologicalIndegree from 'App/containers/algorithms/topological_indegree.container';
 
 export const AlgorithmsMap = {
 	Djikstra: {

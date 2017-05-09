@@ -32,5 +32,10 @@
     "react",
     "jsx-a11y",
     "import"
-  ]
+  ],
+  "settings": {
+    "import/resolver": {
+      "webpack": {}
+    }
+  }
 }

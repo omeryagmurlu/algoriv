@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 
-import styles from '../styles/side-drawer.scss';
+import styles from './style.scss';
 
 class SideDrawer extends Component {
 	constructor(props) {
