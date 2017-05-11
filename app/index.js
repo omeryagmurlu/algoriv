@@ -2,17 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import { AppContainer } from 'react-hot-loader';
+import { AppContainer as ReactHotLoader } from 'react-hot-loader';
 
 import App from './containers/app.container';
 
 const render = (Component) => {
 	ReactDOM.render(
-		<AppContainer>
+		<ReactHotLoader>
 			<MuiThemeProvider>
 				<Component />
 			</MuiThemeProvider>
-		</AppContainer>,
+		</ReactHotLoader>,
 		document.getElementById('content')
 	);
 };

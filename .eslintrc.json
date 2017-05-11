@@ -26,7 +26,13 @@
     }],
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
-    "react/prefer-stateless-function": "error"
+    "react/prefer-stateless-function": "error",
+
+    "import/no-absolute-path": "off",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-duplicates": "off",
+    "import/extensions": "off"
   },
   "plugins": [
     "react",

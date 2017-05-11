@@ -1,4 +1,4 @@
-import Modules from 'App/modules';
+import Modules from 'App/features/modules';
 import AlgorithmFactory from '../algorithm.factory';
 
 const recurseStack = Modules.TableFunc('Recursion Stack', 150);
