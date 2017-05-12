@@ -12,7 +12,7 @@
     "watch:electron":      "yarn run prebuild && TARGET=electron NODE_ENV=dev webpack --watch",
     "watch:browser":       "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack-dev-server --hot --history-api-fallback --open",
 
-    "prebuild": "sed -e 's/dist\\//&browser.js/' -e 's/ing in/& browser/' index.base.html > index.html && sed -e 's/dist\\//&electron.js/' -e 's/ing in/& electron/' index.base.html > index.electron.html",
+    "prebuild":            "sed -e 's/dist\\//&browser.js/' -e 's/ing in/& browser/' index.base.html > index.html && sed -e 's/dist\\//&electron.js/' -e 's/ing in/& electron/' index.base.html > index.electron.html",
 
     "build":               "yarn run build:prod",
     "build:dev":           "yarn run build:dev:electron && yarn run build:dev:browser",
@@ -20,7 +20,9 @@
     "build:dev:electron":  "yarn run prebuild && TARGET=electron NODE_ENV=dev webpack",
     "build:prod:electron": "yarn run prebuild && TARGET=electron NODE_ENV=production webpack",
     "build:dev:browser":   "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack",
-    "build:prod:browser":  "yarn run prebuild && TARGET=browser NODE_ENV=production webpack"
+    "build:prod:browser":  "yarn run prebuild && TARGET=browser NODE_ENV=production webpack",
+
+    "daily-banner":        "convert /home/omer/.local/share/unsplashLinux/old/1494183705.jpg -font Docker-One -gravity Center -fill \"#FFEF00\" -pointsize       200 -annotate +0+75 \"$(expr '(' $(date -d 2017/06/20 +%s) - $(date +%s) + 86399 ')' / 86400)\" -pointsize 80 -font URWGothic-Demi -annotate +0+200 'Days Left Until TSA' 'Days Left Until TSA.jpg'"
   },
   "author": "Omer Erdinc Yagmurlu",
   "license": "MIT",
