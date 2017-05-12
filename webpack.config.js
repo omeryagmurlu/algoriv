@@ -5,7 +5,7 @@ const environment = webpackConfig.environment;
 
 environment.setAll({
 	env: () => process.env.NODE_ENV || 'production',
-	target: () => process.env.TARGET || 'node'
+	target: () => process.env.TARGET || 'electron'
 });
 
 module.exports = new Config().extend('webpack/webpack.[env].[target].config.js');

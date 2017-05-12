@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import AlgorithmView from 'App/views/algorithm.view';
+import AlgorithmView from 'app/views/algorithm.view';
 import Animator from './features/animator';
 
 class AnimatorContainer extends Component {

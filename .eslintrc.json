@@ -28,11 +28,7 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/prefer-stateless-function": "error",
 
-    "import/no-absolute-path": "off",
-    "import/no-unresolved": "off",
-    "import/no-extraneous-dependencies": "off",
-    "import/no-duplicates": "off",
-    "import/extensions": "off"
+    "import/no-extraneous-dependencies": "warn"
   },
   "plugins": [
     "react",
@@ -41,7 +37,9 @@
   ],
   "settings": {
     "import/resolver": {
-      "webpack": {}
+      "webpack": {
+        "config": "webpack/partials/webpack.base.config.js"
+      }
     }
   }
 }

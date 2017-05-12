@@ -6,6 +6,21 @@ $viewportMargin: 60px;
 
 $moduleMaxWidth: 200px;
 
+$wrapperWidth: 960px;
+
 @mixin trans($dur: 0.5s) {
 	transition-duration: $dur;
+}
+
+@mixin wrapper {
+	position: relative;
+	margin: auto;
+	max-width: $wrapperWidth;
+	padding-top: 2vh;
+}
+
+@mixin verticalCenter {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }

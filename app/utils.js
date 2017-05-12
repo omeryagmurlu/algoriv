@@ -1,6 +1,13 @@
 import chroma from 'chroma-js';
+import _pickBy from 'lodash.pickby';
+
+export const getEvents = obj => _pickBy(obj, (v, k) => k.startsWith('on'));
 
 export const px = a => String(a).concat('px');
+
+export const getRandomArbitrary = (min, max) => (Math.random() * (max - min)) + min;
+
+export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
 export const trace = a => {
 	console.log(a);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import MainView from 'App/views/main.view';
+import MainView from 'app/views/main.view';
 
-class App extends Component {
+class app extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -20,4 +20,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default app;

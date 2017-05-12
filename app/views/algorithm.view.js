@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Slider from 'material-ui/Slider';
 import LinearProgress from 'material-ui/LinearProgress';
 import FlatButton from 'material-ui/FlatButton';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import AvSkipPrevious from 'material-ui/svg-icons/av/skip-previous';
 import AvFastRewind from 'material-ui/svg-icons/av/fast-rewind';
@@ -12,10 +11,8 @@ import AvPause from 'material-ui/svg-icons/av/pause';
 import AvFastForward from 'material-ui/svg-icons/av/fast-forward';
 import AvSkipNext from 'material-ui/svg-icons/av/skip-next';
 
-import Header from 'App/components/header.component';
-import AlgorithmInner from 'App/components/algorithm-inner.component';
-
-injectTapEventPlugin();
+import Header from 'app/components/header.component';
+import AlgorithmInner from 'app/components/algorithm-inner.component';
 
 const AlgorithmView = props => {
 	const {
@@ -31,7 +28,6 @@ const AlgorithmView = props => {
 	} = props;
 	return (
 		<div className="AlgorithmView">
-			<Header info={props.algorithmInfo} />
 			<AlgorithmInner
 				{...passProps}
 			/>

@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _mapValues from 'lodash.mapvalues';
-import SideDrawer from 'App/components/side-drawer.component';
+import SideDrawer from 'app/components/SideDrawer';
 
 import styles from './style.scss';
 
@@ -16,10 +16,10 @@ import styles from './style.scss';
 // ]))
 
 const components = {
-	code: require('App/components/modules/code.component').default,
-	explanation: require('App/components/modules/explanation.component').default,
-	graph: require('App/components/modules/graph.component').default,
-	table: require('App/components/modules/table.component').default
+	code: require('app/components/modules/code.component').default,
+	explanation: require('app/components/modules/explanation.component').default,
+	graph: require('app/components/modules/graph.component').default,
+	table: require('app/components/modules/table.component').default
 };
 
 const AlgorithmInner = props => {

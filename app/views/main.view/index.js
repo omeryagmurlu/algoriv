@@ -1,24 +1,45 @@
-import React from 'react';
-import FlatButton from 'material-ui/FlatButton';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import React, { Component } from 'react';
 
-import { AlgorithmsList } from './data/algorithms';
+import AlgorithmPageView from 'app/views/algorithm-page.view';
+import BigButton from 'app/components/BigButton';
 
-injectTapEventPlugin();
+import { mainView, container } from './style.scss';
 
-const MainView = props => (
-	<div className="MainView">
-		{AlgorithmsList.map(group => (
-			<nav key={group.title} >
-				<header>{group.title}</header>
-				{group.algorithms.map(alg => ( // changing prop FIXME
-					<FlatButton key={alg.name} onTouchTap={() => props.changeView(alg.view)}>
-						<header>{alg.name}</header><p>{alg.desc}</p>
-					</FlatButton>
-				))}
-			</nav>
-		))}
-	</div>
-);
+const views = [
+	{
+		view: AlgorithmPageView,
+		name: 'Algorithms',
+		desc: 'Give \'em all what they want!'
+	},
+	{
+		view: MainView,
+		name: 'Custom Code'
+	},
+	{
+		view: MainView,
+		name: 'CO-OP'
+	}
+];
+
+class MainView extends Component {
+	render() {
+		return (
+			<div className={mainView}>
+				<div
+					className={container}
+				>
+					{views.map(v => (
+						<BigButton
+							name={v.name}
+							key={v.name}
+							desc={v.desc}
+							onTouchTap={() => this.props.changeView(v.view)}
+						/>
+					))}
+				</div>
+			</div>
+		);
+	}
+}
 
 export default MainView;

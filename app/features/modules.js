@@ -1,4 +1,4 @@
-import { ColorList } from 'App/utils';
+import { ColorList } from 'app/utils';
 
 const typee = (type, layout, data = {}) => ({
 	type,

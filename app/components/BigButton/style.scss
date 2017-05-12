@@ -1,0 +1,33 @@
+@import "~app/styles/common";
+@import 'node_modules/sass-material-colors/sass/sass-material-colors';
+
+$fontSize: 22px;
+
+.child {
+	background: desaturate(material-color('amber', '400'), 30%);
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	box-sizing: border-box;
+	margin-bottom: 20px;
+	margin-right: 20px;
+	padding: 20px;
+	// padding-left: 20px * 2;
+	position: relative;
+	color: white;
+	overflow: hidden;
+
+	.primary, .secondary {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.primary {
+		font-size: $fontSize;
+	}
+
+	.secondary {
+		font-size: $fontSize * (5/9);
+	}
+}

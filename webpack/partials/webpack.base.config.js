@@ -13,13 +13,12 @@ module.exports = new Config().merge({
 		]
 	},
 	output: {
-		filename: 'bundle.js',
-		path: path.resolve(main, 'dist', 'js/'),
-		publicPath: 'dist/js/'
+		path: path.resolve(main, 'dist'),
+		publicPath: 'dist/'
 	},
 	resolve: {
 		alias: {
-			App: path.resolve(main, 'app')
+			app: path.resolve(main, 'app')
 		}
 	},
 	module: {

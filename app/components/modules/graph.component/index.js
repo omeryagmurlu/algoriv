@@ -53,7 +53,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
 
-import { flatten, ColorList, animateColor } from 'App/utils';
+import { flatten, ColorList, animateColor } from 'app/utils';
 import { style } from './style.scss';
 
 class Graph extends Component {

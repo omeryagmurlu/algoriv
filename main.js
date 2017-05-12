@@ -16,7 +16,7 @@ const createWindow = () => {
 		maximizeable: false
 	});
 
-	mainWindow.loadURL(`file://${path.join(__dirname, '/index.html')}`);
+	mainWindow.loadURL(`file://${path.join(__dirname, '/index.electron.html')}`);
 
 	mainWindow.webContents.openDevTools();
 
