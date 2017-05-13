@@ -10,12 +10,15 @@ import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import AvPause from 'material-ui/svg-icons/av/pause';
 import AvFastForward from 'material-ui/svg-icons/av/fast-forward';
 import AvSkipNext from 'material-ui/svg-icons/av/skip-next';
+import ContentSend from 'material-ui/svg-icons/content/send';
 
-import Header from 'app/components/header.component';
 import AlgorithmInner from 'app/components/algorithm-inner.component';
+
+import InformationDemandingButton from 'app/components/InformationDemandingButton';
 
 const AlgorithmView = props => {
 	const {
+		algorithmInitInput,
 		animationSpeed,
 		animationIsPaused,
 		onAnimationChangeSpeed,
@@ -42,7 +45,17 @@ const AlgorithmView = props => {
 				/>
 				<FlatButton icon={<AvSkipPrevious />} id="toBegin" onTouchTap={onAnimationToBegin} />
 				<FlatButton icon={<AvFastRewind />} id="stepBackward" onTouchTap={onAnimationStepBackward} />
-				<FlatButton icon={animationIsPaused ? <AvPlayArrow /> : <AvPause />} id="pauseRestart" onTouchTap={onAnimationPauseRestart} />
+				<InformationDemandingButton
+					activeIcon={<ContentSend />}
+					passiveIcon={animationIsPaused ? <AvPlayArrow /> : <AvPause />}
+					demandCondition={props.animationProgress === 0}
+					demandings={algorithmInitInput.map(({ description: text, handler }) => ({
+						text,
+						handler
+					}))}
+					resolve={onAnimationPauseRestart}
+					formatter={parseInt}
+				/>
 				<FlatButton icon={<AvFastForward />} id="stepForward" onTouchTap={onAnimationStepForward} />
 				<FlatButton icon={<AvSkipNext />} id="toEnd" onTouchTap={onAnimationToEnd} />
 				<LinearProgress value={props.animationProgress} mode="determinate" />
@@ -62,11 +75,7 @@ AlgorithmView.propTypes = {
 	onAnimationStepBackward: PropTypes.func.isRequired,
 	onAnimationToEnd: PropTypes.func.isRequired,
 
-	algorithmInfo: PropTypes.object.isRequired,
-	algorithmInputChange: PropTypes.shape({
-		fields: PropTypes.arrayOf(PropTypes.string).isRequired,
-		handler: PropTypes.func.isRequired
-	}).isRequired
+	algorithmInfo: PropTypes.object.isRequired
 };
 
 export default AlgorithmView;

@@ -159,51 +159,49 @@ class Graph extends Component {
 	}
 
 	registerEvents() {
-		if (this.props.algorithmInputChange.fields.includes('graph')) {
-			const notify = () => this.props.algorithmInputChange.handler({
-				graph: JSON.parse(JSON.stringify(this.state.graph)) // I need Immutable.js D:
-			});
+		const notify = () => this.props.input(
+			JSON.parse(JSON.stringify(this.state.graph)) // I need Immutable.js D:
+		);
 
-			const commonWork = cb => e => {
-				if (e.data.captor.ctrlKey) {
-					return cb(e, JSON.parse(JSON.stringify(this.state)));
+		const commonWork = cb => e => {
+			if (e.data.captor.ctrlKey) {
+				return cb(e, JSON.parse(JSON.stringify(this.state)));
+			}
+		};
+
+		this.sigma.bind('clickStage', commonWork((e, state) => {
+			// console.log(e);
+			const id = state.graph.nodeCount;
+			this.sigma.graph.addNode(Graph.node(id, e.data.captor.x, e.data.captor.y));
+			this.forceAtlas();
+
+			state.graph.edges[state.graph.nodeCount] = [];
+			state.graph.nodeCount++;
+
+			this.setState({ graph: state.graph });
+			notify();
+		}));
+
+		this.sigma.bind('clickNode', commonWork((e, state) => {
+			// console.log(e);
+			if (this.shortMem.previouslySelectedNode !== null) {
+				const fromNode = this.shortMem.previouslySelectedNode;
+				const toNode = e.data.node.id;
+
+				if (!this.sigma.graph.edges(`${fromNode}${toNode}`)) {
+					this.sigma.graph.addEdge(Graph.edge(fromNode, toNode));
+					this.forceAtlas();
+
+					state.graph.edges[fromNode].push(toNode);
+					this.setState({ graph: state.graph });
+					notify();
 				}
-			};
 
-			this.sigma.bind('clickStage', commonWork((e, state) => {
-				// console.log(e);
-				const id = state.graph.nodeCount;
-				this.sigma.graph.addNode(Graph.node(id, e.data.captor.x, e.data.captor.y));
-				this.forceAtlas();
-
-				state.graph.edges[state.graph.nodeCount] = [];
-				state.graph.nodeCount++;
-
-				this.setState({ graph: state.graph });
-				notify();
-			}));
-
-			this.sigma.bind('clickNode', commonWork((e, state) => {
-				// console.log(e);
-				if (this.shortMem.previouslySelectedNode !== null) {
-					const fromNode = this.shortMem.previouslySelectedNode;
-					const toNode = e.data.node.id;
-
-					if (!this.sigma.graph.edges(`${fromNode}${toNode}`)) {
-						this.sigma.graph.addEdge(Graph.edge(fromNode, toNode));
-						this.forceAtlas();
-
-						state.graph.edges[fromNode].push(toNode);
-						this.setState({ graph: state.graph });
-						notify();
-					}
-
-					this.shortMem.previouslySelectedNode = null;
-					return;
-				}
-				this.shortMem.previouslySelectedNode = e.data.node.id;
-			}));
-		}
+				this.shortMem.previouslySelectedNode = null;
+				return;
+			}
+			this.shortMem.previouslySelectedNode = e.data.node.id;
+		}));
 	}
 
 	updateColors(deadClist) {
@@ -258,10 +256,7 @@ Graph.propTypes = {
 		edges: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
 	}).isRequired,
 
-	algorithmInputChange: PropTypes.shape({
-		fields: PropTypes.arrayOf(PropTypes.string).isRequired,
-		handler: PropTypes.func.isRequired
-	}).isRequired,
+	input: PropTypes.func.isRequired,
 
 	animationNextFrameTime: PropTypes.number.isRequired
 };

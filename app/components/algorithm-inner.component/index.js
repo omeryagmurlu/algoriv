@@ -23,7 +23,12 @@ const components = {
 };
 
 const AlgorithmInner = props => {
-	const { animationDirectives: directives, algorithmStatic: statics, ...passProps } = props;
+	const {
+		animationDirectives: directives,
+		algorithmStatic: statics,
+		algorithmCustomInput: inputs,
+		...passProps
+	} = props;
 
 	const parts = _mapValues({
 		main: 0,
@@ -35,6 +40,11 @@ const AlgorithmInner = props => {
 				...passProps,
 				id: moduleId,
 				key: moduleId,
+				input: data => {
+					if (inputs.fields.includes(moduleId)) {
+						inputs.handler({ [moduleId]: data });
+					}
+				},
 				...statics[moduleId].data,
 				...directives[moduleId]
 			})
@@ -57,7 +67,11 @@ const AlgorithmInner = props => {
 
 AlgorithmInner.propTypes = {
 	animationDirectives: PropTypes.object.isRequired,
-	algorithmStatic: PropTypes.object.isRequired
+	algorithmStatic: PropTypes.object.isRequired,
+	algorithmCustomInput: PropTypes.shape({
+		fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+		handler: PropTypes.func.isRequired
+	}).isRequired
 };
 
 export default AlgorithmInner;

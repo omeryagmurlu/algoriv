@@ -1,4 +1,5 @@
 import Modules from 'app/features/modules';
+import { InitInput, CustomInput } from 'app/features/input-types';
 import AlgorithmFactory from '../algorithm.factory';
 
 const steps = [
@@ -40,6 +41,10 @@ const BFS = AlgorithmFactory({
 				[4]
 			]
 		}
+	},
+	inputType: {
+		graph: CustomInput(),
+		startVertex: InitInput('Starting Vertex'),
 	},
 	snap: (vis, q) => (hgs, text, cN, cE) => ({
 		kod: Modules.Code.snap(hgs),

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import _pickBy from 'lodash.pickby';
+import _mapValues from 'lodash.mapvalues';
+import _values from 'lodash.values';
 
 import AnimatorContainer from 'app/containers/animator.container';
 
@@ -15,41 +17,61 @@ export const snapFactoryProxy = (frames, prototype) =>
 
 const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !== 'undefined'));
 
-const AlgorithmFactory = opts => class AlgorithmPrototype extends Component {
+const AlgorithmFactory = ({
+	logic: algLogic,
+	snap: algSnap,
+	input: algInput,
+	inputType: algInputType,
+	info: algInfo,
+	modules: algModules
+}) => class AlgorithmPrototype extends Component {
 	static logic = input => {
 		const frames = [];
-		opts.logic(input, snapFactoryProxy(frames, opts.snap));
+		algLogic(input, snapFactoryProxy(frames, algSnap));
 		return frames;
 	}
 
 	constructor(props) {
 		super(props);
 
-		this.state = opts.input;
-		this.state.frames = AlgorithmPrototype.logic(opts.input);
+		this.state = algInput;
+		this.state.frames = AlgorithmPrototype.logic(algInput);
 	}
 
-	inputChange = {
-		fields: Object.keys(opts.input),
-		handler: input => this.setState(prevState => {
-			const newState = { ...prevState, ...input };
-			newState.frames = AlgorithmPrototype.logic(filterObjectByKeys(newState, opts.input));
-			console.log(newState.frames.length, prevState.frames.length);
+	inputHandler(inputObj, cb) {
+		this.setState(prevState => {
+			const newState = { ...prevState, ...inputObj };
+			newState.frames = AlgorithmPrototype.logic(filterObjectByKeys(newState, algInput));
 			return newState;
-		})
+		}, cb);
 	}
+
+	customInput = {
+		fields: Object.keys(algInput).filter(key => algInputType[key].type === 'custom'),
+		handler: (inputObj, cb) => this.inputHandler(inputObj, cb)
+	}
+
+	initInput = _values(_mapValues(
+		_pickBy(algInputType, ({ type }) => type === 'init'),
+		({ type, ...others }, key) => ({
+			...others,
+			handler: (data, cb) => this.inputHandler({
+				[key]: data
+			}, cb)
+		})
+	))
 
 	render() {
-		console.log(this.state);
 		return (
 			<AnimatorContainer
 				{...this.props}
 
 				frames={JSON.parse(JSON.stringify(this.state.frames))}
 
-				algorithmStatic={opts.modules(filterObjectByKeys(this.state, opts.input))}
-				algorithmInfo={opts.info}
-				algorithmInputChange={this.inputChange}
+				algorithmStatic={algModules(filterObjectByKeys(this.state, algInput))}
+				algorithmInfo={algInfo}
+				algorithmCustomInput={this.customInput}
+				algorithmInitInput={this.initInput}
 			/>
 		);
 	}

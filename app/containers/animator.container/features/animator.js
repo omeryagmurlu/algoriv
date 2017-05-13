@@ -2,6 +2,10 @@ export default class Animator {
 	constructor(frames, changeHandler, frameTime = 1) {
 		Object.assign(this, { frames, changeHandler, frameTime });
 
+		this._init();
+	}
+
+	_init() {
 		this.frameIndex = 0;
 		this.internalSpeed = 1;
 
@@ -11,7 +15,14 @@ export default class Animator {
 		this.progress = 0;
 		this.directives = this.frames[0];
 		this.isPaused = true;
-		this.nextFrameTime = 1000 * frameTime;
+		this.nextFrameTime = 1000 * this.frameTime;
+	}
+
+	refresh(frames) {
+		this.frames = frames;
+
+		this._init();
+		this.changeHandler();
 	}
 
 	getSpeed = () => this.speed

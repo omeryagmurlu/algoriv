@@ -1,4 +1,5 @@
 import Modules from 'app/features/modules';
+import { InitInput, CustomInput } from 'app/features/input-types';
 import AlgorithmFactory from '../algorithm.factory';
 
 const recurseStack = Modules.TableFunc('Recursion Stack', 150);
@@ -30,6 +31,10 @@ const DFS = AlgorithmFactory({
 				[4]
 			]
 		}
+	},
+	inputType: {
+		graph: CustomInput(),
+		startVertex: InitInput('Starting Vertex'),
 	},
 	snap: (vis, reclist) => (hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),

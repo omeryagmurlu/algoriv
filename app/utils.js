@@ -1,6 +1,8 @@
 import chroma from 'chroma-js';
 import _pickBy from 'lodash.pickby';
 
+export const rippleWait = fn => setTimeout(fn, 500);
+
 export const getEvents = obj => _pickBy(obj, (v, k) => k.startsWith('on'));
 
 export const px = a => String(a).concat('px');
