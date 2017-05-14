@@ -1,5 +1,16 @@
 import chroma from 'chroma-js';
 import _pickBy from 'lodash.pickby';
+import graphology from 'graphology';
+import _isNil from 'lodash.isnil';
+
+export const isNotNil = (...a) => !_isNil(...a);
+
+export const graphologyImportFix = obj => {
+	const type = obj.edges.find(o => o.undirected) ? 'UndirectedGraph' : 'DirectedGraph';
+	const graph = new graphology[type]();
+	graph.import(obj);
+	return graph;
+};
 
 export const rippleWait = fn => setTimeout(fn, 500);
 
@@ -31,43 +42,30 @@ export class ColorList {
 		this.edgesList = edgesList;
 	}
 
-	pushNode = node => this.nodesList.push([node])
-	pushNodes = nodes => this.nodesList.push(nodes)
-	pushEdge = edge => this.edgesList.push([edge])
-	pushEdges = edges => this.edgesList.push(edges)
+	static push = (list, items) => list.push(items.filter(isNotNil))
+	static set = (list, i, items) => (list[i] = items.filter(isNotNil))
 
-	setNode = (node, i) => (this.nodesList[i] = [node])
-	setNodes = (nodes, i) => (this.nodesList[i] = nodes)
-	setEdge = (edge, i) => (this.edgesList[i] = [edge])
-	setEdges = (edges, i) => (this.edgesList[i] = edges)
+	pushNode = node => ColorList.push(this.nodesList, [node])
+	pushNodes = nodes => ColorList.push(this.nodesList, nodes)
+	pushEdge = edge => ColorList.push(this.edgesList, [edge])
+	pushEdges = edges => ColorList.push(this.edgesList, edges)
 
-	static forEach = (list, check, callback) => {
+	setNode = (node, i) => ColorList.set(this.nodesList, i, [node])
+	setNodes = (nodes, i) => ColorList.set(this.nodesList, i, nodes)
+	setEdge = (edge, i) => ColorList.set(this.edgesList, i, [edge])
+	setEdges = (edges, i) => ColorList.set(this.edgesList, i, edges)
+
+	static forEach = (list, callback) => {
 		list.forEach((things, idx) => {
 			if (!Array.isArray(things)) {
 				return;
 			}
-			things.filter(v => check(v)).forEach(thing => callback(thing, idx));
+			things.forEach(thing => callback(thing, idx));
 		});
 	}
 
-	static isEdge = thing => {
-		if (
-			Array.isArray(thing) &&
-			(thing.length === 2) &&
-			(thing.filter(num => typeof num === 'number').length === 2)
-		) return true;
-		return false;
-	}
-
-	static isNode = thing => {
-		if (
-			typeof thing === 'number'
-		) return true;
-		return false;
-	}
-
-	forEachEdge = callback => ColorList.forEach(this.edgesList, ColorList.isEdge, callback)
-	forEachNode = callback => ColorList.forEach(this.nodesList, ColorList.isNode, callback)
+	forEachEdge = callback => ColorList.forEach(this.edgesList, callback)
+	forEachNode = callback => ColorList.forEach(this.nodesList, callback)
 }
 
 export const animateColor = ({

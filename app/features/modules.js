@@ -11,8 +11,9 @@ const exporter = (snap, module) => ({ snap, module });
 const Modules = {};
 
 export const GraphModule = Modules.Graph = exporter(
-	clist => ({
-		colors: clist
+	(clist, optMutatingGraph) => ({
+		colors: clist,
+		graph: optMutatingGraph
 	}),
 	(graph, options) => typee('graph', 'main', { graph, options })
 );
@@ -53,7 +54,7 @@ export const ExplanationModule = Modules.Explanation = exporter(
 );
 
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
-	(currentEdge, currentNode, vis, q) => {
+	(currentEdge, currentNode, vis, q, ...params) => {
 		const clist = new ColorList();
 
 		clist.pushNodes(vis.map((v, i) => ((v !== true) ? -1 : i)).filter(v => (v !== -1))); // to high
@@ -62,11 +63,9 @@ export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 
 		clist.setEdge(currentEdge, 2);
 
-		return GraphModule.snap(clist);
+		return GraphModule.snap(clist, ...params);
 	},
-	graph => GraphModule.module(graph, {
-		edgeWeight: true
-	})
+	graph => GraphModule.module(graph)
 );
 
 export const QueueModule = Modules.Queue = exporter(

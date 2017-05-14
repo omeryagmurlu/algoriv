@@ -9,11 +9,8 @@ export const snapshot = (payload, object) => {
 	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
 };
 
-export const snapFactoryProxy = (frames, prototype) =>
-	(...outerParams) => {
-		const instance = prototype(...outerParams);
-		return (...innerParams) => snapshot(frames, instance(...innerParams));
-	};
+export const snapFactoryProxy = (frames, fn) =>
+	(...params) => snapshot(frames, fn(...params));
 
 const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !== 'undefined'));
 
@@ -46,6 +43,8 @@ const AlgorithmFactory = ({
 		}, cb);
 	}
 
+	getInput = () => filterObjectByKeys(this.state, algInput)
+
 	customInput = {
 		fields: Object.keys(algInput).filter(key => algInputType[key].type === 'custom'),
 		handler: (inputObj, cb) => this.inputHandler(inputObj, cb)
@@ -53,11 +52,19 @@ const AlgorithmFactory = ({
 
 	initInput = _values(_mapValues(
 		_pickBy(algInputType, ({ type }) => type === 'init'),
-		({ type, ...others }, key) => ({
-			...others,
-			handler: (data, cb) => this.inputHandler({
-				[key]: data
-			}, cb)
+		({ type, invalid, options }, key) => ({
+			def: algInput[key],
+			...options,
+			handler: (data, cb) => {
+				const error = invalid(data, this.getInput());
+				if (error) {
+					return cb(error);
+				}
+
+				return this.inputHandler({
+					[key]: data
+				}, cb);
+			}
 		})
 	))
 
@@ -66,9 +73,11 @@ const AlgorithmFactory = ({
 			<AnimatorContainer
 				{...this.props}
 
-				frames={JSON.parse(JSON.stringify(this.state.frames))}
+				frames={this.state.frames}
 
-				algorithmStatic={algModules(filterObjectByKeys(this.state, algInput))}
+				// NOTE: I hated doing this, but modules should be wrapped like snaps,
+				// 		 since they all get combined together at the end.
+				algorithmStatic={JSON.parse(JSON.stringify(algModules(this.getInput())))}
 				algorithmInfo={algInfo}
 				algorithmCustomInput={this.customInput}
 				algorithmInitInput={this.initInput}

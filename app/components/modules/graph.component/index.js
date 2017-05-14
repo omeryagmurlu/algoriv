@@ -53,34 +53,39 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
 
-import { flatten, ColorList, animateColor } from 'app/utils';
+import { ColorList, animateColor, graphologyImportFix as gimport } from 'app/utils';
 import { style } from './style.scss';
 
 class Graph extends Component {
-	static node = (i, x, y) => ({
-		id: i,
-		label: `${i}`,
+	static node = (id, x, y) => ({
+		id,
+		label: `${id}`,
 		size: 1,
 		color: Graph.defaultColor,
 		x,
 		y
 	})
 
-	static edge = (v, u) => ({
-		id: `${v}${u}`,
-		source: v,
-		target: u,
+	static edge = (id, graph, weight) => ({
+		id,
+		source: graph.source(id),
+		target: graph.target(id),
+		label: weight && `${weight}`,
 		color: Graph.defaultColor,
 		size: 1
 	})
 
 	static readGraph = graph => ({
-		nodes: Array(graph.nodeCount).fill(1).map((v, i) => Graph.node(
-			i,
-			100 * Math.cos((2 * i * Math.PI) / graph.nodeCount),
-			100 * Math.sin((2 * i * Math.PI) / graph.nodeCount)
+		nodes: graph.nodes().map((id, i) => Graph.node(
+			id,
+			100 * Math.cos((2 * i * Math.PI) / graph.order),
+			100 * Math.sin((2 * i * Math.PI) / graph.order)
 		)),
-		edges: flatten(graph.edges.map((negs, v) => negs.map((u) => (Graph.edge(v, u))))) // FIXME: check whether u array is
+		edges: graph.edges().map(id => Graph.edge(
+			id,
+			graph,
+			graph.getEdgeAttribute(id, 'weight')
+		))
 	})
 
 	static defaultColor = '#ccc'
@@ -96,12 +101,13 @@ class Graph extends Component {
 	}
 
 	componentDidMount() {
+		const graph = gimport(this.props.graph);
 		this.sigma = new sigma({ // eslint-disable-line new-cap
 			renderer: {
 				container: this.graphId,
 				type: 'canvas'
 			},
-			graph: Graph.readGraph(this.props.graph),
+			graph: Graph.readGraph(graph),
 			settings: {
 				singleHover: true,
 				zoomMin: 0.0001,
@@ -112,16 +118,8 @@ class Graph extends Component {
 				edgeLabelSize: 'proportional'
 			}
 		});
-		this.createGraph(this.props.graph);
+		this.createGraph(graph);
 		this.registerEvents();
-
-		this.state = { // state, without react, we dont need to inform it
-			graph: this.props.graph,
-		};
-
-		this.shortMem = {
-			previouslySelectedNode: null
-		};
 
 		this.colorTemp = {
 			edges: {},
@@ -130,11 +128,11 @@ class Graph extends Component {
 		this.colorPurgeStack = [];
 	}
 
-	componentWillReceiveProps({ graph }) {
-		if (!_isEqual(graph, this.state.graph)) {
+	componentWillReceiveProps({ graph: deadGraph }) {
+		const graph = gimport(deadGraph);
+		if (!_isEqual(graph, gimport(this.props.graph))) {
 			console.log('force update');
 			this.createGraph(graph);
-			this.setState({ graph });
 		}
 	}
 
@@ -145,10 +143,10 @@ class Graph extends Component {
 	createGraph(graph) {
 		this.sigma.graph.clear();
 		this.sigma.graph.read(Graph.readGraph(graph));
-		this.forceAtlas();
+		this.layout();
 	}
 
-	forceAtlas() {
+	layout() {
 		this.sigma.startForceAtlas2({
 			worker: true,
 			barnesHutOptimize: false,
@@ -159,48 +157,44 @@ class Graph extends Component {
 	}
 
 	registerEvents() {
-		const notify = () => this.props.input(
-			JSON.parse(JSON.stringify(this.state.graph)) // I need Immutable.js D:
+		const notify = graph => this.props.input(
+			gimport(JSON.parse(JSON.stringify(graph))) // I need Immutable.js D: // I really do
 		);
 
-		const commonWork = cb => e => {
+		const commonWork = fn => e => {
 			if (e.data.captor.ctrlKey) {
-				return cb(e, JSON.parse(JSON.stringify(this.state)));
+				return fn(e, gimport(this.props.graph));
 			}
 		};
 
-		this.sigma.bind('clickStage', commonWork((e, state) => {
-			// console.log(e);
-			const id = state.graph.nodeCount;
+		this.sigma.bind('clickStage', commonWork((e, graph) => {
+			const id = graph.addNode(graph.order);
+
 			this.sigma.graph.addNode(Graph.node(id, e.data.captor.x, e.data.captor.y));
-			this.forceAtlas();
+			this.layout();
 
-			state.graph.edges[state.graph.nodeCount] = [];
-			state.graph.nodeCount++;
-
-			this.setState({ graph: state.graph });
-			notify();
+			notify(graph);
 		}));
 
-		this.sigma.bind('clickNode', commonWork((e, state) => {
-			// console.log(e);
-			if (this.shortMem.previouslySelectedNode !== null) {
-				const fromNode = this.shortMem.previouslySelectedNode;
+		let previouslySelectedNode = null;
+		this.sigma.bind('clickNode', commonWork((e, graph) => {
+			if (previouslySelectedNode !== null) {
+				const fromNode = previouslySelectedNode;
 				const toNode = e.data.node.id;
 
-				if (!this.sigma.graph.edges(`${fromNode}${toNode}`)) {
-					this.sigma.graph.addEdge(Graph.edge(fromNode, toNode));
-					this.forceAtlas();
+				if (!graph.hasEdge(fromNode, toNode)) {
+					const id = graph.addEdge(fromNode, toNode);
 
-					state.graph.edges[fromNode].push(toNode);
-					this.setState({ graph: state.graph });
-					notify();
+					this.sigma.graph.addEdge(Graph.edge(id, graph));
+					this.layout();
+
+					notify(graph);
 				}
 
-				this.shortMem.previouslySelectedNode = null;
+				previouslySelectedNode = null;
 				return;
 			}
-			this.shortMem.previouslySelectedNode = e.data.node.id;
+			previouslySelectedNode = e.data.node.id;
 		}));
 	}
 
@@ -211,7 +205,7 @@ class Graph extends Component {
 		}
 
 		clist.forEachEdge((edge, idx) => {
-			this.colorizeThing(edge.join(''), Graph.colors[idx], 'edges');
+			this.colorizeThing(edge, Graph.colors[idx], 'edges');
 		});
 
 		clist.forEachNode((node, idx) => {
@@ -234,6 +228,10 @@ class Graph extends Component {
 				}
 			}))
 		);
+		this.colorTemp = {
+			edges: {},
+			nodes: {}
+		};
 	}
 
 	colorizeThing = (thing, color, type) => {
@@ -251,10 +249,7 @@ class Graph extends Component {
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
-	graph: PropTypes.shape({
-		nodeCount: PropTypes.number.isRequired,
-		edges: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
-	}).isRequired,
+	graph: PropTypes.object.isRequired,
 
 	input: PropTypes.func.isRequired,
 

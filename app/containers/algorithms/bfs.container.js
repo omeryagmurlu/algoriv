@@ -1,5 +1,7 @@
 import Modules from 'app/features/modules';
 import { InitInput, CustomInput } from 'app/features/input-types';
+import { randomGraph } from 'app/data/graphs';
+
 import AlgorithmFactory from '../algorithm.factory';
 
 const steps = [
@@ -29,24 +31,14 @@ const BFS = AlgorithmFactory({
 		name: 'BFS'
 	},
 	input: {
-		startVertex: 5,
-		graph: {
-			nodeCount: 6,
-			edges: [
-				[1, 2, 4],
-				[0, 3],
-				[0, 3],
-				[1, 2, 4],
-				[0, 3, 5],
-				[4]
-			]
-		}
+		graph: randomGraph('BFS').graph,
+		startVertex: 0
 	},
 	inputType: {
 		graph: CustomInput(),
-		startVertex: InitInput('Starting Vertex'),
+		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
-	snap: (vis, q) => (hgs, text, cN, cE) => ({
+	snap: (vis, q, hgs, text, cN, cE) => ({
 		kod: Modules.Code.snap(hgs),
 		explain: Modules.Explanation.snap(text),
 		graph: Modules.VisitedAheadGraph.snap(cE, cN, vis, q),
@@ -60,11 +52,11 @@ const BFS = AlgorithmFactory({
 		queue: Modules.Queue.module(),
 		visit: Modules.VisitedArray.module()
 	}),
-	logic: ({ startVertex: st, graph }, snapFactory) => {
+	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];
-		const vis = Array(graph.nodeCount).fill(false);
+		const vis = Array(graph.order).fill(false);
 
-		const snap = snapFactory(vis, q);
+		const snap = (...par) => rawSnap(vis, q, ...par);
 
 		snap([], undefined);
 		q.push(st);
@@ -75,14 +67,14 @@ const BFS = AlgorithmFactory({
 			snap([3], steps[2](v), v);
 			vis[v] = true;
 			snap([4], steps[3](v), v);
-			graph.edges[v].forEach(u => {
-				snap([5], steps[4](u, v), u, [v, u]);
+			graph.neighbors(v).forEach(u => {
+				snap([5], steps[4](u, v), u, graph.edge(v, u));
 				if (vis[u]) {
-					snap([6], steps[5](u), u, [v, u]);
+					snap([6], steps[5](u), u, graph.edge(v, u));
 					return;
 				}
 				q.push(u);
-				snap([7], steps[6](u), u, [v, u]);
+				snap([7], steps[6](u), u, graph.edge(v, u));
 			});
 		}
 		snap([], steps[7](st));

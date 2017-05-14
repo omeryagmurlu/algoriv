@@ -1,5 +1,7 @@
 import Modules from 'app/features/modules';
 import { InitInput, CustomInput } from 'app/features/input-types';
+import { randomGraph } from 'app/data/graphs';
+
 import AlgorithmFactory from '../algorithm.factory';
 
 const recurseStack = Modules.TableFunc('Recursion Stack', 150);
@@ -19,24 +21,14 @@ const DFS = AlgorithmFactory({
 		name: 'DFS'
 	},
 	input: {
-		startVertex: 5,
-		graph: {
-			nodeCount: 6,
-			edges: [
-				[1, 2, 4],
-				[0, 3],
-				[0, 3],
-				[1, 2, 4],
-				[0, 3, 5],
-				[4]
-			]
-		}
+		startVertex: 0,
+		graph: randomGraph('BFS').graph
 	},
 	inputType: {
 		graph: CustomInput(),
-		startVertex: InitInput('Starting Vertex'),
+		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
-	snap: (vis, reclist) => (hgs, text, cn, ce) => ({
+	snap: (vis, reclist, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
 		graph: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist),
 		exp: Modules.Explanation.snap(text),
@@ -50,11 +42,11 @@ const DFS = AlgorithmFactory({
 		recurse: recurseStack.module(),
 		vis: Modules.VisitedArray.module()
 	}),
-	logic: ({ startVertex: st, graph }, snapFactory) => {
+	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];
-		const vis = Array(graph.nodeCount).fill(false);
+		const vis = Array(graph.order).fill(false);
 
-		const snap = snapFactory(vis, reclist);
+		const snap = (...par) => rawSnap(vis, reclist, ...par);
 
 		const dfs = v => {
 			snap([0], `DFS ${v}`, v);
@@ -64,8 +56,8 @@ const DFS = AlgorithmFactory({
 			}
 			vis[v] = true;
 			snap([2], `Mark ${v} visited`, v);
-			graph.edges[v].forEach(u => {
-				snap([3, 4], `For neighbour ${u} of ${v} do DFS`, v, [v, u]);
+			graph.neighbors(v).forEach(u => {
+				snap([3, 4], `For neighbour ${u} of ${v} do DFS`, v, graph.edge(v, u));
 				reclist.push(u);
 				dfs(u);
 				reclist.pop();

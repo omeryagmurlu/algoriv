@@ -49,12 +49,16 @@ const AlgorithmView = props => {
 					activeIcon={<ContentSend />}
 					passiveIcon={animationIsPaused ? <AvPlayArrow /> : <AvPause />}
 					demandCondition={props.animationProgress === 0}
-					demandings={algorithmInitInput.map(({ description: text, handler }) => ({
+					demandings={algorithmInitInput.map(({
+						handler,
+						description: text,
+						def: defaultValue
+					}) => ({
 						text,
-						handler
+						handler,
+						defaultValue
 					}))}
 					resolve={onAnimationPauseRestart}
-					formatter={parseInt}
 				/>
 				<FlatButton icon={<AvFastForward />} id="stepForward" onTouchTap={onAnimationStepForward} />
 				<FlatButton icon={<AvSkipNext />} id="toEnd" onTouchTap={onAnimationToEnd} />
@@ -80,6 +84,7 @@ AlgorithmView.propTypes = {
 	onAnimationToEnd: PropTypes.func.isRequired,
 
 	algorithmInitInput: PropTypes.arrayOf(PropTypes.shape({
+		def: PropTypes.number.isRequired,
 		description: PropTypes.string.isRequired,
 		handler: PropTypes.func.isRequired
 	})),

@@ -10,10 +10,45 @@ class InformationDemandingButton extends Component {
 		super(props);
 
 		this.state = {
-			active: false,
+			opened: false,
+			errors: [],
 			inputValues: [],
 		};
 	}
+
+	isShown = () => this.props.demandCondition || this.props.demandings.length === 0
+	isOpened = () => this.isShown() && this.state.opened
+
+	handler = () => {
+		if (this.isShown()) {
+			if (!this.isOpened()) {
+				rippleWait(() => this.setState({ opened: true }));
+			} else {
+				let remaining = this.props.demandings.length;
+				this.props.demandings.forEach(({ handler, defaultValue }, i) => {
+					handler(this.props.formatter(this.state.inputValues[i] || defaultValue), (err) => {
+						if (err) {
+							this.setState(pS => {
+								pS.errors[i] = err;
+								return pS;
+							});
+							return;
+						}
+
+						remaining--;
+						if (remaining === 0) {
+							rippleWait(() => {
+								this.setState({ opened: false });
+								this.props.resolve();
+							});
+						}
+					});
+				});
+			}
+		} else {
+			this.props.resolve();
+		}
+	};
 
 	render() {
 		const {
@@ -25,42 +60,26 @@ class InformationDemandingButton extends Component {
 			passiveIcon,
 			...pTB
 		} = this.props;
-		const textFields = this.state.active && demandings.map(({ text }, i) => (
+		const textFields = this.isOpened() && demandings.map(({ text, defaultValue }, i) => (
 			<TextField
-				hintText={text}
+				floatingLabelText={text}
+				defaultValue={defaultValue}
 				key={text}
+				errorText={this.state.errors[i]}
 				onChange={({ target: { value } }) => this.setState(pS => {
 					pS.inputValues[i] = value;
 					return pS;
 				})}
 			/>
 		));
-		const sendEvent = () => {
-			if (!this.state.active) {
-				rippleWait(() => this.setState({ active: true }));
-			} else {
-				let remaining = demandings.length;
-				demandings.forEach(({ handler }, i) => {
-					handler(formatter(this.state.inputValues[i]), () => {
-						remaining--;
-						if (remaining === 0) {
-							rippleWait(() => {
-								this.setState({ active: false });
-								resolve();
-							});
-						}
-					});
-				});
-			}
-		};
 
 		return (
 			<div style={{ display: 'inline-block' }}>
 				{textFields}
 				<FlatButton
 					{...pTB}
-					onTouchTap={(!demandCondition || demandings.length === 0) ? resolve : sendEvent}
-					icon={this.state.active ? activeIcon : passiveIcon}
+					onTouchTap={this.handler}
+					icon={this.isOpened() ? activeIcon : passiveIcon}
 				/>
 			</div>
 		);
@@ -68,7 +87,7 @@ class InformationDemandingButton extends Component {
 }
 
 InformationDemandingButton.defaultProps = {
-	formatter: () => {},
+	formatter: v => v,
 	demandings: [],
 	demandCondition: false
 };

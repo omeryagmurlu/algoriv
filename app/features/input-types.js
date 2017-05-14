@@ -1,5 +1,8 @@
 export const CustomInput = () => ({ type: 'custom' });
-export const InitInput = description => ({
+export const InitInput = (description, invalid = () => false) => ({
 	type: 'init',
-	description
+	invalid,
+	options: {
+		description
+	}
 });
