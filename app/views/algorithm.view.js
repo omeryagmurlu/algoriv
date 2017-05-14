@@ -64,6 +64,10 @@ const AlgorithmView = props => {
 	);
 };
 
+AlgorithmView.defaultProps = {
+	algorithmInitInput: []
+};
+
 AlgorithmView.propTypes = {
 	animationSpeed: PropTypes.number.isRequired,
 	animationProgress: PropTypes.number.isRequired,
@@ -75,6 +79,10 @@ AlgorithmView.propTypes = {
 	onAnimationStepBackward: PropTypes.func.isRequired,
 	onAnimationToEnd: PropTypes.func.isRequired,
 
+	algorithmInitInput: PropTypes.arrayOf(PropTypes.shape({
+		description: PropTypes.string.isRequired,
+		handler: PropTypes.func.isRequired
+	})),
 	algorithmInfo: PropTypes.object.isRequired
 };
 

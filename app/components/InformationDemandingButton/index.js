@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
@@ -15,7 +16,15 @@ class InformationDemandingButton extends Component {
 	}
 
 	render() {
-		const { demandCondition, demandings, resolve, formatter, activeIcon, passiveIcon, ...pTB } = this.props;
+		const {
+			demandCondition,
+			demandings,
+			resolve,
+			formatter,
+			activeIcon,
+			passiveIcon,
+			...pTB
+		} = this.props;
 		const textFields = this.state.active && demandings.map(({ text }, i) => (
 			<TextField
 				hintText={text}
@@ -50,12 +59,30 @@ class InformationDemandingButton extends Component {
 				{textFields}
 				<FlatButton
 					{...pTB}
-					onTouchTap={!demandCondition ? resolve : sendEvent}
+					onTouchTap={(!demandCondition || demandings.length === 0) ? resolve : sendEvent}
 					icon={this.state.active ? activeIcon : passiveIcon}
 				/>
 			</div>
 		);
 	}
 }
+
+InformationDemandingButton.defaultProps = {
+	formatter: () => {},
+	demandings: [],
+	demandCondition: false
+};
+
+InformationDemandingButton.propTypes = {
+	demandCondition: PropTypes.bool,
+	demandings: PropTypes.arrayOf(PropTypes.shape({
+		text: PropTypes.string.isRequired,
+		handler: PropTypes.func.isRequired
+	})),
+	formatter: PropTypes.func,
+	activeIcon: PropTypes.element.isRequired,
+	passiveIcon: PropTypes.element.isRequired,
+	resolve: PropTypes.func.isRequired
+};
 
 export default InformationDemandingButton;
