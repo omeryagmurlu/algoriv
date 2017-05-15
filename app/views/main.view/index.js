@@ -33,7 +33,7 @@ class MainView extends Component {
 							name={v.name}
 							key={v.name}
 							desc={v.desc}
-							onTouchTap={() => this.props.changeView(v.view)}
+							onTouchTap={() => this.props.changeView(v)}
 						/>
 					))}
 				</div>

@@ -31,7 +31,7 @@ const AlgorithmFactory = ({
 	constructor(props) {
 		super(props);
 
-		this.state = algInput;
+		this.state = { ...algInput }; // BUGFIX: multiple instances, deepCopy needed
 		this.state.frames = AlgorithmPrototype.logic(algInput);
 	}
 

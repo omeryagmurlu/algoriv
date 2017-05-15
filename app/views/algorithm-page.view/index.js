@@ -19,7 +19,7 @@ const AlgorithmPageView = props => (
 							key={alg.name}
 							desc={alg.desc}
 							cols={2}
-							onTouchTap={() => props.changeView(alg.view)}
+							onTouchTap={() => props.changeView(alg)}
 						/>
 					))}
 				</div>

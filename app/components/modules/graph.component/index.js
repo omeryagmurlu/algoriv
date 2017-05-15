@@ -95,6 +95,15 @@ class Graph extends Component {
 		'#00f', // current
 	]
 
+	static typeOptions = {
+		directed: {
+			defaultEdgeType: 'arrow',
+			minArrowSize: 6
+		},
+		undirected: {},
+		mixed: {}
+	}
+
 	constructor(props) {
 		super(props);
 		this.graphId = `graph${this.props.id}`;
@@ -108,15 +117,6 @@ class Graph extends Component {
 				type: 'canvas'
 			},
 			graph: Graph.readGraph(graph),
-			settings: {
-				singleHover: true,
-				zoomMin: 0.0001,
-				zoomMax: 100,
-				maxEdgeSize: 1,
-				defaultEdgeType: 'arrow',
-				minArrowSize: 6,
-				edgeLabelSize: 'proportional'
-			}
 		});
 		this.createGraph(graph);
 		this.registerEvents();
@@ -142,6 +142,14 @@ class Graph extends Component {
 
 	createGraph(graph) {
 		this.sigma.graph.clear();
+		this.sigma.settings({
+			singleHover: true,
+			zoomMin: 0.0001,
+			zoomMax: 100,
+			maxEdgeSize: 1,
+			edgeLabelSize: 'proportional',
+			...Graph.typeOptions[graph.type]
+		});
 		this.sigma.graph.read(Graph.readGraph(graph));
 		this.layout();
 	}
