@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { themedStyle } from 'app/utils';
 
 import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 
-import styles from './style.scss';
+import style from './style.scss';
+
+const css = themedStyle(style);
 
 class SideDrawer extends Component {
 	constructor(props) {
@@ -35,21 +38,21 @@ class SideDrawer extends Component {
 		return (
 			<aside
 				className={classNames({
-					[styles.par]: true,
-					[this.side(styles.right, styles.left)]: true,
-					[styles.active]: this.state.active,
+					[css('par', this.props.theme)]: true,
+					[this.side(css('right'), css('left'))]: true,
+					[css('active')]: this.state.active,
 				})}
 			>
-				<section className={styles.container}>
+				<section className={css('container')}>
 					{this.props.children}
 				</section>
-				<div className={styles.handle} onClick={this.toggleActive}>
+				<div className={css('handle')} onClick={this.toggleActive}>
 					{React.createElement(
 						this.side(
 							this.active(HardwareKeyboardArrowLeft, HardwareKeyboardArrowRight),
 							this.active(HardwareKeyboardArrowRight, HardwareKeyboardArrowLeft)
 						), {
-							className: styles.handleIcon
+							className: css('handleIcon')
 						}
 					)}
 				</div>
@@ -58,8 +61,14 @@ class SideDrawer extends Component {
 	}
 }
 
-SideDrawer.propTypes = {
+SideDrawer.defaultProps = {
+	children: null
+};
 
+SideDrawer.propTypes = {
+	theme: PropTypes.string.isRequired,
+	side: PropTypes.oneOf(['right', 'left']).isRequired,
+	children: PropTypes.any
 };
 
 export default SideDrawer;

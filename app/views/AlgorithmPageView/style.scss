@@ -1,0 +1,10 @@
+@import "~app/styles/common";
+
+.pageView {
+	@include wrapper;
+}
+
+.container {
+	display: flex;
+	flex-flow: row wrap;
+}

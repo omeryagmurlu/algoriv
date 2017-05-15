@@ -1,74 +1,74 @@
 @import "~app/styles/common";
-@import 'node_modules/sass-material-colors/sass/sass-material-colors';
 
-.par {
-	.container {
-		@include trans;
-		overflow: scroll;
-		max-width: 0;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-
-		position: relative;
-		> * {
-			@include trans;
-			margin: 0;
-			position: relative;
-		}
-	}
-
-	.handle {
-		.handleIcon {
-			color: material-color('amber', '500');
-			width: $drawerHandleWidth !important;
-			height: $drawerHandleWidth !important;
-		}
-		background-color: material-color('green', 'a400');
-		width: $drawerHandleWidth;
-		transition-duration: 0.15s;
-		position: relative;
-		display: flex;
-		align-items: center;
-	}
-
-	display: flex;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-
-	&.right {
-		right: 0;
-		flex-direction: row-reverse;
-	}
-
-	&.left {
-		left: 0;
-		flex-direction: row;
-	}
-
-	&.active {
+@include themeable() {
+	.par-#{$themeName} {
 		.container {
-			max-width: 50vw;
-			> * {
-				margin-left: $drawerHandleWidth;
-				margin-right: $drawerHandleWidth;
-				margin-top: $drawerHandleWidth;
-				margin-bottom: 0;
-			}
+			@include trans;
+			overflow: scroll;
+			max-width: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
 
-			> *:last-child {
-				margin-top: 0;
+			position: relative;
+			> * {
+				@include trans;
+				margin: 0;
+				position: relative;
 			}
 		}
 
 		.handle {
 			.handleIcon {
-				width: $drawerHandleWidth / 2 !important;
-				height: $drawerHandleWidth / 2 !important;
+				width: $drawerHandleWidth !important;
+				height: $drawerHandleWidth !important;
 			}
-			width: $drawerHandleWidth / 2;
+			background-color: map-get($themeMap, 'primary');
+			width: $drawerHandleWidth;
+			transition-duration: 0.15s;
+			position: relative;
+			display: flex;
+			align-items: center;
+		}
+
+		display: flex;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+
+		&.right {
+			right: 0;
+			flex-direction: row-reverse;
+		}
+
+		&.left {
+			left: 0;
+			flex-direction: row;
+		}
+
+		&.active {
+			.container {
+				max-width: 50vw;
+				> * {
+					margin-left: $drawerHandleWidth;
+					margin-right: $drawerHandleWidth;
+					margin-top: $drawerHandleWidth;
+					margin-bottom: 0;
+				}
+
+				> *:last-child {
+					margin-top: 0;
+				}
+			}
+
+			.handle {
+				.handleIcon {
+					width: $drawerHandleWidth / 2 !important;
+					height: $drawerHandleWidth / 2 !important;
+				}
+				width: $drawerHandleWidth / 2;
+			}
 		}
 	}
-}
+};

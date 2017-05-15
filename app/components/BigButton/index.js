@@ -1,22 +1,34 @@
 import React from 'react';
-import { getEvents } from 'app/utils';
-import { child, primary, secondary } from './style.scss';
+import PropTypes from 'prop-types';
+import { getEvents, themedStyle } from 'app/utils';
+import style from './style.scss';
+import { margin } from './variables.json';
+
+const css = themedStyle(style);
 
 const BigButton = props => (
 	<div
 		{...getEvents(props)}
-		className={child}
+		className={css('child', props.theme)}
 		style={{
-			width: `calc((100% - (20px * ${props.cols})) / ${props.cols})` // FIXME: must get the 20px from sccs file
+			width: `calc((100% - (${margin} * ${props.cols})) / ${props.cols})`
 		}}
 	>
-		<div className={primary} {...getEvents(props)}>{props.name}</div>
-		<div className={secondary} {...getEvents(props)}>{props.desc}</div>
+		<div className={css('primary', props.theme)} {...getEvents(props)}>{props.name}</div>
+		<div className={css('secondary', props.theme)} {...getEvents(props)}>{props.desc}</div>
 	</div>
 );
 
 BigButton.defaultProps = {
-	cols: 1
+	cols: 1,
+	desc: null
+};
+
+BigButton.propTypes = {
+	theme: PropTypes.string.isRequired,
+	cols: PropTypes.number,
+	name: PropTypes.string.isRequired,
+	desc: PropTypes.string
 };
 
 export default BigButton;

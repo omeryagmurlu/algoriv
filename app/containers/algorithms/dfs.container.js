@@ -2,7 +2,7 @@ import Modules from 'app/features/modules';
 import { InitInput, CustomInput } from 'app/features/input-types';
 import { randomGraph } from 'app/data/graphs';
 
-import AlgorithmFactory from '../algorithm.factory';
+import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 
 const recurseStack = Modules.TableFunc('Recursion Stack', 150);
 

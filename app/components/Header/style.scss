@@ -1,5 +1,8 @@
 @import "~app/styles/common.scss";
 
-.header {
-	height: $headerHeight;
-}
+@include themeable() {
+	.header-#{$themeName} {
+		height: $headerHeight;
+		background: map-get($themeMap, 'primary');
+	}
+};

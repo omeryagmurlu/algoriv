@@ -1,0 +1,11 @@
+@import "~app/styles/common.scss";
+
+.section {
+	position: relative;
+	height: calc(100% - #{$footerHeight});
+}
+
+.footer {
+	position: relative;
+	height: $footerHeight;
+}

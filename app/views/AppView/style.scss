@@ -1,0 +1,6 @@
+@import "~app/styles/common.scss";
+
+.main {
+	position: relative;
+	height: calc(100vh - #{$headerHeight});
+}

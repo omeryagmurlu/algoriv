@@ -2,6 +2,11 @@ import chroma from 'chroma-js';
 import _pickBy from 'lodash.pickby';
 import graphology from 'graphology';
 import _isNil from 'lodash.isnil';
+import { themes } from 'app/styles/themes.json';
+
+export const themeVars = theme => themes[theme];
+
+export const themedStyle = (style) => (className, theme) => style[`${className}${theme ? `-${theme}` : ''}`];
 
 export const isNotNil = (...a) => !_isNil(...a);
 

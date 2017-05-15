@@ -1,0 +1,8 @@
+{"themes": {
+	"dark": {
+		"primary": "#ffd54f"
+	},
+	"light": {
+		"primary": "desaturate(#ffca28, 30%)"
+	}
+}}

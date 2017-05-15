@@ -1,4 +1,5 @@
 const webpackConfig = require('webpack-config');
+const jsonImporter = require('node-sass-json-importer');
 const path = require('path');
 
 const Config = webpackConfig.Config;
@@ -81,10 +82,15 @@ module.exports = new Config().merge({
 						modules: true,
 						localIdentName: '[path][name]__[local]--[hash:base64:5]',
 						minimize: true,
-						camelCase: true
+						camelCase: true,
+						importLoaders: 1
 					}
 				}, {
-					loader: 'sass-loader'
+					loader: 'sass-loader',
+					options: {
+						includePaths: [],
+						importer: jsonImporter
+					}
 				}]
 			},
 			{

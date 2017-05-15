@@ -1,3 +1,5 @@
+@import "app/styles/themes.json";
+
 $drawerHandleWidth: 40px;
 $footerHeight: $drawerHandleWidth;
 $headerHeight: $drawerHandleWidth;
@@ -16,11 +18,22 @@ $wrapperWidth: 960px;
 	position: relative;
 	margin: auto;
 	max-width: $wrapperWidth;
-	padding-top: 2vh;
+	padding-top: 4vh;
 }
 
 @mixin verticalCenter {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+$themeName: 1;
+$themeMap: 1;
+@mixin themeable() {
+	$names: dark, light;
+	@each $name in $names {
+		$themeName: $name !global;
+		$themeMap: map-get($themes, $name) !global;
+		@content;
+	}
 }
