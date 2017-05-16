@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import MainView from 'app/views/MainView';
 import AppView from 'app/views/AppView';
@@ -19,7 +20,7 @@ class AppContainer extends Component {
 			view: initialView,
 			back: null,
 			headerRoutes: [],
-			theme: 'light'
+			theme: 'giant-goldfish'
 		};
 
 		this.history = [initialView];
@@ -32,6 +33,10 @@ class AppContainer extends Component {
 	updateHeader = (headerRoutes, cb) => { // must implement clearing this
 		this.setState({ headerRoutes }, cb);
 	}
+
+	getThemeColors = () => ({
+		palette: themes[this.state.theme]
+	})
 
 	_setView = () => {
 		this.setState({
@@ -61,7 +66,7 @@ class AppContainer extends Component {
 
 	render() {
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={getMuiTheme(this.getThemeColors())} >
 				<AppView
 					view={this.state.view}
 
@@ -70,7 +75,6 @@ class AppContainer extends Component {
 					headerRoutes={this.state.headerRoutes}
 
 					theme={this.state.theme}
-					availableThemes={themeNames}
 					changeTheme={this.changeTheme}
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}

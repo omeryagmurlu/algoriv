@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
 
 import { rippleWait } from 'app/utils';
 
@@ -35,6 +34,11 @@ class InformationDemandingButton extends Component {
 							return;
 						}
 
+						this.setState(pS => {
+							pS.errors[i] = null;
+							return pS;
+						});
+
 						remaining--;
 						if (remaining === 0) {
 							rippleWait(() => {
@@ -50,6 +54,9 @@ class InformationDemandingButton extends Component {
 		}
 	};
 
+	// floatingLabelText={text}
+	// defaultValue={defaultValue}
+	// errorText={this.state.errors[i]}
 	render() {
 		const {
 			demandCondition,
@@ -61,11 +68,9 @@ class InformationDemandingButton extends Component {
 			...pTB
 		} = this.props;
 		const textFields = this.isOpened() && demandings.map(({ text, defaultValue }, i) => (
-			<TextField
-				floatingLabelText={text}
-				defaultValue={defaultValue}
+			<input
 				key={text}
-				errorText={this.state.errors[i]}
+
 				onChange={({ target: { value } }) => this.setState(pS => {
 					pS.inputValues[i] = value;
 					return pS;
@@ -74,7 +79,7 @@ class InformationDemandingButton extends Component {
 		));
 
 		return (
-			<div style={{ display: 'inline-block' }}>
+			<div style={{ display: 'inline-flex', alignItems: 'center' }}>
 				{textFields}
 				<FlatButton
 					{...pTB}

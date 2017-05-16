@@ -1,7 +1,11 @@
 @import "~app/styles/common";
 
-.style {
+.container {
 	width: $moduleMaxWidth;
-	text-align: center;
+	font-family: $textFont;
+	white-space: pre-line;
+}
+
+.header {
 	font-weight: bold;
 }

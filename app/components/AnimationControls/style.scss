@@ -1,0 +1,35 @@
+@import "~app/styles/common.scss";
+
+@include themeable() {
+	.container-#{$themeName} {
+		background: map-get($themeMap, 'primary1Color');
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+
+		.upper {
+			width: 100%;
+			height: 100%;
+			> * {
+				margin: 0 $drawerHandleWidth;
+			}
+		}
+
+		.buttons { // All of the !important s below are a shame of MUI (or my understanding of it)
+			> * svg {
+				color: map-get($themeMap, 'alternativeTextColor') !important;
+				fill: map-get($themeMap, 'alternativeTextColor') !important;
+			}
+
+			> *:hover svg {
+				color: map-get($themeMap, 'accent1Color') !important;
+				fill: map-get($themeMap, 'accent1Color') !important;
+			}
+		}
+	}
+
+	.upper, .buttons {
+		align-items: center;
+		display: flex;
+	}
+};

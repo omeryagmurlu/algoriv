@@ -1,0 +1,15 @@
+{
+	"drawerHandleWidth": "40px",
+	"footerHeight": "40px",
+	"headerHeight": "40px",
+
+	"viewportMargin": "60px",
+
+	"moduleMaxWidth": "20vw",
+
+	"wrapperWidth": "960px",
+
+	"uiFont": "'Roboto', sans-serif",
+	"textFont": "'Slabo 27px', serif",
+	"monospaceFont": "'AnkaCoderC75Regular', monospace"
+}

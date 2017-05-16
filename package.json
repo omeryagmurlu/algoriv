@@ -27,6 +27,8 @@
     "classnames": "^2.2.5",
     "electron": "^1.6.2",
     "electron-reload": "^1.1.0",
+    "electron-settings": "^3.0.14",
+    "electron-window-state": "^4.1.1",
     "graphology": "^0.10.0",
     "immutability-helper": "^2.2.0",
     "lodash.isequal": "^4.5.0",
@@ -42,7 +44,8 @@
     "react-dom": "^15.5.4",
     "react-hot-loader": "next",
     "react-tap-event-plugin": "^2.0.1",
-    "sigma": "^1.2.0"
+    "sigma": "^1.2.0",
+    "tinycolor2": "^1.4.1"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

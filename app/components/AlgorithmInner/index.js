@@ -10,19 +10,12 @@ import style from './style.scss';
 
 const css = themedStyle(style);
 
-// I hate webpack
-// const components = ((comps => comps.reduce((acc, v) => {
-// 	acc[v] = require(`./${v}.component`);
-// 	return acc;
-// }, {}))([
-// 	'code', 'explanation', 'graph', 'queue', 'table'
-// ]))
-
 const components = {
-	code: require('app/components/modules/code.component').default,
-	explanation: require('app/components/modules/explanation.component').default,
-	graph: require('app/components/modules/graph.component').default,
-	table: require('app/components/modules/table.component').default
+	code: require('app/components/modules/code.module').default,
+	explanation: require('app/components/modules/explanation.module').default,
+	graph: require('app/components/modules/graph.module').default,
+	table: require('app/components/modules/table.module').default,
+	description: require('app/components/modules/description.module').default
 };
 
 const AlgorithmInner = props => {
@@ -43,6 +36,7 @@ const AlgorithmInner = props => {
 				...passProps,
 				id: moduleId,
 				key: moduleId,
+				theme: props.theme,
 				input: data => {
 					if (inputs.fields.includes(moduleId)) {
 						inputs.handler({ [moduleId]: data });

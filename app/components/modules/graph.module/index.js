@@ -52,48 +52,54 @@ import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
+import tinycolor from 'tinycolor2';
 
-import { ColorList, animateColor, graphologyImportFix as gimport } from 'app/utils';
+import { ColorList, animateColor, graphologyImportFix as gimport, themeVars } from 'app/utils';
 import { style } from './style.scss';
 
 class Graph extends Component {
-	static node = (id, x, y) => ({
+	node = (id, x, y) => ({
 		id,
 		label: `${id}`,
 		size: 1,
-		color: Graph.defaultColor,
+		color: this.defaultColor(),
 		x,
 		y
 	})
 
-	static edge = (id, graph, weight) => ({
+	edge = (id, graph, weight) => ({
 		id,
 		source: graph.source(id),
 		target: graph.target(id),
 		label: weight && `${weight}`,
-		color: Graph.defaultColor,
+		color: this.defaultColor(),
 		size: 1
 	})
 
-	static readGraph = graph => ({
-		nodes: graph.nodes().map((id, i) => Graph.node(
+	readGraph = graph => ({
+		nodes: graph.nodes().map((id, i) => this.node(
 			id,
 			100 * Math.cos((2 * i * Math.PI) / graph.order),
 			100 * Math.sin((2 * i * Math.PI) / graph.order)
 		)),
-		edges: graph.edges().map(id => Graph.edge(
+		edges: graph.edges().map(id => this.edge(
 			id,
 			graph,
 			graph.getEdgeAttribute(id, 'weight')
 		))
 	})
 
-	static defaultColor = '#ccc'
-	static colors = [
-		'#0f0', // past
-		'#f0f', // future
-		'#00f', // current
-	]
+	defaultColor() {
+		return themeVars(this.props.theme)('primary1Color');
+	}
+
+	colors() {
+		return [
+			tinycolor(this.defaultColor()).spin(90).toString(), // past
+			tinycolor(this.defaultColor()).spin(180).toString(), // future
+			tinycolor(this.defaultColor()).spin(270).toString(), // current
+		];
+	}
 
 	static typeOptions = {
 		directed: {
@@ -116,7 +122,7 @@ class Graph extends Component {
 				container: this.graphId,
 				type: 'canvas'
 			},
-			graph: Graph.readGraph(graph),
+			graph: this.readGraph(graph),
 		});
 		this.createGraph(graph);
 		this.registerEvents();
@@ -150,7 +156,7 @@ class Graph extends Component {
 			edgeLabelSize: 'proportional',
 			...Graph.typeOptions[graph.type]
 		});
-		this.sigma.graph.read(Graph.readGraph(graph));
+		this.sigma.graph.read(this.readGraph(graph));
 		this.layout();
 	}
 
@@ -178,7 +184,7 @@ class Graph extends Component {
 		this.sigma.bind('clickStage', commonWork((e, graph) => {
 			const id = graph.addNode(graph.order);
 
-			this.sigma.graph.addNode(Graph.node(id, e.data.captor.x, e.data.captor.y));
+			this.sigma.graph.addNode(this.node(id, e.data.captor.x, e.data.captor.y));
 			this.layout();
 
 			notify(graph);
@@ -193,7 +199,7 @@ class Graph extends Component {
 				if (!graph.hasEdge(fromNode, toNode)) {
 					const id = graph.addEdge(fromNode, toNode);
 
-					this.sigma.graph.addEdge(Graph.edge(id, graph));
+					this.sigma.graph.addEdge(this.edge(id, graph));
 					this.layout();
 
 					notify(graph);
@@ -213,11 +219,11 @@ class Graph extends Component {
 		}
 
 		clist.forEachEdge((edge, idx) => {
-			this.colorizeThing(edge, Graph.colors[idx], 'edges');
+			this.colorizeThing(edge, this.colors()[idx], 'edges');
 		});
 
 		clist.forEachNode((node, idx) => {
-			this.colorizeThing(node, Graph.colors[idx], 'nodes');
+			this.colorizeThing(node, this.colors()[idx], 'nodes');
 		});
 
 		const scaleCache = {};
@@ -244,7 +250,7 @@ class Graph extends Component {
 
 	colorizeThing = (thing, color, type) => {
 		this.colorTemp[type][thing] = color;
-		this.colorPurgeStack.push(() => (this.colorTemp[type][thing] = Graph.defaultColor));
+		this.colorPurgeStack.push(() => (this.colorTemp[type][thing] = this.defaultColor()));
 	}
 
 	render() {

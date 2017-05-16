@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { themedStyle } from 'app/utils';
+import { themedStyle, themeVars } from 'app/utils';
 
 import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
@@ -18,6 +18,8 @@ class SideDrawer extends Component {
 			active: false
 		};
 	}
+
+	theme = (key) => themeVars(this.props.theme)(key)
 
 	toggleActive = () => {
 		this.setState(prevState => {
@@ -52,7 +54,8 @@ class SideDrawer extends Component {
 							this.active(HardwareKeyboardArrowLeft, HardwareKeyboardArrowRight),
 							this.active(HardwareKeyboardArrowRight, HardwareKeyboardArrowLeft)
 						), {
-							className: css('handleIcon')
+							className: css('handleIcon'),
+							color: this.theme('alternativeTextColor')
 						}
 					)}
 				</div>

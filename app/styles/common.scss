@@ -1,14 +1,6 @@
+@import "app/styles/fonts/fonts.css";
 @import "app/styles/themes.json";
-
-$drawerHandleWidth: 40px;
-$footerHeight: $drawerHandleWidth;
-$headerHeight: $drawerHandleWidth;
-
-$viewportMargin: 60px;
-
-$moduleMaxWidth: 200px;
-
-$wrapperWidth: 960px;
+@import "app/styles/variables.json";
 
 @mixin trans($dur: 0.5s) {
 	transition-duration: $dur;
@@ -19,6 +11,7 @@ $wrapperWidth: 960px;
 	margin: auto;
 	max-width: $wrapperWidth;
 	padding-top: 4vh;
+	box-sizing: border-box;
 }
 
 @mixin verticalCenter {
@@ -30,7 +23,7 @@ $wrapperWidth: 960px;
 $themeName: 1;
 $themeMap: 1;
 @mixin themeable() {
-	$names: dark, light;
+	$names: dark, giant-goldfish;
 	@each $name in $names {
 		$themeName: $name !global;
 		$themeMap: map-get($themes, $name) !global;

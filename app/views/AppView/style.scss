@@ -1,5 +1,13 @@
 @import "~app/styles/common.scss";
 
+@include themeable() {
+	.container-#{$themeName} {
+		user-select: none;
+		font-family: $uiFont;
+		color: map-get($themeMap, 'textColor');
+	}
+};
+
 .main {
 	position: relative;
 	height: calc(100vh - #{$headerHeight});

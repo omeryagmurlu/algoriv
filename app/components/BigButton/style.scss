@@ -3,13 +3,12 @@
 
 @include themeable() {
 	.child-#{$themeName} {
-		background: map-get($themeMap, 'primary');
+		background: map-get($themeMap, 'primary1Color');
 		display: flex;
 		flex-flow: column;
 		justify-content: center;
 		box-sizing: border-box;
-		margin-bottom: $margin;
-		margin-right: $margin;
+		margin: $margin / 2;
 		padding: $margin;
 		// padding-left: $margin * 2;
 		position: relative;
@@ -20,6 +19,7 @@
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			overflow: hidden;
+			color: map-get($themeMap, 'alternativeTextColor');
 		}
 
 		.primary-#{$themeName} {

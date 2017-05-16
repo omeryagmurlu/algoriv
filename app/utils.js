@@ -4,9 +4,24 @@ import graphology from 'graphology';
 import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 
-export const themeVars = theme => themes[theme];
+export const themeVars = theme => key => {
+	if (!themes[theme][key]) {
+		throw new ReferenceError(`${key} is a non-existent style`);
+	}
+	return themes[theme][key];
+};
 
-export const themedStyle = (style) => (className, theme) => style[`${className}${theme ? `-${theme}` : ''}`];
+export const themedStyle = (style) => {
+	if (!style) {
+		throw new ReferenceError(`themedStyle: unknown style ${style}`);
+	}
+	return (className, theme) => {
+		if (!style[`${className}${theme ? `-${theme}` : ''}`]) {
+			throw new ReferenceError(`themedStyle: could'nt find: ${className}${theme ? `-${theme}` : ''} in [${Object.keys(style).join(' ,')}]`);
+		}
+		return style[`${className}${theme ? `-${theme}` : ''}`];
+	};
+};
 
 export const isNotNil = (...a) => !_isNil(...a);
 

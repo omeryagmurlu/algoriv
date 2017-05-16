@@ -1,0 +1,17 @@
+@import "~app/styles/common.scss";
+
+@include themeable() {
+	.code-#{$themeName} {
+		p {
+			&.active {
+				color: map-get($themeMap, 'alternativeTextColor');
+				background-color: map-get($themeMap, 'accent1Color');
+			}
+			color: map-get($themeMap, 'textColor');
+			font-family: $monospaceFont;
+			transition-duration: 500ms;
+			margin: 0;
+			white-space: pre;
+		}
+	}
+}

@@ -1,0 +1,29 @@
+@font-face {
+	font-family: 'AnkaCoderC75Regular';
+	src: url('app/styles/fonts/AnkaCoderC75Regular.eot');
+	src: url('app/styles/fonts/AnkaCoderC75Regular.eot') format('embedded-opentype'),
+		url('app/styles/fonts/AnkaCoderC75Regular.woff2') format('woff2'),
+		url('app/styles/fonts/AnkaCoderC75Regular.woff') format('woff'),
+		url('app/styles/fonts/AnkaCoderC75Regular.ttf') format('truetype'),
+		url('app/styles/fonts/AnkaCoderC75Regular.svg#AnkaCoderC75Regular') format('svg');
+}
+
+/* roboto-regular - latin */
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto'), local('Roboto-Regular'),
+		url('app/styles/fonts/roboto-v16-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		url('app/styles/fonts/roboto-v16-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* slabo-27px-regular - latin_latin-ext */
+@font-face {
+	font-family: 'Slabo 27px';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Slabo 27px'), local('Slabo27px-Regular'),
+		url('app/styles/fonts/slabo-27px-v3-latin_latin-ext-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		url('app/styles/fonts/slabo-27px-v3-latin_latin-ext-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}

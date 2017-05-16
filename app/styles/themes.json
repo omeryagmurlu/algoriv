@@ -1,8 +1,20 @@
 {"themes": {
-	"dark": {
-		"primary": "#ffd54f"
+	"giant-goldfish": {
+		"primary1Color": "#F38630",
+		"primary2Color": "#FA6900",
+		"accent1Color": "#009688",
+		"accent2Color": "#A7DBD8",
+		"textColor": "#333333",
+		"alternativeTextColor": "#E0E4CC",
+		"backgroundColor": "#E0E4CC"
 	},
-	"light": {
-		"primary": "desaturate(#ffca28, 30%)"
+	"dark": {
+		"primary1Color": "#C69C85",
+		"primary2Color": "#542437",
+		"accent1Color": "#D95B43",
+		"accent2Color": "#ECD078",
+		"textColor": "#C69C85",
+		"alternativeTextColor": "#774F38",
+		"backgroundColor": "#774F38"
 	}
 }}

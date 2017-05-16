@@ -15,6 +15,16 @@ const steps = [
 	s => `BFS(${s}) completed`
 ];
 
+const description = `
+Breadth-first search (BFS) is an algorithm for traversing or searching tree \
+or graph data structures. It starts at the tree root (or some arbitrary node \
+of a graph, sometimes referred to as a 'search key') and explores the \
+neighbor nodes first, before moving to the next level neighbors.
+
+BFS was invented in the late 1950s by E. F. Moore, who used it to find the shortest \
+path out of a maze, and discovered independently by C. Y. Lee as a wire routing algorithm (published 1961).
+`;
+
 const code = [
 	'BFS(s):',
 	'    Q = {s}; // FIFO',
@@ -50,7 +60,8 @@ const BFS = AlgorithmFactory({
 		explain: Modules.Explanation.module(),
 		graph: Modules.VisitedAheadGraph.module(graph),
 		queue: Modules.Queue.module(),
-		visit: Modules.VisitedArray.module()
+		visit: Modules.VisitedArray.module(),
+		desc: Modules.Description.module(description)
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];

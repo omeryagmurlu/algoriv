@@ -99,6 +99,10 @@ module.exports = new Config().merge({
 					loader: 'url-loader?limit=8192'
 				}
 			},
+			{
+				loader: 'url-loader',
+				test: /\.(svg|eot|ttf|woff|woff2)?$/
+			},
 		]
 	}
 });

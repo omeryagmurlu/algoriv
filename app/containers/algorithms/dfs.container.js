@@ -6,6 +6,17 @@ import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 
 const recurseStack = Modules.TableFunc('Recursion Stack', 150);
 
+const description = `
+Depth-first search (DFS) is an algorithm for traversing or searching tree or \
+graph data structures. One starts at the root (selecting some arbitrary node \
+as the root in the case of a graph) and explores as far as possible along each \
+branch before backtracking.
+
+A version of depth-first search was investigated in the 19th century by French \
+mathematician Charles Pierre Trémaux as a strategy for solving mazes.
+`;
+
+
 const code = [
 	'DFS(v):',
 	'    if v is visited return',
@@ -40,7 +51,8 @@ const DFS = AlgorithmFactory({
 		graph: Modules.VisitedAheadGraph.module(graph),
 		exp: Modules.Explanation.module(),
 		recurse: recurseStack.module(),
-		vis: Modules.VisitedArray.module()
+		vis: Modules.VisitedArray.module(),
+		desc: Modules.Description.module(description)
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];

@@ -53,6 +53,11 @@ export const ExplanationModule = Modules.Explanation = exporter(
 	() => typee('explanation', 'right')
 );
 
+export const DescriptionModule = Modules.Description = exporter(
+	() => ({}),
+	(text) => typee('description', 'left', { text })
+);
+
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 	(currentEdge, currentNode, vis, q, ...params) => {
 		const clist = new ColorList();

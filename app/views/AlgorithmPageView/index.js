@@ -2,6 +2,7 @@ import React from 'react';
 import Subheader from 'material-ui/Subheader';
 
 import { AlgorithmsList } from 'app/data/algorithms';
+import { themeVars } from 'app/utils';
 import BigButton from 'app/components/BigButton';
 import { pageView, container } from './style.scss';
 
@@ -9,7 +10,11 @@ const AlgorithmPageView = props => (
 	<div className={pageView}>
 		{AlgorithmsList.map(group => (
 			<nav key={group.title} >
-				<Subheader>{group.title}</Subheader>
+				<Subheader
+					style={{
+						color: themeVars(props.app.theme)('textColor')
+					}}
+				>{group.title}</Subheader>
 				<div
 					className={container}
 				>

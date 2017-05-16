@@ -1,8 +1,28 @@
 @import "~app/styles/common.scss";
 
 @include themeable() {
-	.header-#{$themeName} {
+	.container-#{$themeName} {
 		height: $headerHeight;
-		background: map-get($themeMap, 'primary');
+		background: map-get($themeMap, 'primary1Color');
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		-webkit-app-region: drag;
+		> * {
+			// -webkit-app-region: no-drag;
+		}
+
+		.nav {
+			display: block;
+		}
+
+		.header {
+			color: map-get($themeMap, 'alternativeTextColor');
+			display: block;
+			margin: 0 $drawerHandleWidth;
+			font-size: 18pt;
+			font-weight: normal;
+		}
 	}
 };

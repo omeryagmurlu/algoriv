@@ -1,0 +1,10 @@
+@import "~app/styles/common";
+
+@include themeable() {
+	.container-#{$themeName} {
+		width: $moduleMaxWidth;
+		tr {
+			background: map-get($themeMap, 'backgroundColor') !important;
+		}
+	}
+}

@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { style, active, passive } from './style.scss';
+import { themedStyle } from 'app/utils';
+
+import style from './style.scss';
+
+const css = themedStyle(style);
 
 const Code = props => {
-	const lineTags = Array(props.code.length).fill(passive);
-	props.highlights.forEach((idx => (lineTags[idx] = active)));
+	const lineTags = Array(props.code.length).fill(1);
+	props.highlights.forEach((idx => (lineTags[idx] = css('active'))));
 	const lines = props.code.map((line, i) => <p key={line} className={lineTags[i]}>{line}</p>);
 	return (
-		<div className={style}>
+		<div className={css('code', props.theme)}>
 			{lines}
 		</div>
 	);

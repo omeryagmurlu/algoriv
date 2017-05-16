@@ -5,3 +5,5 @@
 	* ~~a click on empty area -> add node~~
 	* ~~a click on a node and then on an another node -> add edge~~ (if edges are weighted, ask by means of a popup)
 * Make a class which has helper methods to generate an `AlgorithmPrototype` in an imperative way!
+* WRITE SOME FUCKING TESTS ASSHOLE
+* Rewrite InformationDemandingButton, it is implemented poorly
