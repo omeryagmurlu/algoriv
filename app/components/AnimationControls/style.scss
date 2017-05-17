@@ -15,17 +15,17 @@
 			}
 		}
 
-		.buttons { // All of the !important s below are a shame of MUI (or my understanding of it)
-			> * svg {
-				color: map-get($themeMap, 'alternativeTextColor') !important;
-				fill: map-get($themeMap, 'alternativeTextColor') !important;
-			}
-
-			> *:hover svg {
-				color: map-get($themeMap, 'accent1Color') !important;
-				fill: map-get($themeMap, 'accent1Color') !important;
-			}
-		}
+		// .buttons { // All of the !important s below are a shame of MUI (or my understanding of it)
+		// 	> * svg {
+		// 		color: map-get($themeMap, 'alternativeTextColor') !important;
+		// 		fill: map-get($themeMap, 'alternativeTextColor') !important;
+		// 	}
+		//
+		// 	> *:hover svg {
+		// 		color: map-get($themeMap, 'accent1Color') !important;
+		// 		fill: map-get($themeMap, 'accent1Color') !important;
+		// 	}
+		// }
 	}
 
 	.upper, .buttons {

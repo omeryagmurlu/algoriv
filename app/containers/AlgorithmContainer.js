@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import _pickBy from 'lodash.pickby';
-import _mapValues from 'lodash.mapvalues';
-import _values from 'lodash.values';
 
 import AnimatorContainer from 'app/containers/AnimatorContainer';
 
@@ -21,12 +19,18 @@ const AlgorithmFactory = ({
 	inputType: algInputType,
 	info: algInfo,
 	modules: algModules
+}) => ((({
+	revampedAlgInputType
 }) => class AlgorithmPrototype extends Component {
 	static logic = input => {
 		const frames = [];
 		algLogic(input, snapFactoryProxy(frames, algSnap));
 		return frames;
 	}
+
+	static selectInput = inType => revampedAlgInputType.filter(
+		({ inputType: { type } }) => type === inType
+	)
 
 	constructor(props) {
 		super(props);
@@ -45,28 +49,22 @@ const AlgorithmFactory = ({
 
 	getInput = () => filterObjectByKeys(this.state, algInput)
 
-	customInput = {
-		fields: Object.keys(algInput).filter(key => algInputType[key].type === 'custom'),
-		handler: (inputObj, cb) => this.inputHandler(inputObj, cb)
-	}
-
-	initInput = _values(_mapValues(
-		_pickBy(algInputType, ({ type }) => type === 'init'),
-		({ type, invalid, options }, key) => ({
-			def: algInput[key],
-			...options,
-			handler: (data, cb) => {
-				const error = invalid(data, this.getInput());
-				if (error) {
-					return cb(error);
-				}
-
-				return this.inputHandler({
-					[key]: data
-				}, cb);
+	inputs = () => revampedAlgInputType.map(({ inputName, inputType: { type, invalid, data } }) => ({
+		type,
+		data,
+		value: JSON.parse(JSON.stringify(this.getInput()[inputName])),
+		validate: newInput => !invalid(newInput, this.getInput()),
+		update: (newInput, cb = () => {}) => {
+			const error = invalid(newInput, this.getInput());
+			if (error) {
+				return cb(error);
 			}
-		})
-	))
+
+			return this.inputHandler({
+				[inputName]: newInput
+			}, cb);
+		}
+	}))
 
 	render() {
 		return (
@@ -77,13 +75,22 @@ const AlgorithmFactory = ({
 
 				// NOTE: I hated doing this, but modules should be wrapped like snaps,
 				// 		 since they all get combined together at the end.
-				algorithmStatic={JSON.parse(JSON.stringify(algModules(this.getInput())))}
 				algorithmInfo={algInfo}
-				algorithmCustomInput={this.customInput}
-				algorithmInitInput={this.initInput}
+				algorithmStatic={JSON.parse(JSON.stringify(algModules))}
+				algorithmInput={this.inputs()}
 			/>
 		);
 	}
-};
+})({
+	revampedAlgInputType: Object.keys(algInputType).reduce((acc, key) =>
+		acc.concat((Array.isArray(algInputType[key])
+			? algInputType[key]
+			: [algInputType[key]]
+		).map(v => ({
+			inputName: key,
+			inputType: v
+		})))
+	, [])
+}));
 
 export default AlgorithmFactory;

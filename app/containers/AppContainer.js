@@ -20,7 +20,7 @@ class AppContainer extends Component {
 			view: initialView,
 			back: null,
 			headerRoutes: [],
-			theme: 'giant-goldfish'
+			theme: 'dark'
 		};
 
 		this.history = [initialView];

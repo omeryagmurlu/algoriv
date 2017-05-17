@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { themedStyle, themeVars } from 'app/utils';
 
+import FlatButton from 'material-ui/FlatButton';
+
 import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 
@@ -48,17 +50,21 @@ class SideDrawer extends Component {
 				<section className={css('container')}>
 					{this.props.children}
 				</section>
-				<div className={css('handle')} onClick={this.toggleActive}>
-					{React.createElement(
-						this.side(
-							this.active(HardwareKeyboardArrowLeft, HardwareKeyboardArrowRight),
-							this.active(HardwareKeyboardArrowRight, HardwareKeyboardArrowLeft)
-						), {
-							className: css('handleIcon'),
-							color: this.theme('alternativeTextColor')
-						}
-					)}
-				</div>
+				<FlatButton
+					disableTouchRipple
+					onClick={this.toggleActive}
+					icon={
+						React.createElement(
+							this.side(
+								HardwareKeyboardArrowLeft,
+								HardwareKeyboardArrowRight
+							), {
+								className: css('handleIcon'),
+								color: this.theme('alternativeTextColor')
+							}
+						)
+					}
+				/>
 			</aside>
 		);
 	}

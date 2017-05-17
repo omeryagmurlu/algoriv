@@ -1,4 +1,5 @@
 import { ColorList } from 'app/utils';
+import { ModuleInput } from 'app/features/input-types';
 
 const typee = (type, layout, data = {}) => ({
 	type,
@@ -6,16 +7,21 @@ const typee = (type, layout, data = {}) => ({
 	data
 });
 
-const exporter = (snap, module) => ({ snap, module });
+const exporter = (snap, module, input) => ({ snap, module, input });
 
 const Modules = {};
+
+export const InputsRegistry = {
+	Graph: '// these will be consumed by both algorithms and modules'
+};
 
 export const GraphModule = Modules.Graph = exporter(
 	(clist, optMutatingGraph) => ({
 		colors: clist,
-		graph: optMutatingGraph
+		optGraph: optMutatingGraph // This is only viable for snap, as it is used in logic, in a module, it wouldn't get updated
 	}),
-	(graph, options) => typee('graph', 'main', { graph, options })
+	(options) => typee('graph', 'main', { options }),
+	(moduleId) => ModuleInput(moduleId, InputsRegistry.Graph)
 );
 
 export const TableModule = Modules.Table = exporter(
@@ -70,7 +76,7 @@ export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 
 		return GraphModule.snap(clist, ...params);
 	},
-	graph => GraphModule.module(graph)
+	() => GraphModule.module()
 );
 
 export const QueueModule = Modules.Queue = exporter(

@@ -1,5 +1,5 @@
 import Modules from 'app/features/modules';
-import { InitInput, CustomInput } from 'app/features/input-types';
+import { InitInput } from 'app/features/input-types';
 import { randomGraph } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
@@ -23,7 +23,8 @@ const code = [
 	'    mark v visited',
 	'    for every neighbour u of v:',
 	'        DFS(u)',
-	'',
+	'    return',
+	' ',
 	'DFS(s)'
 ];
 
@@ -32,28 +33,28 @@ const DFS = AlgorithmFactory({
 		name: 'DFS'
 	},
 	input: {
-		startVertex: 0,
-		graph: randomGraph('BFS').graph
+		graph: randomGraph('BFS').graph,
+		startVertex: '0'
 	},
 	inputType: {
-		graph: CustomInput(),
+		graph: Modules.Graph.input('graf'),
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
 	snap: (vis, reclist, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graph: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist),
+		graf: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist),
 		exp: Modules.Explanation.snap(text),
 		recurse: recurseStack.snap(reclist),
 		vis: Modules.VisitedArray.snap(vis)
 	}),
-	modules: ({ graph }) => ({
+	modules: {
 		kod: Modules.Code.module(code),
-		graph: Modules.VisitedAheadGraph.module(graph),
+		graf: Modules.VisitedAheadGraph.module(),
 		exp: Modules.Explanation.module(),
 		recurse: recurseStack.module(),
 		vis: Modules.VisitedArray.module(),
 		desc: Modules.Description.module(description)
-	}),
+	},
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];
 		const vis = Array(graph.order).fill(false);
@@ -61,7 +62,7 @@ const DFS = AlgorithmFactory({
 		const snap = (...par) => rawSnap(vis, reclist, ...par);
 
 		const dfs = v => {
-			snap([0], `DFS ${v}`, v);
+			snap([0], `Start DFS(${v})`, v);
 			if (vis[v]) {
 				snap([1], `${v} is visited; return`, v);
 				return;
@@ -74,11 +75,12 @@ const DFS = AlgorithmFactory({
 				dfs(u);
 				reclist.pop();
 			});
+			snap([5], `DFS(${v}) ended!`, v);
 		};
 		reclist.push(st);
-		snap([6], `Starting main DFS from ${st}`, st);
+		snap([7], `Starting main DFS from ${st}`, st);
 		dfs(st);
-		snap([], `DFS from ${st} ended!`);
+		snap([], `DFS from ${st} ended!`, st);
 	}
 });
 

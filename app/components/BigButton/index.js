@@ -7,7 +7,7 @@ import { margin } from './variables.json';
 const css = themedStyle(style);
 
 const BigButton = props => (
-	<div
+	<button
 		{...getEvents(props)}
 		className={css('child', props.theme)}
 		style={{
@@ -16,7 +16,7 @@ const BigButton = props => (
 	>
 		<div className={css('primary', props.theme)} {...getEvents(props)}>{props.name}</div>
 		<div className={css('secondary', props.theme)} {...getEvents(props)}>{props.desc}</div>
-	</div>
+	</button>
 );
 
 BigButton.defaultProps = {

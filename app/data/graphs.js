@@ -1,14 +1,14 @@
 import _sample from 'lodash.sample';
 import { flatten } from 'app/utils';
-import { UndirectedGraph } from 'graphology';
+import graphology from 'graphology';
 
-const create = (Class, fn) => {
-	const graph = new Class();
+const create = (className, fn) => {
+	const graph = new graphology[className]();
 	fn(graph);
 	return graph;
 };
 
-const createFrom = (Class, data) => create(Class, graph => {
+export const createFrom = (className, data) => create(className, graph => {
 	graph.addNodesFrom(Array(data.length).fill(1).map((v, i) => i));
 	data.forEach((negs, v) => negs.forEach(rawU => {
 		const u = Array.isArray(rawU) ? rawU[0] : rawU;
@@ -25,7 +25,7 @@ export const graphs = [
 		graphs: [
 			{
 				name: 'Undirected Cyclic',
-				graph: createFrom(UndirectedGraph, [
+				graph: createFrom('UndirectedGraph', [
 					[1, 2, 4],
 					[3],
 					[3],

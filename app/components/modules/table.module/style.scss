@@ -3,8 +3,18 @@
 @include themeable() {
 	.container-#{$themeName} {
 		width: $moduleMaxWidth;
-		tr {
+		height: 100%;
+		// overflow-x: hidden;
+		thead, tr {
+			display:table;
+			width:100%;
+			table-layout:fixed;
 			background: map-get($themeMap, 'backgroundColor') !important;
+			border-bottom: none !important;
+		}
+
+		tbody {
+			display: block;
 		}
 	}
 }

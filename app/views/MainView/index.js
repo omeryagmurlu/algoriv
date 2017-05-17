@@ -1,31 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import AlgorithmPageView from 'app/views/AlgorithmPageView';
 import BigButton from 'app/components/BigButton';
 
 import { mainView, container } from './style.scss';
 
-class MainView extends Component {
-	render() {
-		return (
-			<div className={mainView}>
-				<div
-					className={container}
-				>
-					{views.map(v => (
-						<BigButton
-							name={v.name}
-							key={v.name}
-							desc={v.desc}
-							onTouchTap={() => this.props.app.changeView(v)}
-							theme={this.props.app.theme}
-						/>
-					))}
-				</div>
-			</div>
-		);
-	}
-}
+const MainView = props => (
+	<div className={mainView}>
+		<div
+			className={container}
+		>
+			{views.map(v => (
+				<BigButton
+					name={v.name}
+					key={v.name}
+					desc={v.desc}
+					onTouchTap={() => props.app.changeView(v)}
+					theme={props.app.theme}
+				/>
+			))}
+		</div>
+	</div>
+);
 
 const views = [
 	{
@@ -42,5 +39,12 @@ const views = [
 		name: 'CO-OP'
 	}
 ];
+
+MainView.propTypes = {
+	app: PropTypes.shape({
+		theme: PropTypes.any.isRequired,
+		changeView: PropTypes.func.isRequired
+	}).isRequired
+};
 
 export default MainView;

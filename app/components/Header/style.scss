@@ -19,6 +19,7 @@
 
 		.header {
 			color: map-get($themeMap, 'alternativeTextColor');
+			font-family: $textFont;
 			display: block;
 			margin: 0 $drawerHandleWidth;
 			font-size: 18pt;

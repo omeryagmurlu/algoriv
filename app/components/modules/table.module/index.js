@@ -15,9 +15,11 @@ import style from './style.scss';
 const css = themedStyle(style);
 
 const Table = props => (
-	<div className={css('container', props.theme)}>
+	<div
+		className={css('container', props.theme)}
+	>
 		<TableView
-			height={`${props.width}px`}
+			// height={`${props.width}px`}
 		>
 			<TableHeader
 				adjustForCheckbox={false}
@@ -31,6 +33,9 @@ const Table = props => (
 			</TableHeader>
 			<TableBody
 				displayRowCheckbox={false}
+				style={{
+					maxHeight: `${props.width}px`
+				}}
 			>
 				{props.data.map((row, i) => (
 					<TableRow
@@ -64,7 +69,8 @@ const Table = props => (
 Table.propTypes = {
 	width: PropTypes.number.isRequired,
 	columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-	data: PropTypes.array.isRequired
+	data: PropTypes.array.isRequired,
+	theme: PropTypes.string.isRequired,
 };
 
 // Table.defaultProps = {

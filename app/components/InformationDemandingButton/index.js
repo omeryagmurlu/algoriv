@@ -10,53 +10,50 @@ class InformationDemandingButton extends Component {
 
 		this.state = {
 			opened: false,
-			errors: [],
-			inputValues: [],
+			inputs: this.props.demandings.map(({ value }) => value)
 		};
 	}
 
-	isShown = () => this.props.demandCondition || this.props.demandings.length === 0
-	isOpened = () => this.isShown() && this.state.opened
+	componentWillReceiveProps(newProps) {
+		this.setState({
+			inputs: newProps.demandings.map(({ value }) => value)
+		});
+	}
 
-	handler = () => {
-		if (this.isShown()) {
-			if (!this.isOpened()) {
-				rippleWait(() => this.setState({ opened: true }));
-			} else {
-				let remaining = this.props.demandings.length;
-				this.props.demandings.forEach(({ handler, defaultValue }, i) => {
-					handler(this.props.formatter(this.state.inputValues[i] || defaultValue), (err) => {
-						if (err) {
-							this.setState(pS => {
-								pS.errors[i] = err;
-								return pS;
-							});
-							return;
-						}
+	canBeShown = () => this.props.demandCondition || this.props.demandings.length === 0
+	isOpened = () => this.canBeShown() && this.state.opened
 
-						this.setState(pS => {
-							pS.errors[i] = null;
-							return pS;
-						});
-
-						remaining--;
-						if (remaining === 0) {
-							rippleWait(() => {
-								this.setState({ opened: false });
-								this.props.resolve();
-							});
-						}
-					});
-				});
-			}
+	passiveHandler = () => {
+		if (this.canBeShown()) {
+			rippleWait(() => this.setState({ opened: true }));
 		} else {
 			this.props.resolve();
 		}
-	};
+	}
 
-	// floatingLabelText={text}
-	// defaultValue={defaultValue}
-	// errorText={this.state.errors[i]}
+	activeHandler = () => {
+		let remains = this.props.demandings.length;
+		this.props.demandings.forEach((demand, i) => {
+			demand.handler(this.state.inputs[i], () => {
+				remains--;
+				if (remains === 0) {
+					this.setState({ opened: false }, () => this.props.resolve());
+				}
+			});
+		});
+	}
+
+	inputHandler = (demand, i) => ({ target: { value } }) => {
+		this.setState(pS => {
+			pS.inputs[i] = value;
+			return pS;
+		});
+	}
+
+	isButtonDisabled = () => this.state.inputs.reduce(
+		(acc, v, i) => acc || !this.props.demandings[i].validate(v), false
+	);
+
 	render() {
 		const {
 			demandCondition,
@@ -67,14 +64,13 @@ class InformationDemandingButton extends Component {
 			passiveIcon,
 			...pTB
 		} = this.props;
-		const textFields = this.isOpened() && demandings.map(({ text, defaultValue }, i) => (
-			<input
-				key={text}
 
-				onChange={({ target: { value } }) => this.setState(pS => {
-					pS.inputValues[i] = value;
-					return pS;
-				})}
+		const textFields = this.isOpened() && demandings.map((demand, i) => (
+			<input
+				key={demand.text}
+				placeholder={demand.text}
+				value={this.state.inputs[i]}
+				onChange={this.inputHandler(demand, i)}
 			/>
 		));
 
@@ -83,7 +79,8 @@ class InformationDemandingButton extends Component {
 				{textFields}
 				<FlatButton
 					{...pTB}
-					onTouchTap={this.handler}
+					disabled={this.isButtonDisabled()}
+					onTouchTap={this.isOpened() ? this.activeHandler : this.passiveHandler}
 					icon={this.isOpened() ? activeIcon : passiveIcon}
 				/>
 			</div>
@@ -101,7 +98,9 @@ InformationDemandingButton.propTypes = {
 	demandCondition: PropTypes.bool,
 	demandings: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,
-		handler: PropTypes.func.isRequired
+		validate: PropTypes.func.isRequired,
+		handler: PropTypes.func.isRequired,
+		value: PropTypes.string.isRequired
 	})),
 	formatter: PropTypes.func,
 	activeIcon: PropTypes.element.isRequired,

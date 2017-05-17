@@ -8,7 +8,7 @@ import Stretch from 'app/components/Stretch';
 import { section, footer } from './style.scss';
 
 const filter = [
-	'algorithmInitInput',
+	'algorithmInput',
 	'animationSpeed',
 	'animationIsPaused',
 	'onAnimationChangeSpeed',
@@ -27,26 +27,25 @@ const AlgorithmView = props => (
 					acc[v] = props[v];
 					return acc;
 				}, {}))}
+				input={props.algorithmInput.filter(v => v.type === 'module')}
 				theme={props.app.theme}
 			/>
 		</section>
 		<footer className={footer}>
 			<AnimationControls
 				{...props}
+				input={props.algorithmInput.filter(v => v.type === 'init')}
 				theme={props.app.theme}
 			/>
 		</footer>
 	</Stretch>
 );
 
-AlgorithmView.defaultProps = {
-	algorithmInitInput: []
-};
-
 AlgorithmView.propTypes = {
-	app: PropTypes.shape({
-		theme: PropTypes.string.isRequired
-	}).isRequired
+	app: PropTypes.any.isRequired,
+	algorithmInput: PropTypes.arrayOf(PropTypes.shape({
+		type: PropTypes.string.isRequired
+	})).isRequired
 };
 
 export default AlgorithmView;

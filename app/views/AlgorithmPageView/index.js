@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Subheader from 'material-ui/Subheader';
 
 import { AlgorithmsList } from 'app/data/algorithms';
@@ -33,5 +34,11 @@ const AlgorithmPageView = props => (
 		))}
 	</div>
 );
+
+AlgorithmPageView.propTypes = {
+	app: PropTypes.shape({
+		theme: PropTypes.string.isRequired
+	}).isRequired
+};
 
 export default AlgorithmPageView;

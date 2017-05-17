@@ -1,4 +1,5 @@
 /* global sigma */
+
 import 'sigma/src/sigma.core';
 import 'sigma/src/conrad';
 import 'sigma/src/utils/sigma.utils';
@@ -52,17 +53,70 @@ import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
-import tinycolor from 'tinycolor2';
 
-import { ColorList, animateColor, graphologyImportFix as gimport, themeVars } from 'app/utils';
+import { InputsRegistry } from 'app/features/modules';
+import { graphologyImportFix as gimport, themeVars } from 'app/utils';
+
+import colorStuff from './features/colorStuff';
+import eventStuff from './features/eventStuff';
+
 import { style } from './style.scss';
+import vars from './variables.json';
+
+const GRAPH = InputsRegistry.Graph;
 
 class Graph extends Component {
+	static getGraph = (props) => gimport(props.optGraph || props.input[GRAPH].value)
+
+	static typeOptions = {
+		directed: {
+			defaultEdgeType: vars.curvedEdges ? 'curvedArrow' : 'arrow',
+		},
+		undirected: {
+			defaultEdgeType: vars.curvedEdges ? 'curved' : 'line',
+		},
+		mixed: {}
+	}
+
+	constructor(props) {
+		super(props);
+		this.graphId = `graph${this.props.id}`;
+		Object.assign(this,
+			colorStuff(this, Graph),
+			eventStuff(this, Graph)
+		);
+	}
+
+	componentDidMount() {
+		const graph = Graph.getGraph(this.props);
+		this.sigma = new sigma({ // eslint-disable-line new-cap
+			renderer: {
+				container: this.graphId,
+				type: 'canvas'
+			},
+			graph: this.readGraph(graph),
+		});
+		this.createGraph(graph);
+		this.attachEvents();
+	}
+
+	componentWillReceiveProps(newProps) {
+		const graph = Graph.getGraph(newProps);
+		if (!_isEqual(graph, Graph.getGraph(this.props))) {
+			console.log('force update');
+			this.createGraph(Graph.getGraph(newProps));
+		}
+	}
+
+	componentWillUpdate({ colors }) {
+		this.updateColors(colors);
+	}
+
 	node = (id, x, y) => ({
 		id,
 		label: `${id}`,
 		size: 1,
-		color: this.defaultColor(),
+		color: this.defaultColor,
 		x,
 		y
 	})
@@ -72,7 +126,7 @@ class Graph extends Component {
 		source: graph.source(id),
 		target: graph.target(id),
 		label: weight && `${weight}`,
-		color: this.defaultColor(),
+		color: this.defaultColor,
 		size: 1
 	})
 
@@ -89,71 +143,22 @@ class Graph extends Component {
 		))
 	})
 
-	defaultColor() {
-		return themeVars(this.props.theme)('primary1Color');
-	}
-
-	colors() {
-		return [
-			tinycolor(this.defaultColor()).spin(90).toString(), // past
-			tinycolor(this.defaultColor()).spin(180).toString(), // future
-			tinycolor(this.defaultColor()).spin(270).toString(), // current
-		];
-	}
-
-	static typeOptions = {
-		directed: {
-			defaultEdgeType: 'arrow',
-			minArrowSize: 6
-		},
-		undirected: {},
-		mixed: {}
-	}
-
-	constructor(props) {
-		super(props);
-		this.graphId = `graph${this.props.id}`;
-	}
-
-	componentDidMount() {
-		const graph = gimport(this.props.graph);
-		this.sigma = new sigma({ // eslint-disable-line new-cap
-			renderer: {
-				container: this.graphId,
-				type: 'canvas'
-			},
-			graph: this.readGraph(graph),
-		});
-		this.createGraph(graph);
-		this.registerEvents();
-
-		this.colorTemp = {
-			edges: {},
-			nodes: {}
-		};
-		this.colorPurgeStack = [];
-	}
-
-	componentWillReceiveProps({ graph: deadGraph }) {
-		const graph = gimport(deadGraph);
-		if (!_isEqual(graph, gimport(this.props.graph))) {
-			console.log('force update');
-			this.createGraph(graph);
-		}
-	}
-
-	componentWillUpdate({ colors }) {
-		this.updateColors(colors);
-	}
+	theme = (key) => themeVars(this.props.theme)(key)
 
 	createGraph(graph) {
 		this.sigma.graph.clear();
+		console.log(graph.type);
 		this.sigma.settings({
-			singleHover: true,
+			// singleHover: true,
 			zoomMin: 0.0001,
 			zoomMax: 100,
-			maxEdgeSize: 1,
+			minArrowSize: 6,
+			maxEdgeSize: 5,
+			maxNodeSize: 15,
+			defaultLabelSize: vars.labelSize,
 			edgeLabelSize: 'proportional',
+			defaultNodeType: 'overNode',
+			defaultLabelColor: this.theme('textColor'),
 			...Graph.typeOptions[graph.type]
 		});
 		this.sigma.graph.read(this.readGraph(graph));
@@ -170,89 +175,6 @@ class Graph extends Component {
 		setTimeout(() => this.sigma.killForceAtlas2(), 1000);
 	}
 
-	registerEvents() {
-		const notify = graph => this.props.input(
-			gimport(JSON.parse(JSON.stringify(graph))) // I need Immutable.js D: // I really do
-		);
-
-		const commonWork = fn => e => {
-			if (e.data.captor.ctrlKey) {
-				return fn(e, gimport(this.props.graph));
-			}
-		};
-
-		this.sigma.bind('clickStage', commonWork((e, graph) => {
-			const id = graph.addNode(graph.order);
-
-			this.sigma.graph.addNode(this.node(id, e.data.captor.x, e.data.captor.y));
-			this.layout();
-
-			notify(graph);
-		}));
-
-		let previouslySelectedNode = null;
-		this.sigma.bind('clickNode', commonWork((e, graph) => {
-			if (previouslySelectedNode !== null) {
-				const fromNode = previouslySelectedNode;
-				const toNode = e.data.node.id;
-
-				if (!graph.hasEdge(fromNode, toNode)) {
-					const id = graph.addEdge(fromNode, toNode);
-
-					this.sigma.graph.addEdge(this.edge(id, graph));
-					this.layout();
-
-					notify(graph);
-				}
-
-				previouslySelectedNode = null;
-				return;
-			}
-			previouslySelectedNode = e.data.node.id;
-		}));
-	}
-
-	updateColors(deadClist) {
-		const clist = ColorList.revive(deadClist);
-		while (this.colorPurgeStack.length !== 0) {
-			this.colorPurgeStack.pop()();
-		}
-
-		clist.forEachEdge((edge, idx) => {
-			this.colorizeThing(edge, this.colors()[idx], 'edges');
-		});
-
-		clist.forEachNode((node, idx) => {
-			this.colorizeThing(node, this.colors()[idx], 'nodes');
-		});
-
-		const scaleCache = {};
-		const eachTimeCache = {};
-
-		Object.keys(this.colorTemp).forEach(type =>
-			Object.keys(this.colorTemp[type]).forEach(id => animateColor({
-				remainingTime: () => this.props.animationNextFrameTime,
-				scaleCache,
-				eachTimeCache,
-				firstCol: this.sigma.graph[type](id).color,
-				secCol: this.colorTemp[type][id],
-				callback: col => {
-					this.sigma.graph[type](id).color = col;
-					this.sigma.refresh();
-				}
-			}))
-		);
-		this.colorTemp = {
-			edges: {},
-			nodes: {}
-		};
-	}
-
-	colorizeThing = (thing, color, type) => {
-		this.colorTemp[type][thing] = color;
-		this.colorPurgeStack.push(() => (this.colorTemp[type][thing] = this.defaultColor()));
-	}
-
 	render() {
 		return (
 			<div id={this.graphId} className={style} />
@@ -260,12 +182,21 @@ class Graph extends Component {
 	}
 }
 
+Graph.defaultProps = {
+	optGraph: null
+};
+
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
-	graph: PropTypes.object.isRequired,
+	optGraph: PropTypes.object,
 
-	input: PropTypes.func.isRequired,
+	input: PropTypes.objectOf(PropTypes.shape({
+		update: PropTypes.func.isRequired,
+		value: PropTypes.object.isRequired
+	})).isRequired,
+
+	theme: PropTypes.string.isRequired,
 
 	animationNextFrameTime: PropTypes.number.isRequired
 };

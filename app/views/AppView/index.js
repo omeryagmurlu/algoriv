@@ -39,8 +39,16 @@ const AppView = props => {
 	);
 };
 
+AppView.defaultProps = {
+	backData: null
+};
+
 AppView.propTypes = {
-	view: PropTypes.object.isRequired
+	view: PropTypes.object.isRequired,
+	theme: PropTypes.string.isRequired,
+
+	backData: PropTypes.any,
+	headerRoutes: PropTypes.any.isRequired,
 };
 
 export default AppView;

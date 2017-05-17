@@ -10,6 +10,7 @@ import AvSkipPrevious from 'material-ui/svg-icons/av/skip-previous';
 import AvFastRewind from 'material-ui/svg-icons/av/fast-rewind';
 import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import AvPause from 'material-ui/svg-icons/av/pause';
+import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
 import AvFastForward from 'material-ui/svg-icons/av/fast-forward';
 import AvSkipNext from 'material-ui/svg-icons/av/skip-next';
 import ContentSend from 'material-ui/svg-icons/content/send';
@@ -22,34 +23,39 @@ import style from './style.scss';
 
 const css = themedStyle(style);
 
-const icon = (ico/* , obj */) => React.createElement(ico, {
-	// color: themeVars(obj.theme)('alternativeTextColor'), // As Im doing below in css, do this too
-	// hoverColor: themeVars(obj.theme)('accent1Color') // I really start to hate MUI, need css again
+const icon = (ico, obj) => React.createElement(ico, {
+	color: themeVars(obj.theme)('alternativeTextColor'),
+	hoverColor: themeVars(obj.theme)('accent1Color')
 });
 
 const AnimationControls = props => (
 	<div className={css('container', props.theme)}>
 		<div className={css('upper')}>
 			<div className={css('buttons')}>
-				<FlatButton icon={icon(AvSkipPrevious, props)} id="toBegin" onTouchTap={props.onAnimationToBegin} />
-				<FlatButton icon={icon(AvFastRewind, props)} id="stepBackward" onTouchTap={props.onAnimationStepBackward} />
+				<FlatButton icon={icon(AvSkipPrevious, props)} onTouchTap={props.onAnimationToBegin} />
+				<FlatButton icon={icon(AvFastRewind, props)} onTouchTap={props.onAnimationStepBackward} />
 				<InformationDemandingButton
 					activeIcon={icon(ContentSend, props)}
-					passiveIcon={icon((props.animationIsPaused ? AvPlayArrow : AvPause), props)}
+					passiveIcon={icon((props.animationProgress === 100
+						? NavigationRefresh
+						: props.animationIsPaused
+							? AvPlayArrow
+							: AvPause
+					), props)}
 					demandCondition={props.animationProgress === 0}
-					demandings={props.algorithmInitInput.map(({
-						handler,
-						description: text,
-						def: defaultValue
+					demandings={props.input.map(({
+						data: { description: text },
+						update: handler,
+						...remaining
 					}) => ({
 						text,
 						handler,
-						defaultValue
+						...remaining
 					}))}
 					resolve={props.onAnimationPauseRestart}
 				/>
-				<FlatButton icon={icon(AvFastForward, props)} id="stepForward" onTouchTap={props.onAnimationStepForward} />
-				<FlatButton icon={icon(AvSkipNext, props)} id="toEnd" onTouchTap={props.onAnimationToEnd} />
+				<FlatButton icon={icon(AvFastForward, props)} onTouchTap={props.onAnimationStepForward} />
+				<FlatButton icon={icon(AvSkipNext, props)} onTouchTap={props.onAnimationToEnd} />
 			</div>
 			<MuiThemeProvider
 				muiTheme={getMuiTheme({
@@ -92,7 +98,7 @@ const AnimationControls = props => (
 );
 
 AnimationControls.defaultProps = {
-	algorithmInitInput: []
+	input: []
 };
 
 AnimationControls.propTypes = {
@@ -106,10 +112,11 @@ AnimationControls.propTypes = {
 	onAnimationStepBackward: PropTypes.func.isRequired,
 	onAnimationToEnd: PropTypes.func.isRequired,
 
-	algorithmInitInput: PropTypes.arrayOf(PropTypes.shape({
-		def: PropTypes.number.isRequired,
-		description: PropTypes.string.isRequired,
-		handler: PropTypes.func.isRequired
+	input: PropTypes.arrayOf(PropTypes.shape({
+		data: PropTypes.shape({
+			description: PropTypes.string.isRequired,
+		}).isRequired,
+		update: PropTypes.func.isRequired
 	})),
 
 	theme: PropTypes.string.isRequired

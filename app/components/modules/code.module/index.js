@@ -17,13 +17,14 @@ const Code = props => {
 	);
 };
 
-Code.propTypes = {
-	code: PropTypes.arrayOf(PropTypes.string).isRequired,
-	highlights: PropTypes.arrayOf(PropTypes.number)
-};
-
 Code.defaultProps = {
 	highlights: []
+};
+
+Code.propTypes = {
+	code: PropTypes.arrayOf(PropTypes.string).isRequired,
+	theme: PropTypes.string.isRequired,
+	highlights: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default Code;

@@ -1,5 +1,5 @@
 import Modules from 'app/features/modules';
-import { InitInput, CustomInput } from 'app/features/input-types';
+import { InitInput } from 'app/features/input-types';
 import { randomGraph } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
@@ -42,27 +42,27 @@ const BFS = AlgorithmFactory({
 	},
 	input: {
 		graph: randomGraph('BFS').graph,
-		startVertex: 0
+		startVertex: '0'
 	},
 	inputType: {
-		graph: CustomInput(),
+		graph: Modules.Graph.input('graf'),
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
 	snap: (vis, q, hgs, text, cN, cE) => ({
 		kod: Modules.Code.snap(hgs),
 		explain: Modules.Explanation.snap(text),
-		graph: Modules.VisitedAheadGraph.snap(cE, cN, vis, q),
+		graf: Modules.VisitedAheadGraph.snap(cE, cN, vis, q),
 		queue: Modules.Queue.snap(q),
 		visit: Modules.VisitedArray.snap(vis)
 	}),
-	modules: ({ graph }) => ({
+	modules: {
 		kod: Modules.Code.module(code),
 		explain: Modules.Explanation.module(),
-		graph: Modules.VisitedAheadGraph.module(graph),
+		graf: Modules.VisitedAheadGraph.module(),
 		queue: Modules.Queue.module(),
 		visit: Modules.VisitedArray.module(),
 		desc: Modules.Description.module(description)
-	}),
+	},
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];
 		const vis = Array(graph.order).fill(false);
