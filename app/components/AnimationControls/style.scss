@@ -8,14 +8,17 @@
 		height: 100%;
 
 		.upper {
+			justify-content: center;
 			width: 100%;
 			height: 100%;
+			overflow: hidden;
 			> * {
-				margin: 0 $drawerHandleWidth;
+				margin: 0 $drawerHandleWidth / 2;
 			}
 		}
 
-		// .buttons { // All of the !important s below are a shame of MUI (or my understanding of it)
+		.buttons { // All of the !important s below are a shame of MUI (or my understanding of it)
+			order: -1;
 		// 	> * svg {
 		// 		color: map-get($themeMap, 'alternativeTextColor') !important;
 		// 		fill: map-get($themeMap, 'alternativeTextColor') !important;
@@ -25,7 +28,7 @@
 		// 		color: map-get($themeMap, 'accent1Color') !important;
 		// 		fill: map-get($themeMap, 'accent1Color') !important;
 		// 	}
-		// }
+		}
 	}
 
 	.upper, .buttons {

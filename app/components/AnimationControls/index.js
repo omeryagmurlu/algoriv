@@ -19,6 +19,8 @@ import { themedStyle, themeVars } from 'app/utils';
 
 import InformationDemandingButton from 'app/components/InformationDemandingButton';
 
+import { sliderWidth } from './variables.json';
+
 import style from './style.scss';
 
 const css = themedStyle(style);
@@ -31,6 +33,32 @@ const icon = (ico, obj) => React.createElement(ico, {
 const AnimationControls = props => (
 	<div className={css('container', props.theme)}>
 		<div className={css('upper')}>
+			<MuiThemeProvider
+				muiTheme={getMuiTheme({
+					slider: {
+						// trackColor: palette.primary3Color,
+						handleFillColor: themeVars(props.theme)('accent1Color'),
+						selectionColor: themeVars(props.theme)('alternativeTextColor'),
+						rippleColor: themeVars(props.theme)('accent1Color'),
+					},
+				})}
+			>
+				<Slider
+					max={100}
+					min={0}
+					step={1}
+					value={props.animationSpeed}
+					defaultValue={props.animationSpeed}
+					onChange={(_, v) => props.onAnimationChangeSpeed(v)}
+					style={{
+						flexGrow: 1,
+						maxWidth: sliderWidth
+					}}
+					sliderStyle={{
+						margin: 0
+					}}
+				/>
+			</MuiThemeProvider>
 			<div className={css('buttons')}>
 				<FlatButton icon={icon(AvSkipPrevious, props)} onTouchTap={props.onAnimationToBegin} />
 				<FlatButton icon={icon(AvFastRewind, props)} onTouchTap={props.onAnimationStepBackward} />
@@ -57,31 +85,6 @@ const AnimationControls = props => (
 				<FlatButton icon={icon(AvFastForward, props)} onTouchTap={props.onAnimationStepForward} />
 				<FlatButton icon={icon(AvSkipNext, props)} onTouchTap={props.onAnimationToEnd} />
 			</div>
-			<MuiThemeProvider
-				muiTheme={getMuiTheme({
-					slider: {
-						// trackColor: palette.primary3Color,
-						handleFillColor: themeVars(props.theme)('accent1Color'),
-						selectionColor: themeVars(props.theme)('alternativeTextColor'),
-						rippleColor: themeVars(props.theme)('accent1Color'),
-					},
-				})}
-			>
-				<Slider
-					max={100}
-					min={0}
-					step={1}
-					value={props.animationSpeed}
-					defaultValue={props.animationSpeed}
-					onChange={(_, v) => props.onAnimationChangeSpeed(v)}
-					style={{
-						flexGrow: 1
-					}}
-					sliderStyle={{
-						margin: 0
-					}}
-				/>
-			</MuiThemeProvider>
 		</div>
 		<LinearProgress
 			value={props.animationProgress}
