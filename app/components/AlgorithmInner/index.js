@@ -32,7 +32,10 @@ const AlgorithmInner = props => {
 				id: moduleId,
 				key: moduleId,
 
-				input: inputs.filter(v => v.data.targetModule === moduleId).reduce((acc, input) => {
+				input: (
+					inputs.find(v => v.data.targetModule === moduleId)
+					|| inputs.filter(v => v.data.moduleName === statics[moduleId].type)
+				).reduce((acc, input) => {
 					acc[input.data.inputIdentifier] = _pick(input, ['value', 'update']);
 					return acc;
 				}, {}),

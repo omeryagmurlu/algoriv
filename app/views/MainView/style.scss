@@ -1,12 +1,12 @@
-@import "~app/styles/common";
+@import '~app/styles/common';
 
-.mainView {
+.main-view {
 	@include wrapper;
 	height: 100%;
 }
 
 .container {
-	@include verticalCenter;
+	@include vertical-center;
 	display: flex;
 	flex-flow: row wrap;
 }

@@ -1,6 +1,6 @@
-@import "app/styles/fonts/fonts.css";
-@import "app/styles/themes.json";
-@import "app/styles/variables.json";
+@import 'app/styles/fonts/fonts.css';
+@import 'app/styles/themes.json';
+@import 'app/styles/variables.json';
 
 @mixin trans($dur: 0.5s) {
 	transition-duration: $dur;
@@ -9,20 +9,33 @@
 @mixin wrapper {
 	position: relative;
 	margin: auto;
-	max-width: $wrapperWidth;
 	padding-top: 4vh;
+	max-width: $wrapperWidth;
 	box-sizing: border-box;
 }
 
-@mixin verticalCenter {
+@mixin vertical-center {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
 }
 
+@mixin override-button {
+	> button {
+		position: absolute !important;
+		width: 100% !important;
+		height: 100% !important;
+		min-width: unset !important;
+
+		> * {
+			display: none !important;
+		}
+	}
+}
+
 $themeName: 1;
 $themeMap: 1;
-@mixin themeable() {
+@mixin themeable {
 	$names: dark, giant-goldfish;
 	@each $name in $names {
 		$themeName: $name !global;

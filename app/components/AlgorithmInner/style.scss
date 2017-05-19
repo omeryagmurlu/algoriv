@@ -1,11 +1,15 @@
-@import "~app/styles/common.scss";
+@import '~app/styles/common';
 
 .top {
 	display: flex;
-	justify-content: space-between;
 	position: relative;
+	justify-content: space-between;
 	height: 100%;
+
 	.main {
 		position: relative;
+		margin-right: auto;
+		margin-left: auto;
+		width: calc(100% - #{$drawerHandleWidth * 2});
 	}
 }

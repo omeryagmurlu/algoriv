@@ -1,7 +1,5 @@
-import { InputsRegistry } from 'app/features/modules';
+import { Graph as GRAPH } from 'app/data/inputsRegistry';
 import { graphologyImportFix as gimport } from 'app/utils';
-
-const GRAPH = InputsRegistry.Graph;
 
 const eventStuff = (instance, clas) => {
 	const notify = graph => instance.props.input[GRAPH].update(
@@ -18,7 +16,7 @@ const eventStuff = (instance, clas) => {
 		handlerClickStage: commonWork((e, graph) => {
 			const id = graph.addNode(graph.order);
 
-			instance.sigma.graph.addNode(instance.node(id, e.data.captor.x, e.data.captor.y));
+			instance.sigma.graph.addNode(instance.node(id, 0, 0));
 			instance.layout();
 
 			notify(graph);

@@ -1,16 +1,18 @@
-@import "~app/styles/common";
+@import '~app/styles/common';
 
-@include themeable() {
+@include themeable {
 	.container-#{$themeName} {
 		width: $moduleMaxWidth;
-		height: 100%;
+		// height: 100%;
 		// overflow-x: hidden;
-		thead, tr {
-			display:table;
-			width:100%;
-			table-layout:fixed;
+
+		thead,
+		tr {
+			display: table;
+			border-bottom: 0 !important;
 			background: map-get($themeMap, 'backgroundColor') !important;
-			border-bottom: none !important;
+			width: 100%;
+			table-layout: fixed;
 		}
 
 		tbody {

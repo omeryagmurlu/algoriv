@@ -1,9 +1,9 @@
-@import "~app/styles/common";
+@import '~app/styles/common';
 
 .container {
 	width: $moduleMaxWidth;
-	font-family: $textFont;
 	white-space: pre-line;
+	font-family: $textFont;
 }
 
 .header {

@@ -50,21 +50,20 @@ class SideDrawer extends Component {
 				<section className={css('container')}>
 					{this.props.children}
 				</section>
-				<FlatButton
-					disableTouchRipple
-					onClick={this.toggleActive}
-					icon={
-						React.createElement(
-							this.side(
-								HardwareKeyboardArrowLeft,
-								HardwareKeyboardArrowRight
-							), {
-								className: css('handleIcon'),
-								color: this.theme('alternativeTextColor')
-							}
-						)
-					}
-				/>
+				<div className={css('handle')}>
+					<FlatButton
+						onClick={this.toggleActive}
+					/>
+					{React.createElement(
+						this.side(
+							HardwareKeyboardArrowLeft,
+							HardwareKeyboardArrowRight
+						), {
+							className: css('handleIcon'),
+							color: this.theme('alternativeTextColor')
+						}
+					)}
+				</div>
 			</aside>
 		);
 	}

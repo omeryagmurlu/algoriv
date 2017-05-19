@@ -1,27 +1,27 @@
-@import "~app/styles/common.scss";
+@import '~app/styles/common';
 
-@include themeable() {
+@include themeable {
 	.container-#{$themeName} {
-		height: $headerHeight;
-		background: map-get($themeMap, 'primary1Color');
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
+		justify-content: space-between;
+		background: map-get($themeMap, 'primary1Color');
+		height: $headerHeight;
 
-		-webkit-app-region: drag;
-		> * {
-			// -webkit-app-region: no-drag;
-		}
+		// -webkit-app-region: drag;
+		// > * {
+		// 	-webkit-app-region: no-drag;
+		// }
 
 		.nav {
 			display: block;
 		}
 
 		.header {
-			color: map-get($themeMap, 'alternativeTextColor');
-			font-family: $textFont;
 			display: block;
 			margin: 0 $drawerHandleWidth;
+			color: map-get($themeMap, 'alternativeTextColor');
+			font-family: $textFont;
 			font-size: 18pt;
 			font-weight: normal;
 		}

@@ -1,5 +1,6 @@
 import { ColorList } from 'app/utils';
 import { ModuleInput } from 'app/features/input-types';
+import InputsRegistry from 'app/data/inputsRegistry';
 
 const typee = (type, layout, data = {}) => ({
 	type,
@@ -11,17 +12,15 @@ const exporter = (snap, module, input) => ({ snap, module, input });
 
 const Modules = {};
 
-export const InputsRegistry = {
-	Graph: '// these will be consumed by both algorithms and modules'
-};
-
 export const GraphModule = Modules.Graph = exporter(
 	(clist, optMutatingGraph) => ({
 		colors: clist,
-		optGraph: optMutatingGraph // This is only viable for snap, as it is used in logic, in a module, it wouldn't get updated
+
+		// This is only viable for snap, as it is used in logic, in a module, it wouldn't get updated
+		optGraph: optMutatingGraph
 	}),
 	(options) => typee('graph', 'main', { options }),
-	(moduleId) => ModuleInput(moduleId, InputsRegistry.Graph)
+	(ifMultiModuleId) => ModuleInput('graph', ifMultiModuleId, InputsRegistry.Graph)
 );
 
 export const TableModule = Modules.Table = exporter(
@@ -54,6 +53,12 @@ export const CodeModule = Modules.Code = exporter(
 	code => typee('code', 'right', { code })
 );
 
+export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
+	() => ({}), // array of indexes
+	graphs => typee('example-graphs', 'left', { graphs }),
+	(ifMultiModuleId) => ModuleInput('example-graphs', ifMultiModuleId, InputsRegistry.ExampleGraphs)
+);
+
 export const ExplanationModule = Modules.Explanation = exporter(
 	text => ({ text }), // string
 	() => typee('explanation', 'right')
@@ -76,7 +81,8 @@ export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 
 		return GraphModule.snap(clist, ...params);
 	},
-	() => GraphModule.module()
+	(...p) => GraphModule.module(...p),
+	(...p) => GraphModule.input(...p)
 );
 
 export const QueueModule = Modules.Queue = exporter(

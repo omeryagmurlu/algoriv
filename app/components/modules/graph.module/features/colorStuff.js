@@ -1,5 +1,5 @@
 import chroma from 'chroma-js';
-import { ColorList, animateColor } from 'app/utils';
+import { ColorList } from 'app/utils';
 
 const colorStuff = (instance) => {
 	let colorTemp = {
@@ -23,6 +23,42 @@ const colorStuff = (instance) => {
 		colorPurgeStack.push(() => (colorTemp[type][thing] = defaultColor));
 	};
 
+	const animateColor = ({
+		firstCol,
+		secCol,
+		eachTimeCache = {},
+		scaleCache = {},
+		callback
+	}) => {
+		if (chroma(secCol).hex() === chroma(firstCol).hex()) {
+			return;
+		}
+
+		const remainingTime = () => instance.props.animationNextFrameTime;
+
+		const aimedEachTime = 50;
+		const steps = () => Math.floor((remainingTime() * (1.5 / 3)) / aimedEachTime);
+		const eachTime = sps => eachTimeCache[sps * remainingTime()]
+			|| (eachTimeCache[sps * remainingTime()] = Math.floor((remainingTime() * (1.5 / 3)) / sps));
+
+		const scale = sps => scaleCache[`${sps}..${firstCol}.${secCol}`] || (scaleCache[`${sps}..${firstCol}.${secCol}`] = chroma.scale([
+			firstCol,
+			secCol
+		]).mode('lch').domain([0, sps - 1]));
+
+		const timeout = fn => setTimeout(fn, eachTime(steps()));
+		const fn = i => () => {
+			if (i >= steps()) {
+				// console.log('done', eachTime(steps()), steps())
+				return;
+			}
+			// console.log('working', eachTime(steps()), steps(), scale(steps())(i).hex())
+			callback(scale(steps())(i).hex());
+			timeout(fn(i + 1));
+		};
+		timeout(fn(0));
+	};
+
 	const updateColors = (deadClist) => {
 		const clist = ColorList.revive(deadClist);
 		while (colorPurgeStack.length !== 0) {
@@ -42,7 +78,6 @@ const colorStuff = (instance) => {
 
 		Object.keys(colorTemp).forEach(type =>
 			Object.keys(colorTemp[type]).forEach(id => animateColor({
-				remainingTime: () => instance.props.animationNextFrameTime,
 				scaleCache,
 				eachTimeCache,
 				firstCol: instance.sigma.graph[type](id).color,

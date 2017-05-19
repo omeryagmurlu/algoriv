@@ -7,7 +7,7 @@ import style from './style.scss';
 const css = themedStyle(style);
 
 const Code = props => {
-	const lineTags = Array(props.code.length).fill(1);
+	const lineTags = Array(props.code.length).fill('');
 	props.highlights.forEach((idx => (lineTags[idx] = css('active'))));
 	const lines = props.code.map((line, i) => <p key={line} className={lineTags[i]}>{line}</p>);
 	return (

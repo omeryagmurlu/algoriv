@@ -15,7 +15,6 @@
     "consistent-return": "off",
     "comma-dangle": "off",
     "generator-star-spacing": "off",
-    "no-console": "off",
     "no-use-before-define": "off",
     "no-multi-assign": "off",
     "react/forbid-prop-types": "off",

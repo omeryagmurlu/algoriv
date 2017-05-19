@@ -1,19 +1,9 @@
 import Modules from 'app/features/modules';
 import { InitInput } from 'app/features/input-types';
-import { randomGraph } from 'app/data/graphs';
+import { randomGraph, suitingGraphs } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 
-const steps = [
-	v => `Run BFS from vertex ${v}`,
-	q => `Queue is not empty, contains vertexes ${q.join(', ')}`,
-	v => `Processing vertex ${v}`,
-	v => `Mark vertex ${v} visited`,
-	(u, v) => `Extending to neighbour ${u} of vertex ${v}`,
-	u => `Vertex ${u} is visited`,
-	u => `Vertex ${u} is not visited, push to queue`,
-	s => `BFS(${s}) completed`
-];
 
 const description = `
 Breadth-first search (BFS) is an algorithm for traversing or searching tree \
@@ -30,6 +20,7 @@ const code = [
 	'    Q = {s}; // FIFO',
 	'    while Q is not empty',
 	'        v = Q.front(); Q.pop();',
+	'        if v is visited already, continue;',
 	'        mark v visited',
 	'        for each neighbour u of v:',
 	'            if u is visited already, continue;',
@@ -45,7 +36,7 @@ const BFS = AlgorithmFactory({
 		startVertex: '0'
 	},
 	inputType: {
-		graph: Modules.Graph.input('graf'),
+		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
 	snap: (vis, q, hgs, text, cN, cE) => ({
@@ -61,7 +52,8 @@ const BFS = AlgorithmFactory({
 		graf: Modules.VisitedAheadGraph.module(),
 		queue: Modules.Queue.module(),
 		visit: Modules.VisitedArray.module(),
-		desc: Modules.Description.module(description)
+		desc: Modules.Description.module(description),
+		exxx: Modules.ExampleGraphs.module(suitingGraphs('BFS'))
 	},
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];
@@ -71,24 +63,28 @@ const BFS = AlgorithmFactory({
 
 		snap([], undefined);
 		q.push(st);
-		snap([0, 1], steps[0](st), st);
+		snap([0, 1], `Run BFS from vertex ${st}`, st);
 		while (q.length !== 0) {
-			snap([2], steps[1](q));
+			// snap([2], `Queue is not empty, contains vertexes ${q.join(', ')}`);
 			const v = q.shift();
-			snap([3], steps[2](v), v);
+			snap([3], `Processing vertex ${v}`, v);
+			if (vis[v]) {
+				snap([4], `Vertex ${v} is visited`, v);
+				continue; // eslint-disable-line no-continue
+			}
 			vis[v] = true;
-			snap([4], steps[3](v), v);
+			snap([5], `Mark vertex ${v} visited`, v);
 			graph.neighbors(v).forEach(u => {
-				snap([5], steps[4](u, v), u, graph.edge(v, u));
+				// snap([6], `Extending to neighbour ${u} of vertex ${v}`, v, graph.edge(v, u));
 				if (vis[u]) {
-					snap([6], steps[5](u), u, graph.edge(v, u));
+					snap([7], `Vertex ${u} is visited`, v, graph.edge(v, u));
 					return;
 				}
 				q.push(u);
-				snap([7], steps[6](u), u, graph.edge(v, u));
+				snap([8], `Vertex ${u} is not visited, push to queue`, v, graph.edge(v, u));
 			});
 		}
-		snap([], steps[7](st));
+		snap([], `BFS(${st}) completed`);
 	}
 });
 

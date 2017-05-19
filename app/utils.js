@@ -16,10 +16,11 @@ export const themedStyle = (style) => {
 		throw new ReferenceError(`themedStyle: unknown style ${style}`);
 	}
 	return (className, theme) => {
-		if (!style[`${className}${theme ? `-${theme}` : ''}`]) {
-			throw new ReferenceError(`themedStyle: could'nt find: ${className}${theme ? `-${theme}` : ''} in [${Object.keys(style).join(' ,')}]`);
+		const retVal = `${style[`${className}${theme ? `-${theme}` : ''}`]}${style[className] ? ` ${style[className]}` : ''}`;
+		if (!retVal) {
+			throw new ReferenceError(`themedStyle: could'nt find: ${className} in [${Object.keys(style).join(' ,')}]`);
 		}
-		return style[`${className}${theme ? `-${theme}` : ''}`];
+		return retVal;
 	};
 };
 
@@ -87,38 +88,3 @@ export class ColorList {
 	forEachEdge = callback => ColorList.forEach(this.edgesList, callback)
 	forEachNode = callback => ColorList.forEach(this.nodesList, callback)
 }
-
-export const animateColor = ({
-	remainingTime,
-	firstCol,
-	secCol,
-	eachTimeCache = {},
-	scaleCache = {},
-	callback
-}) => {
-	if (chroma(secCol).hex() === chroma(firstCol).hex()) {
-		return;
-	}
-
-	const aimedEachTime = 50;
-	const steps = () => Math.floor((remainingTime() * (1.5 / 3)) / aimedEachTime);
-	const eachTime = sps => eachTimeCache[sps * remainingTime()]
-		|| (eachTimeCache[sps * remainingTime()] = Math.floor((remainingTime() * (1.5 / 3)) / sps));
-
-	const scale = sps => scaleCache[`${sps}..${firstCol}.${secCol}`] || (scaleCache[`${sps}..${firstCol}.${secCol}`] = chroma.scale([
-		firstCol,
-		secCol
-	]).domain([0, sps - 1]));
-
-	const timeout = fn => setTimeout(fn, eachTime(steps()));
-	const fn = i => () => {
-		if (i >= steps()) {
-			// console.log('done', eachTime(steps()), steps())
-			return;
-		}
-		// console.log('working', eachTime(steps()), steps(), scale(steps())(i).hex())
-		callback(scale(steps())(i).hex());
-		timeout(fn(i + 1));
-	};
-	timeout(fn(0));
-};

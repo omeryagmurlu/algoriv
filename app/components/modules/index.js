@@ -1,11 +1,20 @@
 /* eslint global-require: "off" */
 
+import Code from './code.module';
+import Explanation from './explanation.module';
+import Graph from './graph.module';
+import Table from './table.module';
+import Description from './description.module';
+import ExampleGraphs from './example-graphs.module';
+
+
 const modules = {
-	code: require('app/components/modules/code.module').default,
-	explanation: require('app/components/modules/explanation.module').default,
-	graph: require('app/components/modules/graph.module').default,
-	table: require('app/components/modules/table.module').default,
-	description: require('app/components/modules/description.module').default
+	code: Code,
+	explanation: Explanation,
+	graph: Graph,
+	table: Table,
+	description: Description,
+	'example-graphs': ExampleGraphs
 };
 
 export default modules;

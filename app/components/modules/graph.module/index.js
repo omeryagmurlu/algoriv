@@ -54,7 +54,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
 
-import { InputsRegistry } from 'app/features/modules';
+import { Graph as GRAPH } from 'app/data/inputsRegistry';
 import { graphologyImportFix as gimport, themeVars } from 'app/utils';
 
 import colorStuff from './features/colorStuff';
@@ -62,8 +62,6 @@ import eventStuff from './features/eventStuff';
 
 import { style } from './style.scss';
 import vars from './variables.json';
-
-const GRAPH = InputsRegistry.Graph;
 
 class Graph extends Component {
 	static getGraph = (props) => gimport(props.optGraph || props.input[GRAPH].value)
@@ -96,6 +94,7 @@ class Graph extends Component {
 			},
 			graph: this.readGraph(graph),
 		});
+		sigma.utils.zoomTo(this.sigma.cameras[0], 0, 0, 1.2);
 		this.createGraph(graph);
 		this.attachEvents();
 	}
@@ -147,17 +146,15 @@ class Graph extends Component {
 
 	createGraph(graph) {
 		this.sigma.graph.clear();
-		console.log(graph.type);
 		this.sigma.settings({
 			// singleHover: true,
-			zoomMin: 0.0001,
-			zoomMax: 100,
+			zoomMin: 0.8,
+			zoomMax: 2.5,
 			minArrowSize: 6,
 			maxEdgeSize: 5,
 			maxNodeSize: 15,
 			defaultLabelSize: vars.labelSize,
 			edgeLabelSize: 'proportional',
-			defaultNodeType: 'overNode',
 			defaultLabelColor: this.theme('textColor'),
 			...Graph.typeOptions[graph.type]
 		});

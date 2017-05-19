@@ -1,8 +1,12 @@
-@import "~app/styles/common";
+@import '~app/styles/common';
 
 .style {
-	width: $moduleMaxWidth;
+	display: inline-block;
 	text-align: center;
-	font-weight: bold;
 	font-family: $textFont;
+	font-weight: bold;
+
+	&:empty {
+		display: none;
+	}
 }
