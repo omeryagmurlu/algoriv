@@ -3,12 +3,12 @@ import { graphologyImportFix as gimport } from 'app/utils';
 
 const eventStuff = (instance, clas) => {
 	const notify = graph => instance.props.input[GRAPH].update(
-		gimport(JSON.parse(JSON.stringify(graph))) // I need Immutable.js D: // I really do
+		graph
 	);
 
 	const commonWork = fn => e => {
 		if (e.data.captor.ctrlKey) {
-			return fn(e, clas.getGraph(instance.props));
+			return fn(e, gimport(JSON.parse(JSON.stringify(clas.getGraph(instance.props)))));
 		}
 	};
 
@@ -16,7 +16,7 @@ const eventStuff = (instance, clas) => {
 		handlerClickStage: commonWork((e, graph) => {
 			const id = graph.addNode(graph.order);
 
-			instance.sigma.graph.addNode(instance.node(id, 0, 0));
+			instance.sigma.graph.addNode(instance.node(id));
 			instance.layout();
 
 			notify(graph);

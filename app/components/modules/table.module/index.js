@@ -51,20 +51,6 @@ const Table = props => (
 		</TableView>
 	</div>
 );
-// <TableView
-// 	emptyText={''}
-// 	style={{
-// 		width: props.width
-// 	}}
-// 	columns={props.columns.map(obj => {
-// 		obj.key = obj.dataIndex = obj.title;
-// 		return obj;
-// 	})}
-// 	data={props.data.map((obj, i) => {
-// 		obj.key = i;
-// 		return obj;
-// 	})}
-// />
 
 Table.propTypes = {
 	width: PropTypes.number.isRequired,
@@ -72,9 +58,5 @@ Table.propTypes = {
 	data: PropTypes.array.isRequired,
 	theme: PropTypes.string.isRequired,
 };
-
-// Table.defaultProps = {
-// 	data: ''
-// };
 
 export default Table;

@@ -1,6 +1,6 @@
 import Modules from 'app/features/modules';
 import { InitInput } from 'app/features/input-types';
-import { randomGraph } from 'app/data/graphs';
+import { randomGraph, suitingGraphs } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 
@@ -37,7 +37,7 @@ const DFS = AlgorithmFactory({
 		startVertex: '0'
 	},
 	inputType: {
-		graph: Modules.Graph.input('graf'),
+		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
 	snap: (vis, reclist, hgs, text, cn, ce) => ({
@@ -53,7 +53,8 @@ const DFS = AlgorithmFactory({
 		exp: Modules.Explanation.module(),
 		recurse: recurseStack.module(),
 		vis: Modules.VisitedArray.module(),
-		desc: Modules.Description.module(description)
+		desc: Modules.Description.module(description),
+		exxx: Modules.ExampleGraphs.module(suitingGraphs('DFS'))
 	},
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];

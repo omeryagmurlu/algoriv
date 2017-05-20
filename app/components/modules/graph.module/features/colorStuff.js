@@ -2,12 +2,28 @@ import chroma from 'chroma-js';
 import { ColorList } from 'app/utils';
 
 const colorStuff = (instance) => {
-	let colorTemp = {
+	let temp = {
 		edges: {},
 		nodes: {}
 	};
+	const setTemp = (type, thing, key, value) => {
+		temp[type][thing] = temp[type][thing] || {};
+		temp[type][thing][key] = value;
+	};
+	const resetTemp = () => {
+		temp = {
+			edges: {},
+			nodes: {}
+		};
+	};
 
-	const colorPurgeStack = [];
+	let purgeStack = [];
+	const flashStack = () => {
+		resetTemp();
+		while (purgeStack.length !== 0) {
+			purgeStack.pop()();
+		}
+	};
 
 	const defaultColor = instance.theme('primary1Color');
 
@@ -19,8 +35,8 @@ const colorStuff = (instance) => {
 	];
 
 	const colorizeThing = (thing, color, type) => {
-		colorTemp[type][thing] = color;
-		colorPurgeStack.push(() => (colorTemp[type][thing] = defaultColor));
+		setTemp(type, thing, 'col', color);
+		purgeStack.push(() => setTemp(type, thing, 'col', defaultColor));
 	};
 
 	const animateColor = ({
@@ -59,11 +75,9 @@ const colorStuff = (instance) => {
 		timeout(fn(0));
 	};
 
-	const updateColors = (deadClist) => {
+	const updateAppearence = (deadClist) => {
 		const clist = ColorList.revive(deadClist);
-		while (colorPurgeStack.length !== 0) {
-			colorPurgeStack.pop()();
-		}
+		flashStack();
 
 		clist.forEachEdge((edge, idx) => {
 			colorizeThing(edge, colors[idx], 'edges');
@@ -76,28 +90,31 @@ const colorStuff = (instance) => {
 		const scaleCache = {};
 		const eachTimeCache = {};
 
-		Object.keys(colorTemp).forEach(type =>
-			Object.keys(colorTemp[type]).forEach(id => animateColor({
-				scaleCache,
-				eachTimeCache,
-				firstCol: instance.sigma.graph[type](id).color,
-				secCol: colorTemp[type][id],
-				callback: col => {
-					instance.sigma.graph[type](id).color = col;
-					instance.sigma.refresh();
-				}
-			}))
+		Object.keys(temp).forEach(type =>
+			Object.keys(temp[type]).forEach(id => {
+				animateColor({
+					scaleCache,
+					eachTimeCache,
+					firstCol: instance.sigma.graph[type](id).color,
+					secCol: temp[type][id].col,
+					callback: col => {
+						instance.sigma.graph[type](id).color = col;
+						instance.sigma.refresh();
+					}
+				});
+			})
 		);
+	};
 
-		colorTemp = {
-			edges: {},
-			nodes: {}
-		};
+	const resetAppearence = () => {
+		flashStack();
+		purgeStack = [];
 	};
 
 	return {
-		updateColors,
-		defaultColor
+		updateAppearence,
+		defaultColor,
+		resetAppearence
 	};
 };
 

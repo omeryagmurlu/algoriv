@@ -5,7 +5,7 @@ import Explanation from './explanation.module';
 import Graph from './graph.module';
 import Table from './table.module';
 import Description from './description.module';
-import ExampleGraphs from './example-graphs.module';
+import ExampleGraphs from './examples.module';
 
 
 const modules = {
@@ -14,7 +14,7 @@ const modules = {
 	graph: Graph,
 	table: Table,
 	description: Description,
-	'example-graphs': ExampleGraphs
+	examples: ExampleGraphs
 };
 
 export default modules;

@@ -27,7 +27,6 @@ const AlgorithmInner = props => {
 		statics[moduleId].layout === lay).map(moduleId =>
 			React.createElement(modules[statics[moduleId].type], {
 				...passProps,
-				theme: props.theme,
 
 				id: moduleId,
 				key: moduleId,

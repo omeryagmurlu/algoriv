@@ -55,7 +55,7 @@ import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
 
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { graphologyImportFix as gimport, themeVars } from 'app/utils';
+import { themeVars } from 'app/utils';
 
 import colorStuff from './features/colorStuff';
 import eventStuff from './features/eventStuff';
@@ -64,7 +64,7 @@ import { style } from './style.scss';
 import vars from './variables.json';
 
 class Graph extends Component {
-	static getGraph = (props) => gimport(props.optGraph || props.input[GRAPH].value)
+	static getGraph = (props) => props.optGraph || props.input[GRAPH].value
 
 	static typeOptions = {
 		directed: {
@@ -108,10 +108,10 @@ class Graph extends Component {
 	}
 
 	componentWillUpdate({ colors }) {
-		this.updateColors(colors);
+		this.updateAppearence(colors);
 	}
 
-	node = (id, x, y) => ({
+	node = (id, x = 0, y = 0) => ({
 		id,
 		label: `${id}`,
 		size: 1,
@@ -146,10 +146,11 @@ class Graph extends Component {
 
 	createGraph(graph) {
 		this.sigma.graph.clear();
+		this.resetAppearence();
 		this.sigma.settings({
 			// singleHover: true,
-			zoomMin: 0.8,
-			zoomMax: 2.5,
+			zoomMin: 0.3,
+			zoomMax: 5.5,
 			minArrowSize: 6,
 			maxEdgeSize: 5,
 			maxNodeSize: 15,
@@ -163,11 +164,14 @@ class Graph extends Component {
 	}
 
 	layout() {
+		this.sigma.killForceAtlas2();
 		this.sigma.startForceAtlas2({
 			worker: true,
 			barnesHutOptimize: false,
-			strongGravityMode: true,
-			startingIterations: 10000
+			// strongGravityMode: true,
+			gravity: 1.5,
+			scalingRatio: 10,
+			// outboundAttractionDistribution: true
 		});
 		setTimeout(() => this.sigma.killForceAtlas2(), 1000);
 	}

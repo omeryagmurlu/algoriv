@@ -9,7 +9,8 @@ const create = (className, fn) => {
 };
 
 export const createFrom = (className, data) => create(className, graph => {
-	graph.addNodesFrom(Array(data.length).fill(1).map((v, i) => i));
+	const order = data.reduce((allMax, v) => v.reduce((nodeMax, u) => Math.max(nodeMax, u), 0), 0);
+	graph.addNodesFrom(Array(order + 1).fill(1).map((v, i) => i));
 	data.forEach((negs, v) => negs.forEach(rawU => {
 		const u = Array.isArray(rawU) ? rawU[0] : rawU;
 		const weight = Array.isArray(rawU) ? rawU[1] : null;
@@ -31,9 +32,35 @@ export const graphs = [
 					[3],
 					[4],
 					[5],
-					[]
 				])
 			},
+			{
+				name: 'Undirected Acyclic',
+				graph: createFrom('UndirectedGraph', [
+					[1, 2, 3, 4],
+					[5],
+					[6],
+					[7],
+					[8],
+					[9, 10, 11],
+					[12, 13, 14],
+					[15, 16, 17],
+					[18, 19, 20]
+				])
+			},
+			{
+				name: 'Dengesiz Binary Tree',
+				graph: createFrom('DirectedGraph', [
+					[1, 2],
+					[3, 4],
+					[],
+					[5, 6],
+					[],
+					[7, 8],
+					[],
+					[9, 10]
+				])
+			}
 		]
 	}
 ];

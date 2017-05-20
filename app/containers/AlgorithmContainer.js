@@ -52,7 +52,7 @@ const AlgorithmFactory = ({
 	inputs = () => revampedAlgInputType.map(({ inputName, inputType: { type, invalid, data } }) => ({
 		type,
 		data,
-		value: JSON.parse(JSON.stringify(this.getInput()[inputName])),
+		value: this.getInput()[inputName],
 		validate: newInput => !invalid(newInput, this.getInput()),
 		update: (newInput, cb = () => {}) => {
 			const error = invalid(newInput, this.getInput());
@@ -73,10 +73,12 @@ const AlgorithmFactory = ({
 
 				frames={this.state.frames}
 
-				// NOTE: I hated doing this, but modules should be wrapped like snaps,
-				// 		 since they all get combined together at the end.
+				// ~~NOTE: I hated doing this, but modules should be wrapped like snaps,~~
+				// ~~		 since they all get combined together at the end.           ~~
+
+				// Well, fuck it then
 				algorithmInfo={algInfo}
-				algorithmStatic={JSON.parse(JSON.stringify(algModules))}
+				algorithmStatic={/* JSON.parse(JSON.stringify( */algModules/* )) */}
 				algorithmInput={this.inputs()}
 			/>
 		);

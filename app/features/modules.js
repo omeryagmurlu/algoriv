@@ -39,6 +39,15 @@ export const TableModule = Modules.Table = exporter(
 	})
 );
 
+export const ExamplesModule = Modules.Examples = exporter(
+	() => ({}),
+	(stuffName, examples) => typee('examples', 'left', {
+		exampleGroup: stuffName,
+		examples
+	}),
+	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)
+);
+
 // o--o--o--o--o
 
 export const TableFuncModule = Modules.TableFunc = (title, width = 75) => exporter(
@@ -54,9 +63,12 @@ export const CodeModule = Modules.Code = exporter(
 );
 
 export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
-	() => ({}), // array of indexes
-	graphs => typee('example-graphs', 'left', { graphs }),
-	(ifMultiModuleId) => ModuleInput('example-graphs', ifMultiModuleId, InputsRegistry.ExampleGraphs)
+	ExamplesModule.snap,
+	graphs => ExamplesModule.module('Graphs', graphs.map(({ name, graph }) => ({
+		name,
+		data: graph
+	}))),
+	ExamplesModule.input
 );
 
 export const ExplanationModule = Modules.Explanation = exporter(
