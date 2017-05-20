@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { LocalStorage } from 'ALIAS-localstorage';
 
 import MainView from 'app/views/MainView';
 import AppView from 'app/views/AppView';
+import Settings from 'app/features/settings';
 import { themes } from 'app/styles/themes.json'; // An Exception for da rule
+
+const storage = new LocalStorage('./storage.json');
 
 const themeNames = Object.keys(themes);
 
@@ -16,11 +20,19 @@ const initialView = {
 class AppContainer extends Component {
 	constructor(props) {
 		super(props);
+
+		this.settings = new Settings(storage);
+
+		this.settings.defaults({
+			theme: 'dark'
+		});
+
 		this.state = {
 			view: initialView,
 			back: null,
 			headerRoutes: [],
-			theme: 'dark'
+
+			settings: this.settings.get()
 		};
 
 		this.history = [initialView];
@@ -35,7 +47,7 @@ class AppContainer extends Component {
 	}
 
 	getThemeColors = () => ({
-		palette: themes[this.state.theme]
+		palette: themes[this.state.settings.theme]
 	})
 
 	_setView = () => {
@@ -60,9 +72,13 @@ class AppContainer extends Component {
 
 	changeTheme = newTheme => {
 		if (themeNames.includes(newTheme)) {
-			this.setState({ theme: newTheme });
+			this.setSettings({ theme: newTheme });
 		}
 	}
+
+	setSettings = (settings, cb) => this.settings.set(settings, () => {
+		this.setState({ settings: this.settings.get() }, cb);
+	})
 
 	render() {
 		return (
@@ -74,7 +90,9 @@ class AppContainer extends Component {
 					goBack={this.goBack}
 					headerRoutes={this.state.headerRoutes}
 
-					theme={this.state.theme}
+					theme={this.state.settings.theme}
+					settings={this.state.settings}
+					setSettings={this.setSettings}
 					changeTheme={this.changeTheme}
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}

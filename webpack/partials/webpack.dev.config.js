@@ -7,7 +7,8 @@ module.exports = new Config().merge({
 	devtool: 'inline-source-map',
 	plugins: [
 		new webpack.DefinePlugin({
-			__NODE_ENV__: JSON.stringify('dev')
+			__DEVELOPMENT__: JSON.stringify(true),
+			__PRODUCTION__: JSON.stringify(false)
 		})
 	]
 });

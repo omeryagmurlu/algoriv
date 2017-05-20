@@ -1,5 +1,3 @@
-/* eslint global-require: "off" */
-
 import Code from './code.module';
 import Explanation from './explanation.module';
 import Graph from './graph.module';

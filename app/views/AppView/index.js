@@ -7,13 +7,11 @@ import style from './style.scss';
 
 const css = themedStyle(style);
 
-const commonApp = props => [
-	'goBack',
-	'changeView',
-	'updateHeader',
-	'changeTheme',
-	'theme'
-].reduce((acc, v) => {
+const commonApp = props => Object.keys(props).filter(v => !([
+	'view',
+	'backData',
+	'headerRoutes'
+].includes(v))).reduce((acc, v) => {
 	acc[v] = props[v];
 	return acc;
 }, {});

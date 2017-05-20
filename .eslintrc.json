@@ -28,8 +28,20 @@
     "react/prefer-stateless-function": "error",
     "react/no-unused-prop-types": "warn",
 
-    "import/no-extraneous-dependencies": "warn",
-    "import/no-named-as-default-member": "warn"
+    "import/no-extraneous-dependencies": "off",
+    "import/extensions": "off",
+    "import/no-named-as-default-member": "warn",
+    "import/no-unresolved": ["error", {
+      "ignore": [
+        ".*ALIAS.*"
+      ]
+    }]
+  },
+  "globals": {
+    "__BROWSER__": false,
+    "__ELECTRON__": false,
+    "__PRODUCTION__": false,
+    "__DEVELOPMENT__": false
   },
   "plugins": [
     "react",

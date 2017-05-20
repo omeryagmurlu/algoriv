@@ -11,7 +11,8 @@ module.exports = new Config().merge({
 			debug: false
 		}),
 		new webpack.DefinePlugin({
-			__NODE_ENV__: JSON.stringify('production'),
+			__PRODUCTION__: JSON.stringify(true),
+			__DEVELOPMENT__: JSON.stringify(false),
 			'process.env': {
 				NODE_ENV: JSON.stringify('production')
 			}

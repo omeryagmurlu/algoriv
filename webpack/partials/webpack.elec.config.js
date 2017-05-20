@@ -1,6 +1,7 @@
 const webpackConfig = require('webpack-config');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 // const fs = require('fs');
 
 const Config = webpackConfig.Config;
@@ -20,9 +21,15 @@ module.exports = new Config().merge({
 	output: {
 		filename: 'electron.js'
 	},
+	resolve: {
+		alias: {
+			'ALIAS-localstorage': path.resolve('node_modules/node-localstorage')
+		}
+	},
 	plugins: [
 		new webpack.DefinePlugin({
-			__TARGET__: JSON.stringify('electron')
+			__ELECTRON__: JSON.stringify(true),
+			__BROWSER__: JSON.stringify(false)
 		})
 	]
 });
