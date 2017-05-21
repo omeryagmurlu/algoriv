@@ -41,9 +41,11 @@ export const TableModule = Modules.Table = exporter(
 
 export const ExamplesModule = Modules.Examples = exporter(
 	() => ({}),
-	(stuffName, examples) => typee('examples', 'left', {
+	(stuffName, examples, settings) => typee('examples', 'left', {
 		exampleGroup: stuffName,
-		examples
+		examples,
+		customs: settings.get()('examples')(stuffName).get() || [],
+		addCustom: () => settings.set()
 	}),
 	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)
 );
@@ -64,10 +66,10 @@ export const CodeModule = Modules.Code = exporter(
 
 export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 	ExamplesModule.snap,
-	graphs => ExamplesModule.module('Graphs', graphs.map(({ name, graph }) => ({
+	(graphs, ...rest) => ExamplesModule.module('Graphs', graphs.map(({ name, graph }) => ({
 		name,
 		data: graph
-	}))),
+	})), ...rest),
 	ExamplesModule.input
 );
 

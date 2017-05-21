@@ -46,15 +46,15 @@ const BFS = AlgorithmFactory({
 		queue: Modules.Queue.snap(q),
 		visit: Modules.VisitedArray.snap(vis)
 	}),
-	modules: {
+	modules: settings => ({
 		kod: Modules.Code.module(code),
 		explain: Modules.Explanation.module(),
 		graf: Modules.VisitedAheadGraph.module(),
 		queue: Modules.Queue.module(),
 		visit: Modules.VisitedArray.module(),
 		desc: Modules.Description.module(description),
-		exxx: Modules.ExampleGraphs.module(suitingGraphs('BFS'))
-	},
+		exxx: Modules.ExampleGraphs.module(suitingGraphs('BFS'), settings)
+	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];
 		const vis = Array(graph.order).fill(false);

@@ -47,15 +47,15 @@ const DFS = AlgorithmFactory({
 		recurse: recurseStack.snap(reclist),
 		vis: Modules.VisitedArray.snap(vis)
 	}),
-	modules: {
+	modules: settings => ({
 		kod: Modules.Code.module(code),
 		graf: Modules.VisitedAheadGraph.module(),
 		exp: Modules.Explanation.module(),
 		recurse: recurseStack.module(),
 		vis: Modules.VisitedArray.module(),
 		desc: Modules.Description.module(description),
-		exxx: Modules.ExampleGraphs.module(suitingGraphs('DFS'))
-	},
+		exxx: Modules.ExampleGraphs.module(suitingGraphs('DFS'), settings)
+	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];
 		const vis = Array(graph.order).fill(false);

@@ -21,19 +21,17 @@ class AppContainer extends Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			view: initialView,
+			back: null,
+			headerRoutes: []
+		};
+
 		this.settings = new Settings(storage);
 
 		this.settings.defaults({
 			theme: 'dark'
 		});
-
-		this.state = {
-			view: initialView,
-			back: null,
-			headerRoutes: [],
-
-			settings: this.settings.get()
-		};
 
 		this.history = [initialView];
 	}
@@ -47,7 +45,7 @@ class AppContainer extends Component {
 	}
 
 	getThemeColors = () => ({
-		palette: themes[this.state.settings.theme]
+		palette: themes[this.settings.get().theme]
 	})
 
 	_setView = () => {
@@ -72,13 +70,9 @@ class AppContainer extends Component {
 
 	changeTheme = newTheme => {
 		if (themeNames.includes(newTheme)) {
-			this.setSettings({ theme: newTheme });
+			this.settings.set({ theme: newTheme });
 		}
 	}
-
-	setSettings = (settings, cb) => this.settings.set(settings, () => {
-		this.setState({ settings: this.settings.get() }, cb);
-	})
 
 	render() {
 		return (
@@ -91,8 +85,8 @@ class AppContainer extends Component {
 					headerRoutes={this.state.headerRoutes}
 
 					theme={this.state.settings.theme}
-					settings={this.state.settings}
-					setSettings={this.setSettings}
+
+					settings={this.settings}
 					changeTheme={this.changeTheme}
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}

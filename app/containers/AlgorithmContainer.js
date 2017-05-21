@@ -73,12 +73,8 @@ const AlgorithmFactory = ({
 
 				frames={this.state.frames}
 
-				// ~~NOTE: I hated doing this, but modules should be wrapped like snaps,~~
-				// ~~		 since they all get combined together at the end.           ~~
-
-				// Well, fuck it then
 				algorithmInfo={algInfo}
-				algorithmStatic={/* JSON.parse(JSON.stringify( */algModules/* )) */}
+				algorithmStatic={typeof algModules === 'function' ? algModules(this.props.app.settings) : algModules}
 				algorithmInput={this.inputs()}
 			/>
 		);

@@ -26,10 +26,11 @@ const head = (name, theme) => (
 	>{name}</Subheader>
 );
 
-const list = (propName, prefix, abj, optAttr = {}) => (
+const list = (items, prefixName, abj, optAttr = {}, prefixElem = null) => (
 	<List>
-		{head(`${prefix} ${abj.exampleGroup}`, abj.theme)}
-		{abj[propName].map(example => (
+		{head(`${prefixName} ${abj.exampleGroup}`, abj.theme)}
+		{prefixElem}
+		{items.map(example => (
 			<ListItem
 				key={example.name}
 				primaryText={example.name}
@@ -51,8 +52,8 @@ const menuItem = (str, icon) => (
 
 const Examples = props => (
 	<div className={css('container', props.theme)} >
-		{list('examples', 'Example', props)}
-		{list('examples', 'Custom', props, {
+		{list(props.examples, 'Example', props)}
+		{list(props.customs, 'Custom', props, {
 			rightIconButton: (
 				<IconMenu
 					anchorOrigin={{
@@ -71,13 +72,22 @@ const Examples = props => (
 					{menuItem('Delete', ActionDelete)}
 				</IconMenu>
 			)
-		})}
+		}, (
+			<ListItem
+				primaryText={'+'}
+				onTouchTap={props.addCustom}
+			/>
+		))}
 	</div>
 );
 
 Examples.propTypes = {
 	theme: PropTypes.string.isRequired,
 	examples: PropTypes.arrayOf(PropTypes.shape({
+		name: PropTypes.string.isRequired,
+		data: PropTypes.any.isRequired
+	})).isRequired,
+	customs: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		data: PropTypes.any.isRequired
 	})).isRequired,
