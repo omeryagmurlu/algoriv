@@ -74,7 +74,7 @@ const BFS = AlgorithmFactory({
 			}
 			vis[v] = true;
 			snap([5], `Mark vertex ${v} visited`, v);
-			graph.neighbors(v).forEach(u => {
+			graph.outNeighbors(v).forEach(u => {
 				// snap([6], `Extending to neighbour ${u} of vertex ${v}`, v, graph.edge(v, u));
 				if (vis[u]) {
 					snap([7], `Vertex ${u} is visited`, v, graph.edge(v, u));

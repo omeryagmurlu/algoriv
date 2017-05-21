@@ -1,43 +1,14 @@
-import _merge from 'lodash.merge';
 import _isNil from 'lodash.isnil';
 
-class Settings {
-	constructor(localStorage) {
-		this.storage = localStorage;
-	}
+const Settings = (storage, changeHandler = () => {}) => {
+	const _get = () => JSON.parse((storage.getItem('settings') || '{}'));
+	const _set = (obj) => {
+		storage.setItem('settings', JSON.stringify(obj));
+		changeHandler();
+	};
 
-	set = (settings = {}, areWeDefault, cb = () => {}) => {
-		let fn = settings;
-		if (typeof settings !== 'function') {
-			fn = () => settings;
-		}
-
-		const prevSettings = this.get();
-
-		const zirka = [
-			prevSettings.get(),
-			fn(JSON.parse(JSON.stringify(prevSettings.get())))
-		];
-		if (areWeDefault) {
-			zirka.reverse();
-		}
-
-		this.storage.setItem('settings', JSON.stringify(
-			_merge(
-				{},
-				zirka[0],
-				zirka[1]
-			)
-		));
-		cb();
-		return this.get();
-	}
-
-	defaults = (objfunc, cb) => this.set(objfunc, true, cb)
-
-	_get = () => JSON.parse((this.storage.getItem('settings') || '{}'))
-
-	_safeSet = (key = false, context = this._get(), wholeCtx = this._get()) => {
+	const setH = (key = false, context = _get(), wC) => {
+		const wholeCtx = wC || context;
 		const fn = inKey => {
 			let ctx;
 			if (context[key]) {
@@ -45,34 +16,75 @@ class Settings {
 			} else {
 				ctx = context[key] = {};
 			}
-			return this._safeSet(inKey, ctx, wholeCtx);
+			return setH(inKey, ctx, wholeCtx);
 		};
-		fn.set = val => {
-			context[key] = val;
+		fn.set = (val) => {
+			const stuff = typeof val === 'function' ? val : () => val;
+			// Well, we are already getting shit from localstorage, so parsed, once more wont hurt
+			context[key] = stuff(context[key]);
+			_set(wholeCtx);
 		};
-		fn.default = val => {
-			context[key] = _isNil(context[key]) ? val : context[key];
+		fn.default = (val) => {
+			const stuff = typeof val === 'function' ? val : () => val;
+			if (!_isNil(context[key])) {
+				return;
+			}
+			context[key] = stuff(context[key]);
+			_set(wholeCtx);
 		};
 		return fn;
-	}
+	};
 
-	get = (initialKey = false, ctx = this._get(), deadFlag = false) => {
+	const getH = (initialKey = false, ctx = _get(), deadFlag = false) => { // FIXME: time, impl aga.
 		let context = ctx;
 		if (initialKey) {
-			context = ctx[initialKey];
+			if (ctx[initialKey]) {
+				context = ctx[initialKey];
+			} else {
+				deadFlag = true;
+			}
 		}
 		const fn = key => {
 			if (!deadFlag && fn.ctx[key]) {
-				return this.get(false, fn.ctx[key]);
+				return getH(false, fn.ctx[key]);
 			}
-			return this.get(false, {}, true);
+			return getH(false, {}, true);
 		};
 		fn.get = (defVal = undefined) => (deadFlag ? defVal : context);
 		if (!deadFlag) {
 			fn.ctx = context;
 		}
 		return fn;
-	}
-}
+	};
+
+	const selector = (key, list = []) => {
+		if (key) {
+			list.push(key);
+		}
+
+		const fn = k => selector(k, list);
+		fn.get = (...p) => {
+			let curr = getH(list[0]);
+			list.slice(1).forEach(k => (curr = curr(k)));
+			return curr.get(...p);
+		};
+
+		fn.set = (...p) => {
+			let curr = setH(list[0]);
+			list.slice(1).forEach(k => (curr = curr(k)));
+			return curr.set(...p);
+		};
+
+		fn.default = (...p) => {
+			let curr = setH(list[0]);
+			list.slice(1).forEach(k => (curr = curr(k)));
+			return curr.default(...p);
+		};
+
+		return fn;
+	};
+
+	return selector;
+};
 
 export default Settings;

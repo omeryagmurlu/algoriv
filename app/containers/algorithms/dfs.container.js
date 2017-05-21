@@ -70,7 +70,7 @@ const DFS = AlgorithmFactory({
 			}
 			vis[v] = true;
 			snap([2], `Mark ${v} visited`, v);
-			graph.neighbors(v).forEach(u => {
+			graph.outNeighbors(v).forEach(u => {
 				snap([3, 4], `For neighbour ${u} of ${v} do DFS`, v, graph.edge(v, u));
 				reclist.push(u);
 				dfs(u);

@@ -2,7 +2,9 @@
 
 @include themeable {
 	.par-#{$themeName} {
-		background-color: map-get($themeMap, 'primary1Color');
+		.handle {
+			background-color: map-get($themeMap, 'primary1Color');
+		}
 
 		.container {
 			background: map-get($themeMap, 'backgroundColor');

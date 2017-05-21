@@ -5,6 +5,9 @@ import graphology from 'graphology';
 const create = (className, fn) => {
 	const graph = new graphology[className]();
 	fn(graph);
+	if (graph.type === 'undirected') {
+		graph.inNeighbors = graph.outNeighbors = graph.neighbors;
+	}
 	return graph;
 };
 

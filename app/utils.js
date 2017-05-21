@@ -30,6 +30,9 @@ export const graphologyImportFix = obj => {
 	const type = obj.edges.find(o => o.undirected) ? 'UndirectedGraph' : 'DirectedGraph';
 	const graph = new graphology[type]();
 	graph.import(obj);
+	if (graph.type === 'undirected') {
+		graph.inNeighbors = graph.outNeighbors = graph.neighbors;
+	}
 	return graph;
 };
 

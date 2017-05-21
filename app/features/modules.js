@@ -1,4 +1,4 @@
-import { ColorList } from 'app/utils';
+import { ColorList, graphologyImportFix as gimport } from 'app/utils';
 import { ModuleInput } from 'app/features/input-types';
 import InputsRegistry from 'app/data/inputsRegistry';
 
@@ -41,11 +41,24 @@ export const TableModule = Modules.Table = exporter(
 
 export const ExamplesModule = Modules.Examples = exporter(
 	() => ({}),
-	(stuffName, examples, settings) => typee('examples', 'left', {
+	(stuffName, examples, parser = x => x, settings) => typee('examples', 'left', {
 		exampleGroup: stuffName,
 		examples,
-		customs: settings.get()('examples')(stuffName).get() || [],
-		addCustom: () => settings.set()
+		customs: (settings('examples')(stuffName).get() || []).map(({ data, name }) => ({
+			name,
+			data: parser(data)
+		})),
+		addCustom: (name, data) => settings('examples')(stuffName).set((prev = []) => {
+			prev.push({
+				name,
+				data
+			});
+			return prev;
+		}),
+		deleteCustom: (name) => settings('examples')(stuffName).set(prev => {
+			prev.splice(prev.map(v => v.name).indexOf(name), 1);
+			return prev;
+		})
 	}),
 	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)
 );
@@ -66,10 +79,10 @@ export const CodeModule = Modules.Code = exporter(
 
 export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 	ExamplesModule.snap,
-	(graphs, ...rest) => ExamplesModule.module('Graphs', graphs.map(({ name, graph }) => ({
+	(graphs, ...rest) => ExamplesModule.module('Graph', graphs.map(({ name, graph }) => ({
 		name,
 		data: graph
-	})), ...rest),
+	})), gimport, ...rest),
 	ExamplesModule.input
 );
 
