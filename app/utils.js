@@ -1,8 +1,10 @@
-import chroma from 'chroma-js';
 import _pickBy from 'lodash.pickby';
 import graphology from 'graphology';
 import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
+import Buckets from 'buckets-js';
+
+export const DataStructures = Buckets;
 
 export const themeVars = theme => key => {
 	if (!themes[theme][key]) {

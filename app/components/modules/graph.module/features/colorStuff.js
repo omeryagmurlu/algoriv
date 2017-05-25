@@ -28,15 +28,18 @@ const colorStuff = (instance) => {
 	const defaultColor = instance.theme('primary1Color');
 
 	const saturatedDefaultColor = chroma(defaultColor).saturate(2);
-	const colors = [
-		saturatedDefaultColor.set('hsl.h', '+90').hex(), // past
-		saturatedDefaultColor.set('hsl.h', '+180').hex(), // future
-		saturatedDefaultColor.set('hsl.h', '+270').hex(), // current
-	];
+	const colors = Array(instance.props.options.colorCount).fill(1).map((_, i) =>
+		saturatedDefaultColor.set('hsl.h', `+${(360 / (instance.props.options.colorCount + 1)) * (i + 1)}`).hex(),
+	);
 
 	const colorizeThing = (thing, color, type) => {
 		setTemp(type, thing, 'col', color);
 		purgeStack.push(() => setTemp(type, thing, 'col', defaultColor));
+	};
+
+	const labelizeThing = (thing, label, type) => {
+		setTemp(type, thing, 'lab', `${thing} - ${label}`);
+		purgeStack.push(() => setTemp(type, thing, 'lab', thing));
 	};
 
 	const animateColor = ({
@@ -75,9 +78,13 @@ const colorStuff = (instance) => {
 		timeout(fn(0));
 	};
 
-	const updateAppearence = (deadClist) => {
+	const updateAppearence = (deadClist, customLabels) => {
 		const clist = ColorList.revive(deadClist);
 		flashStack();
+
+		customLabels.forEach((mLab, i) => {
+			labelizeThing(i, mLab, 'nodes');
+		});
 
 		clist.forEachEdge((edge, idx) => {
 			colorizeThing(edge, colors[idx], 'edges');
@@ -92,16 +99,22 @@ const colorStuff = (instance) => {
 
 		Object.keys(temp).forEach(type =>
 			Object.keys(temp[type]).forEach(id => {
-				animateColor({
-					scaleCache,
-					eachTimeCache,
-					firstCol: instance.sigma.graph[type](id).color,
-					secCol: temp[type][id].col,
-					callback: col => {
-						instance.sigma.graph[type](id).color = col;
-						instance.sigma.refresh();
-					}
-				});
+				if (temp[type][id].col) {
+					animateColor({
+						scaleCache,
+						eachTimeCache,
+						firstCol: instance.sigma.graph[type](id).color,
+						secCol: temp[type][id].col,
+						callback: col => {
+							instance.sigma.graph[type](id).color = col;
+							instance.sigma.refresh();
+						}
+					});
+				}
+
+				if (temp[type][id].lab) {
+					instance.sigma.graph[type](id).label = temp[type][id].lab;
+				}
 			})
 		);
 	};
@@ -114,6 +127,7 @@ const colorStuff = (instance) => {
 	return {
 		updateAppearence,
 		defaultColor,
+		saturatedDefaultColor,
 		resetAppearence
 	};
 };

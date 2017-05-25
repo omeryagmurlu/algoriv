@@ -5,6 +5,7 @@
 	text-align: center;
 	font-family: $textFont;
 	font-weight: bold;
+	width: $moduleMaxWidth;
 
 	&:empty {
 		display: none;

@@ -49,6 +49,14 @@ import 'sigma/src/misc/sigma.misc.drawHovers';
 
 import 'sigma/build/plugins/sigma.layout.forceAtlas2.min';
 import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.dashed.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.dotted.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.parallel.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.tapered.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.dashed.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.dotted.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.parallel.js';
+// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.tapered.js';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -71,7 +79,7 @@ class Graph extends Component {
 			defaultEdgeType: vars.curvedEdges ? 'curvedArrow' : 'arrow',
 		},
 		undirected: {
-			defaultEdgeType: vars.curvedEdges ? 'curved' : 'line',
+			defaultEdgeType: vars.curvedEdges ? 'curvedLine' : 'line',
 		},
 		mixed: {}
 	}
@@ -107,8 +115,8 @@ class Graph extends Component {
 		}
 	}
 
-	componentWillUpdate({ colors }) {
-		this.updateAppearence(colors);
+	componentWillUpdate({ colors, customLabels }) {
+		this.updateAppearence(colors, customLabels);
 	}
 
 	node = (id, x = 0, y = 0) => ({
@@ -156,7 +164,9 @@ class Graph extends Component {
 			maxNodeSize: 15,
 			defaultLabelSize: vars.labelSize,
 			edgeLabelSize: 'proportional',
-			defaultLabelColor: this.theme('textColor'),
+			defaultLabelColor: this.saturatedDefaultColor,
+			defaultEdgeLabelColor: this.saturatedDefaultColor,
+			edgeLabelSizePowRatio: 1.1,
 			...Graph.typeOptions[graph.type]
 		});
 		this.sigma.graph.read(this.readGraph(graph));
@@ -184,13 +194,15 @@ class Graph extends Component {
 }
 
 Graph.defaultProps = {
-	optGraph: null
+	optGraph: null,
+	customLabels: []
 };
 
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
 	optGraph: PropTypes.object,
+	customLabels: PropTypes.array,
 
 	input: PropTypes.objectOf(PropTypes.shape({
 		update: PropTypes.func.isRequired,

@@ -13,8 +13,9 @@ const exporter = (snap, module, input) => ({ snap, module, input });
 const Modules = {};
 
 export const GraphModule = Modules.Graph = exporter(
-	(clist, optMutatingGraph) => ({
+	(clist, customLabels, optMutatingGraph) => ({
 		colors: clist,
+		customLabels,
 
 		// This is only viable for snap, as it is used in logic, in a module, it wouldn't get updated
 		optGraph: optMutatingGraph
@@ -66,8 +67,8 @@ export const ExamplesModule = Modules.Examples = exporter(
 // o--o--o--o--o
 
 export const TableFuncModule = Modules.TableFunc = (title, width = 75) => exporter(
-	q => TableModule.snap([q]),
-	() => TableModule.module(width, [title])
+	a => TableModule.snap(a),
+	() => TableModule.module(width, title)
 );
 
 // o--o--o--o--o
@@ -96,19 +97,39 @@ export const DescriptionModule = Modules.Description = exporter(
 	(text) => typee('description', 'left', { text })
 );
 
+const pushVis = (clist, vis) =>
+	clist.pushNodes(vis.map((v, i) => ((v !== true) ? -1 : i)).filter(v => (v !== -1))); // to high
+
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 	(currentEdge, currentNode, vis, q, ...params) => {
 		const clist = new ColorList();
-
-		clist.pushNodes(vis.map((v, i) => ((v !== true) ? -1 : i)).filter(v => (v !== -1))); // to high
+		pushVis(clist, vis);
 		clist.pushNodes(q.map(v => v));
 		clist.pushNode(currentNode);
 
 		clist.setEdge(currentEdge, 2);
-
-		return GraphModule.snap(clist, ...params);
+		return GraphModule.snap(clist, undefined, ...params);
 	},
-	(...p) => GraphModule.module(...p),
+	(...p) => GraphModule.module({
+		colorCount: 3,
+		...p
+	}),
+	(...p) => GraphModule.input(...p)
+);
+
+export const CustomLabeledGraphModule = Modules.CustomLabeledGraph = exporter(
+	(currentEdge, currentNode, vis, short, ...params) => {
+		const clist = new ColorList();
+		pushVis(clist, vis);
+		clist.pushNode(currentNode);
+		clist.setEdge(currentEdge, 1);
+
+		return GraphModule.snap(clist, short.map(v => v.toString()), ...params);
+	},
+	(...p) => GraphModule.module({
+		colorCount: 2,
+		...p
+	}),
 	(...p) => GraphModule.input(...p)
 );
 

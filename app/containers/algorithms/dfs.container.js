@@ -4,7 +4,7 @@ import { randomGraph, suitingGraphs } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 
-const recurseStack = Modules.TableFunc('Recursion Stack', 150);
+const recurseStack = Modules.TableFunc(['Recursion Stack'], 150);
 
 const description = `
 Depth-first search (DFS) is an algorithm for traversing or searching tree or \
@@ -33,7 +33,7 @@ const DFS = AlgorithmFactory({
 		name: 'DFS'
 	},
 	input: {
-		graph: randomGraph('BFS').graph,
+		graph: randomGraph('DFS').graph,
 		startVertex: '0'
 	},
 	inputType: {
@@ -44,7 +44,7 @@ const DFS = AlgorithmFactory({
 		kod: Modules.Code.snap(hgs),
 		graf: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist),
 		exp: Modules.Explanation.snap(text),
-		recurse: recurseStack.snap(reclist),
+		recurse: recurseStack.snap([reclist]),
 		vis: Modules.VisitedArray.snap(vis)
 	}),
 	modules: settings => ({
@@ -79,6 +79,7 @@ const DFS = AlgorithmFactory({
 			snap([5], `DFS(${v}) ended!`, v);
 		};
 		reclist.push(st);
+		snap([], undefined);
 		snap([7], `Starting main DFS from ${st}`, st);
 		dfs(st);
 		snap([], `DFS from ${st} ended!`, st);
