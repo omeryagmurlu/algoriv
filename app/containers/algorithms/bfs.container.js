@@ -1,9 +1,11 @@
 import Modules from 'app/features/modules';
 import { InitInput } from 'app/features/input-types';
+import { vis2array } from 'app/utils';
 import { randomGraph, suitingGraphs } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 
+const queueModule = Modules.TableFunc(['Queue'], 150);
 
 const description = `
 Breadth-first search (BFS) is an algorithm for traversing or searching tree \
@@ -41,17 +43,20 @@ const BFS = AlgorithmFactory({
 	},
 	snap: (vis, q, posEd, hgs, text, cN, cE) => ({
 		kod: Modules.Code.snap(hgs),
-		explain: Modules.Explanation.snap(text),
-		graf: Modules.VisitedAheadGraph.snap(cE, cN, vis, q, posEd),
-		queue: Modules.Queue.snap(q),
-		visit: Modules.VisitedArray.snap(vis)
+		explain: Modules.Text.snap(text),
+		graf: Modules.RefinedGraphFunc(3).snap(
+			[vis2array(vis), q, cN],
+			[posEd, cE]
+		),
+		queue: queueModule.snap(q), // didn't wrap like [q] intended! look like a queue
+		visit: Modules.NodedTableFunc('Visited').snap(vis)
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		explain: Modules.Explanation.module(),
-		graf: Modules.VisitedAheadGraph.module(),
-		queue: Modules.Queue.module(),
-		visit: Modules.VisitedArray.module(),
+		explain: Modules.Text.module(),
+		graf: Modules.RefinedGraphFunc(3).module(),
+		queue: queueModule.module(),
+		visit: Modules.NodedTableFunc('Visited').module(),
 		desc: Modules.Description.module(description),
 		exxx: Modules.ExampleGraphs.module(suitingGraphs('BFS'), settings)
 	}),

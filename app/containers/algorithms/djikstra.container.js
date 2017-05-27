@@ -1,12 +1,9 @@
 import Modules from 'app/features/modules';
 import { InitInput } from 'app/features/input-types';
+import { vis2array, DataStructures } from 'app/utils';
 import { randomGraph, suitingGraphs } from 'app/data/graphs';
-import { DataStructures } from 'app/utils';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
-
-const shortestTable = Modules.TableFunc(['Node', 'Distance'], 150);
-const priq = Modules.TableFunc(['Priority Queue', 'Node'], 150);
 
 const description = `
 Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph, \
@@ -48,21 +45,21 @@ const Djikstra = AlgorithmFactory({
 	},
 	snap: (short, vis, posEdges, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.CustomLabeledGraph.snap(ce, cn, vis, short, posEdges),
-		shortest: shortestTable.snap([
-			Object.keys(short),
-			Object.keys(short).map(k => short[k].toString())
-		]),
-		// priq: priq.snap(pq.map(v => v[0]), pq.map(v => v[1])),
-		vis: Modules.VisitedArray.snap(vis),
-		exp: Modules.Explanation.snap(text)
+		graf: Modules.RefinedGraphFunc(2).snap(
+			[vis2array(vis), cn],
+			[posEdges, ce],
+			short
+		),
+		shortest: Modules.NodedTableFunc('Distance').snap(short),
+		vis: Modules.NodedTableFunc('Visited').snap(vis),
+		exp: Modules.Text.snap(text)
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.CustomLabeledGraph.module(),
-		exp: Modules.Explanation.module(),
-		shortest: shortestTable.module(),
-		vis: Modules.VisitedArray.module(),
+		graf: Modules.RefinedGraphFunc(2).module(),
+		exp: Modules.Text.module(),
+		shortest: Modules.NodedTableFunc('Distance').module(),
+		vis: Modules.NodedTableFunc('Visited').module(),
 		desc: Modules.Description.module(description),
 		exxx: Modules.ExampleGraphs.module(suitingGraphs('Djikstra'), settings)
 	}),

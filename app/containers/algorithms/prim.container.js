@@ -1,6 +1,7 @@
 import Modules from 'app/features/modules';
 import { InitInput } from 'app/features/input-types';
 import { randomGraph, suitingGraphs } from 'app/data/graphs';
+import { vis2array } from 'app/utils';
 import { DataStructures } from 'app/utils';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
@@ -10,7 +11,7 @@ A minimum spanning tree (MST) or minimum weight spanning tree is a subset of \
 the edges of a connected, edge-weighted undirected graph that connects all the \
 vertices together, without any cycles and with the minimum possible total edge \
 weight. That is, it is a spanning tree whose sum of edge weights is as small as \
-possible.
+possible. Directed equivalent of a MST is a minimum spanning arborescence.
 
 Prim's algorithm operates by building this tree one vertex at a time, from an \
 arbitrary starting vertex, at each step adding the cheapest possible connection \
@@ -46,17 +47,21 @@ const Prim = AlgorithmFactory({
 	},
 	snap: (short, vis, posEdges, sum, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.CustomLabeledGraph.snap(ce, cn, vis, short, posEdges),
-		exp: Modules.Explanation.snap(text),
+		graf: Modules.RefinedGraphFunc(2).snap(
+			[vis2array(vis), cn],
+			[posEdges, ce],
+			short
+		),
+		exp: Modules.Text.snap(text),
 		sum: Modules.Text.snap(sum),
-		vis: Modules.VisitedArray.snap(vis)
+		vis: Modules.NodedTableFunc('Visited').snap(vis)
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.CustomLabeledGraph.module(),
-		exp: Modules.Explanation.module(),
+		graf: Modules.RefinedGraphFunc(2).module(),
+		exp: Modules.Text.module(),
 		sum: Modules.Text.module(),
-		vis: Modules.VisitedArray.module(),
+		vis: Modules.NodedTableFunc('Visited').module(),
 		desc: Modules.Description.module(description),
 		exxx: Modules.ExampleGraphs.module(suitingGraphs('Prim'), settings)
 	}),

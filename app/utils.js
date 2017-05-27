@@ -4,6 +4,10 @@ import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 import Buckets from 'buckets-js';
 
+export const vis2array = vis => Object.keys(vis)
+	.map((k) => ((vis[k] !== true) ? -1 : k))
+	.filter(v => (v !== -1));
+
 export const labelizer = v => ({
 	Infinity: '∞'
 })[v.toString()] || v.toString();

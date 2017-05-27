@@ -1,5 +1,6 @@
 import Modules from 'app/features/modules';
 import { InitInput } from 'app/features/input-types';
+import { vis2array } from 'app/utils';
 import { randomGraph, suitingGraphs } from 'app/data/graphs';
 
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
@@ -42,17 +43,20 @@ const DFS = AlgorithmFactory({
 	},
 	snap: (vis, reclist, posEd, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist, posEd),
-		exp: Modules.Explanation.snap(text),
+		graf: Modules.RefinedGraphFunc(3).snap(
+			[vis2array(vis), reclist, cn],
+			[posEd, ce]
+		),
+		exp: Modules.Text.snap(text),
 		recurse: recurseStack.snap([reclist]),
-		vis: Modules.VisitedArray.snap(vis)
+		vis: Modules.NodedTableFunc('Visited').snap(vis)
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.VisitedAheadGraph.module(),
-		exp: Modules.Explanation.module(),
+		graf: Modules.RefinedGraphFunc(3).module(),
+		exp: Modules.Text.module(),
 		recurse: recurseStack.module(),
-		vis: Modules.VisitedArray.module(),
+		vis: Modules.NodedTableFunc('Visited').module(),
 		desc: Modules.Description.module(description),
 		exxx: Modules.ExampleGraphs.module(suitingGraphs('DFS'), settings)
 	}),

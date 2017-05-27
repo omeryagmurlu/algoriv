@@ -70,14 +70,10 @@ export const ExamplesModule = Modules.Examples = exporter(
 	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)
 );
 
-// o--o--o--o--o
-
 export const TableFuncModule = Modules.TableFunc = (title, width = 75) => exporter(
 	a => TableModule.snap(a),
 	() => TableModule.module(width, title)
 );
-
-// o--o--o--o--o
 
 export const CodeModule = Modules.Code = exporter(
 	highlights => ({ highlights }), // array of indexes
@@ -93,64 +89,32 @@ export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 	ExamplesModule.input
 );
 
-export const ExplanationModule = Modules.Explanation = TextModule;
-
 export const DescriptionModule = Modules.Description = exporter(
 	() => ({}),
 	(text) => typee('description', 'left', { text })
 );
 
-const pushVis = (clist, vis) =>
-	clist.pushNodes(Object.keys(vis)
-		.map((k) => ((vis[k] !== true) ? -1 : k))
-		.filter(v => (v !== -1))); // to high
-
-export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
-	(currentEdge, currentNode, vis, q, colEdges, ...params) => {
+export const RefinedGraphFuncModule = Modules.RefinedGraphFunc = (colLen) => exporter(
+	(nodesList, edgesList, glyphs = {}, ...params) => {
 		const clist = new ColorList();
-		pushVis(clist, vis);
-		clist.pushNodes(q.map(v => v));
-		clist.pushNode(currentNode);
+		nodesList.forEach(nodes => clist.pushNodes(Array.isArray(nodes) ? nodes : [nodes]));
+		edgesList.forEach(edges => clist.pushEdges(Array.isArray(edges) ? edges : [edges]));
 
-		clist.pushEdges(colEdges)
-		clist.pushEdge(currentEdge);
-		return GraphModule.snap(clist, undefined, ...params);
+		return GraphModule.snap(clist, _mapValues(glyphs, labelizer), ...params);
 	},
 	(...p) => GraphModule.module({
-		colorCount: 3,
+		colorCount: colLen,
 		...p
 	}),
 	(...p) => GraphModule.input(...p)
 );
 
-export const CustomLabeledGraphModule = Modules.CustomLabeledGraph = exporter(
-	(currentEdge, currentNode, vis, short, colEdges, ...params) => {
-		const clist = new ColorList();
-		pushVis(clist, vis);
-		clist.pushNode(currentNode);
-		clist.pushEdges(colEdges)
-		clist.pushEdge(currentEdge);
-
-		return GraphModule.snap(clist, _mapValues(short, labelizer), ...params);
-	},
-	(...p) => GraphModule.module({
-		colorCount: 2,
-		...p
-	}),
-	(...p) => GraphModule.input(...p)
-);
-
-export const QueueModule = Modules.Queue = exporter(
-	q => TableModule.snap([q]),
-	() => TableModule.module(100, ['Queue'])
-);
-
-export const VisitedArrayModule = Modules.VisitedArray = exporter(
+export const NodedTableFuncModule = Modules.NodedTableFunc = (colName) => exporter(
 	vis => TableModule.snap([
 		Object.keys(vis),
 		Object.keys(vis).map(k => vis[k].toString())
 	]),
-	() => TableModule.module(200, ['Node', 'Visited'])
+	() => TableModule.module(200, ['Node', colName])
 );
 
 export default Modules;

@@ -20,7 +20,7 @@ class InformationDemandingButton extends Component {
 		});
 	}
 
-	canBeShown = () => this.props.demandCondition || this.props.demandings.length === 0
+	canBeShown = () => this.props.demandCondition && this.props.demandings.length !== 0
 	isOpened = () => this.canBeShown() && this.state.opened
 
 	passiveHandler = () => {
