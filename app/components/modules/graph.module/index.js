@@ -49,21 +49,16 @@ import 'sigma/src/misc/sigma.misc.drawHovers';
 
 import 'sigma/build/plugins/sigma.layout.forceAtlas2.min';
 import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.dashed.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.dotted.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.parallel.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edges.tapered.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.dashed.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.dotted.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.parallel.js';
-// import 'sigma/build/plugins/sigma.renderers.customEdgeShapes/sigma.canvas.edgehovers.tapered.js';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
+import _isNil from 'lodash.isnil';
 
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
 import { themeVars } from 'app/utils';
+
+import './features/custom-plugins/sigma.renderers.glyphs.min';
 
 import colorStuff from './features/colorStuff';
 import eventStuff from './features/eventStuff';
@@ -103,19 +98,16 @@ class Graph extends Component {
 			graph: this.readGraph(graph),
 		});
 		sigma.utils.zoomTo(this.sigma.cameras[0], 0, 0, 1.2);
+		this.sigma.renderers[0].glyphs();
+		this.sigma.renderers[0].bind('render', () => this.sigma.renderers[0].glyphs());
 		this.createGraph(graph);
 		this.attachEvents();
-	}
-
-	componentWillUnmount() {
-		this.detachEvents();
-		this.sigma.kill();
 	}
 
 	componentWillReceiveProps(newProps) {
 		const graph = Graph.getGraph(newProps);
 		if (!_isEqual(graph, Graph.getGraph(this.props))) {
-			console.log('force update');
+			// console.log('force update');
 			this.createGraph(Graph.getGraph(newProps));
 		}
 	}
@@ -124,20 +116,31 @@ class Graph extends Component {
 		this.updateAppearence(colors, customLabels);
 	}
 
+	componentWillUnmount() {
+		this.detachEvents();
+		this.sigma.kill();
+	}
+
 	node = (id, x = 0, y = 0) => ({
 		id,
 		label: `${id}`,
 		size: 1,
 		color: this.defaultColor,
 		x,
-		y
+		y,
+		glyphs: [{
+			position: 'top-left',
+			strokeColor() { return this.color; },
+			content: undefined,
+			draw: false
+		}]
 	})
 
 	edge = (id, graph, weight) => ({
 		id,
 		source: graph.source(id),
 		target: graph.target(id),
-		label: weight && `${weight}`,
+		label: !_isNil(weight) && `${weight}`,
 		color: this.defaultColor,
 		size: 1
 	})
@@ -166,6 +169,7 @@ class Graph extends Component {
 			zoomMax: 5.5,
 			minArrowSize: 6,
 			maxEdgeSize: 5,
+			minNodeSize: 15,
 			maxNodeSize: 15,
 			defaultLabelSize: vars.labelSize,
 			edgeLabelSize: 'proportional',
@@ -173,10 +177,18 @@ class Graph extends Component {
 			defaultEdgeLabelColor: this.saturatedDefaultColor,
 			doubleClickEnabled: false,
 			// enableEdgeHovering: true,
+			enableHovering: false,
 			edgeLabelSizePowRatio: 1.1,
+			glyphScale: 0.7,
+			glyphLineWidth: 5,
+			glyphFontScale: 1.5,
+			glyphThreshold: 6,
+			glyphFillColor: this.theme('backgroundColor'),
+			glyphTextColor: this.saturatedDefaultColor,
 			...Graph.typeOptions[graph.type]
 		});
 		this.sigma.graph.read(this.readGraph(graph));
+
 		this.layout();
 	}
 
@@ -208,17 +220,17 @@ Graph.defaultProps = {
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
-	optGraph: PropTypes.object,
+	// optGraph: PropTypes.object,
 	customLabels: PropTypes.object,
 
-	input: PropTypes.objectOf(PropTypes.shape({
-		update: PropTypes.func.isRequired,
-		value: PropTypes.object.isRequired
-	})).isRequired,
+	// input: PropTypes.objectOf(PropTypes.shape({
+	// 	update: PropTypes.func.isRequired,
+	// 	value: PropTypes.object.isRequired
+	// })).isRequired,
 
 	theme: PropTypes.string.isRequired,
 
-	animationNextFrameTime: PropTypes.number.isRequired
+	// animationNextFrameTime: PropTypes.number.isRequired
 };
 
 export default Graph;

@@ -1,5 +1,5 @@
 import _mapValues from 'lodash.mapvalues';
-import { ColorList, graphologyImportFix as gimport } from 'app/utils';
+import { ColorList, graphologyImportFix as gimport, labelizer } from 'app/utils';
 import { ModuleInput } from 'app/features/input-types';
 import InputsRegistry from 'app/data/inputsRegistry';
 
@@ -39,6 +39,11 @@ export const TableModule = Modules.Table = exporter(
 		width,
 		columns
 	})
+);
+
+export const TextModule = Modules.Text = exporter(
+	text => ({ text }), // string
+	(text, side = 'right') => typee('text', side, { text })
 );
 
 export const ExamplesModule = Modules.Examples = exporter(
@@ -88,10 +93,7 @@ export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 	ExamplesModule.input
 );
 
-export const ExplanationModule = Modules.Explanation = exporter(
-	text => ({ text }), // string
-	() => typee('explanation', 'right')
-);
+export const ExplanationModule = Modules.Explanation = TextModule;
 
 export const DescriptionModule = Modules.Description = exporter(
 	() => ({}),
@@ -129,7 +131,7 @@ export const CustomLabeledGraphModule = Modules.CustomLabeledGraph = exporter(
 		clist.pushEdges(colEdges)
 		clist.pushEdge(currentEdge);
 
-		return GraphModule.snap(clist, _mapValues(short, v => v.toString()), ...params);
+		return GraphModule.snap(clist, _mapValues(short, labelizer), ...params);
 	},
 	(...p) => GraphModule.module({
 		colorCount: 2,

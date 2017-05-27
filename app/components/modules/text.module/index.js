@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { style } from './style.scss';
 
-const Explanation = props => (
+const Text = props => (
 	<div className={style}>
 		{props.text}
 	</div>
 );
 
-Explanation.propTypes = {
+Text.propTypes = {
 	text: PropTypes.string
 };
 
-Explanation.defaultProps = {
+Text.defaultProps = {
 	text: ''
 };
 
-export default Explanation;
+export default Text;

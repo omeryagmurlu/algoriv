@@ -38,8 +38,8 @@ const colorStuff = (instance) => {
 	};
 
 	const labelizeThing = (thing, label, type) => {
-		setTemp(type, thing, 'lab', `${thing} - ${label}`);
-		purgeStack.push(() => setTemp(type, thing, 'lab', thing));
+		setTemp(type, thing, 'lab', label);
+		purgeStack.push(() => setTemp(type, thing, 'lab', -1));
 	};
 
 	const animateColor = ({
@@ -107,13 +107,19 @@ const colorStuff = (instance) => {
 						secCol: temp[type][id].col,
 						callback: col => {
 							instance.sigma.graph[type](id).color = col;
-							instance.sigma.refresh();
+							instance.sigma.refresh({ skipIndexation: true });
 						}
 					});
 				}
 
 				if (temp[type][id].lab) {
-					instance.sigma.graph[type](id).label = temp[type][id].lab;
+					const thing = instance.sigma.graph[type](id);
+					thing.glyphs[0].content = temp[type][id].lab;
+					if (temp[type][id].lab === -1) {
+						thing.glyphs[0].draw = false;
+					} else {
+						thing.glyphs[0].draw = true;
+					}
 				}
 			})
 		);

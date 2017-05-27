@@ -4,6 +4,10 @@ import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 import Buckets from 'buckets-js';
 
+export const labelizer = v => ({
+	Infinity: '∞'
+})[v.toString()] || v.toString();
+
 export const DataStructures = Buckets;
 
 export const themeVars = theme => key => {

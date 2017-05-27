@@ -70,7 +70,7 @@ export const graphs = [
 		]
 	},
 	{
-		suits: ['Djikstra'],
+		suits: ['Prim', 'Djikstra'],
 		graphs: [
 			{
 				name: 'Dengesiz Binary Tree Weighted',
@@ -96,6 +96,19 @@ export const graphs = [
 			},
 			{
 				name: 'Undirected Cyclic Weighted',
+				graph: createFrom('UndirectedGraph', [
+					[[1, 4], [7, 8]],
+					[[2, 8], [7, 11]],
+					[[3, 7], [5, 4], [8, 2]],
+					[[4, 9], [5, 14]],
+					[[5, 10]],
+					[[6, 2]],
+					[[7, 1], [8, 6]],
+					[[8, 7]]
+				])
+			},
+			{
+				name: 'Undirected Cyclic Weighted 2',
 				graph: createFrom('UndirectedGraph', [
 					[[1, 6], [2, 3]],
 					[[3, 8], [4, 1]],
