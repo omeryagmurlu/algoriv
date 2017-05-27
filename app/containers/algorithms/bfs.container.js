@@ -39,10 +39,10 @@ const BFS = AlgorithmFactory({
 		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
-	snap: (vis, q, hgs, text, cN, cE) => ({
+	snap: (vis, q, posEd, hgs, text, cN, cE) => ({
 		kod: Modules.Code.snap(hgs),
 		explain: Modules.Explanation.snap(text),
-		graf: Modules.VisitedAheadGraph.snap(cE, cN, vis, q),
+		graf: Modules.VisitedAheadGraph.snap(cE, cN, vis, q, posEd),
 		queue: Modules.Queue.snap(q),
 		visit: Modules.VisitedArray.snap(vis)
 	}),
@@ -57,26 +57,33 @@ const BFS = AlgorithmFactory({
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];
+		const parentQ = [];
+		const posEd = [];
 		const vis = graph.nodes().reduce((acc, v) => {
 			acc[v] = false;
 			return acc;
 		}, {});
 
-		const snap = (...par) => rawSnap(vis, q, ...par);
+		const snap = (...par) => rawSnap(vis, q, posEd, ...par);
 
 		snap([], undefined);
 		q.push(st);
+		parentQ.push(undefined);
 		snap([0, 1], `Run BFS from vertex ${st}`, st);
 		while (q.length !== 0) {
 			// snap([2], `Queue is not empty, contains vertexes ${q.join(', ')}`);
 			const v = q.shift();
+			const parent = parentQ.shift();
 			snap([3], `Processing vertex ${v}`, v);
 			if (vis[v]) {
 				snap([4], `Vertex ${v} is visited`, v);
 				continue; // eslint-disable-line no-continue
 			}
 			vis[v] = true;
-			snap([5], `Mark vertex ${v} visited`, v);
+			if (parent) {
+				posEd.push(graph.edge(parent, v));
+			}
+			snap([5], `Mark vertex ${v} visited`);
 			graph.outNeighbors(v).forEach(u => {
 				// snap([6], `Extending to neighbour ${u} of vertex ${v}`, v, graph.edge(v, u));
 				if (vis[u]) {
@@ -84,6 +91,7 @@ const BFS = AlgorithmFactory({
 					return;
 				}
 				q.push(u);
+				parentQ.push(v);
 				snap([8], `Vertex ${u} is not visited, push to queue`, v, graph.edge(v, u));
 			});
 		}

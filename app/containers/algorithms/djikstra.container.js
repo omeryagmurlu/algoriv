@@ -46,9 +46,9 @@ const Djikstra = AlgorithmFactory({
 		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
-	snap: (short, vis, hgs, text, cn, ce) => ({
+	snap: (short, vis, posEdges, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.CustomLabeledGraph.snap(ce, cn, vis, short),
+		graf: Modules.CustomLabeledGraph.snap(ce, cn, vis, short, posEdges),
 		shortest: shortestTable.snap([
 			Object.keys(short),
 			Object.keys(short).map(k => short[k].toString())
@@ -67,8 +67,9 @@ const Djikstra = AlgorithmFactory({
 		exxx: Modules.ExampleGraphs.module(suitingGraphs('Djikstra'), settings)
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
-		const pair = (id, distance) => ({ id, distance });
+		const pair = (id, distance, parent) => ({ id, distance, parent });
 
+		const posEdges = [];
 		const distance = graph.nodes().reduce((acc, v) => {
 			acc[v] = Infinity;
 			return acc;
@@ -77,7 +78,7 @@ const Djikstra = AlgorithmFactory({
 			acc[v] = false;
 			return acc;
 		}, {});
-		const snap = (...p) => rawSnap(distance, vis, ...p);
+		const snap = (...p) => rawSnap(distance, vis, posEdges, ...p);
 
 		const pq = new DataStructures.PriorityQueue((a, b) => {
 			if (a.distance > b.distance) { // MIN HEAP
@@ -94,9 +95,7 @@ const Djikstra = AlgorithmFactory({
 		pq.enqueue(pair(st, 0));
 		snap([1], `Enqueue the starting node ${st} with the distance 0`, st);
 		while (!pq.isEmpty()) {
-			const dis = pq.peek().distance;
-			const v = pq.peek().id;
-			pq.dequeue();
+			const { distance: dis, id: v, parent } = pq.dequeue();
 			snap([2, 3], `Dequeued node ${v} with distance ${dis}`, v);
 			if (vis[v]) {
 				snap([4], `Node ${v} is visited, continue`, v);
@@ -104,11 +103,14 @@ const Djikstra = AlgorithmFactory({
 			}
 			distance[v] = dis;
 			vis[v] = true;
-			snap([5], `Mark ${v} visited`, v);
+			if (parent) {
+				posEdges.push(graph.edge(parent, v));
+			}
+			snap([5], `Mark ${v} visited`);
 			graph.outNeighbors(v).forEach(u => {
 				const weight = graph.getEdgeAttribute(v, u, 'weight');
 				snap([6, 7], `Enqueue neighbor ${u} with distance ${weight + dis} (= weight ${weight} + v's distance ${dis})`, u, graph.edge(v, u));
-				pq.enqueue(pair(u, weight + dis));
+				pq.enqueue(pair(u, weight + dis, v));
 			});
 		}
 		snap([], `Djikstra from ${st} completed`);

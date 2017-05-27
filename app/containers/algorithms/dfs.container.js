@@ -40,9 +40,9 @@ const DFS = AlgorithmFactory({
 		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
 		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
 	},
-	snap: (vis, reclist, hgs, text, cn, ce) => ({
+	snap: (vis, reclist, posEd, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist),
+		graf: Modules.VisitedAheadGraph.snap(ce, cn, vis, reclist, posEd),
 		exp: Modules.Explanation.snap(text),
 		recurse: recurseStack.snap([reclist]),
 		vis: Modules.VisitedArray.snap(vis)
@@ -58,12 +58,13 @@ const DFS = AlgorithmFactory({
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];
+		const posEd = [];
 		const vis = graph.nodes().reduce((acc, v) => {
 			acc[v] = false;
 			return acc;
 		}, {});
 
-		const snap = (...par) => rawSnap(vis, reclist, ...par);
+		const snap = (...par) => rawSnap(vis, reclist, posEd, ...par);
 
 		const dfs = v => {
 			snap([0], `Start DFS(${v})`, v);
@@ -78,6 +79,7 @@ const DFS = AlgorithmFactory({
 				reclist.push(u);
 				dfs(u);
 				reclist.pop();
+				posEd.push(graph.edge(v, u));
 			});
 			snap([5], `DFS(${v}) ended!`, v);
 		};

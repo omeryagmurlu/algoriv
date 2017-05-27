@@ -104,13 +104,14 @@ const pushVis = (clist, vis) =>
 		.filter(v => (v !== -1))); // to high
 
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
-	(currentEdge, currentNode, vis, q, ...params) => {
+	(currentEdge, currentNode, vis, q, colEdges, ...params) => {
 		const clist = new ColorList();
 		pushVis(clist, vis);
 		clist.pushNodes(q.map(v => v));
 		clist.pushNode(currentNode);
 
-		clist.setEdge(currentEdge, 2);
+		clist.pushEdges(colEdges)
+		clist.pushEdge(currentEdge);
 		return GraphModule.snap(clist, undefined, ...params);
 	},
 	(...p) => GraphModule.module({
@@ -121,11 +122,12 @@ export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 );
 
 export const CustomLabeledGraphModule = Modules.CustomLabeledGraph = exporter(
-	(currentEdge, currentNode, vis, short, ...params) => {
+	(currentEdge, currentNode, vis, short, colEdges, ...params) => {
 		const clist = new ColorList();
 		pushVis(clist, vis);
 		clist.pushNode(currentNode);
-		clist.setEdge(currentEdge, 1);
+		clist.pushEdges(colEdges)
+		clist.pushEdge(currentEdge);
 
 		return GraphModule.snap(clist, _mapValues(short, v => v.toString()), ...params);
 	},
