@@ -1,5 +1,5 @@
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { graphologyImportFix as gimport } from 'app/utils';
+import { getRandomInt } from 'app/utils';
 
 const eventStuff = (instance, clas) => {
 	const notify = graph => instance.props.input[GRAPH].update(
@@ -8,7 +8,7 @@ const eventStuff = (instance, clas) => {
 
 	const commonWork = fn => e => {
 		if (e.data.captor.ctrlKey) {
-			return fn(e, gimport(JSON.parse(JSON.stringify(clas.getGraph(instance.props)))));
+			return fn(e, instance.graph);
 		}
 	};
 
@@ -49,7 +49,7 @@ const eventStuff = (instance, clas) => {
 
 			const id = graph.addNode(predOrder);
 
-			instance.sigma.graph.addNode(instance.node(id));
+			instance.sigma.graph.addNode(instance.node(id, getRandomInt(0, 50), getRandomInt(0, 50)));
 			instance.layout();
 
 			notify(graph);
@@ -80,7 +80,7 @@ const eventStuff = (instance, clas) => {
 							weight
 						});
 
-						instance.sigma.graph.addEdge(instance.edge(id, graph));
+						instance.sigma.graph.addEdge(instance.edge(id, graph, graph.getEdgeAttribute(id, 'weight')));
 						instance.layout();
 
 						notify(graph);

@@ -47,7 +47,7 @@ import 'sigma/src/misc/sigma.misc.bindEvents';
 import 'sigma/src/misc/sigma.misc.bindDOMEvents';
 import 'sigma/src/misc/sigma.misc.drawHovers';
 
-import 'sigma/build/plugins/sigma.layout.forceAtlas2.min';
+import 'sigma/build/plugins/sigma.plugins.animate.min';
 import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
 
 import React, { Component } from 'react';
@@ -56,9 +56,10 @@ import _isEqual from 'lodash.isequal';
 import _isNil from 'lodash.isnil';
 
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { themeVars } from 'app/utils';
+import { themeVars, graphologyImportFix as gimport } from 'app/utils';
 
 import './features/custom-plugins/sigma.renderers.glyphs.min';
+import './features/custom-plugins/sigma.layouts.forceLink.min';
 
 import colorStuff from './features/colorStuff';
 import eventStuff from './features/eventStuff';
@@ -67,7 +68,7 @@ import { style } from './style.scss';
 import vars from './variables.json';
 
 class Graph extends Component {
-	static getGraph = (props) => props.optGraph || props.input[GRAPH].value
+	static parseGraph = (props) => gimport(JSON.parse(JSON.stringify(props.optGraph || props.input[GRAPH].value)))
 
 	static typeOptions = {
 		directed: {
@@ -89,26 +90,27 @@ class Graph extends Component {
 	}
 
 	componentDidMount() {
-		const graph = Graph.getGraph(this.props);
+		this.graph = Graph.parseGraph(this.props);
 		this.sigma = new sigma({ // eslint-disable-line new-cap
 			renderer: {
 				container: this.graphId,
 				type: 'canvas'
 			},
-			graph: this.readGraph(graph),
+			graph: this.readGraph(this.graph),
 		});
 		sigma.utils.zoomTo(this.sigma.cameras[0], 0, 0, 1.2);
 		this.sigma.renderers[0].glyphs();
 		this.sigma.renderers[0].bind('render', () => this.sigma.renderers[0].glyphs());
-		this.createGraph(graph);
+		this.createGraph();
 		this.attachEvents();
 	}
 
 	componentWillReceiveProps(newProps) {
-		const graph = Graph.getGraph(newProps);
-		if (!_isEqual(graph, Graph.getGraph(this.props))) {
+		const graph = Graph.parseGraph(newProps);
+		if (!_isEqual(graph, this.graph)) {
 			// console.log('force update');
-			this.createGraph(Graph.getGraph(newProps));
+			this.graph = graph;
+			this.createGraph();
 		}
 	}
 
@@ -160,7 +162,8 @@ class Graph extends Component {
 
 	theme = (key) => themeVars(this.props.theme)(key)
 
-	createGraph(graph) {
+	createGraph() {
+		const graph = this.graph;
 		this.sigma.graph.clear();
 		this.resetAppearence();
 		this.sigma.settings({
@@ -185,6 +188,7 @@ class Graph extends Component {
 			glyphThreshold: 6,
 			glyphFillColor: this.theme('backgroundColor'),
 			glyphTextColor: this.saturatedDefaultColor,
+			animationsTime: 500,
 			...Graph.typeOptions[graph.type]
 		});
 		this.sigma.graph.read(this.readGraph(graph));
@@ -193,16 +197,17 @@ class Graph extends Component {
 	}
 
 	layout() {
-		this.sigma.killForceAtlas2();
-		this.sigma.startForceAtlas2({
+		sigma.layouts.killForceLink(this.sigma);
+		sigma.layouts.startForceLink(this.sigma, {
 			worker: true,
-			barnesHutOptimize: false,
-			// strongGravityMode: true,
 			gravity: 1.5,
 			scalingRatio: 10,
-			// outboundAttractionDistribution: true
+			autoStop: true,
+			background: true,
+			easing: 'cubicInOut',
+			alignNodeSiblings: true
 		});
-		setTimeout(() => this.sigma.killForceAtlas2(), 1000);
+		// setTimeout(() => sigma.layouts.killForceLink(this.sigma), 1000);
 	}
 
 	render() {
