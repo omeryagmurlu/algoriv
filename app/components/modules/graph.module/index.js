@@ -107,6 +107,11 @@ class Graph extends Component {
 		this.attachEvents();
 	}
 
+	componentWillUnmount() {
+		this.detachEvents();
+		this.sigma.kill();
+	}
+
 	componentWillReceiveProps(newProps) {
 		const graph = Graph.getGraph(newProps);
 		if (!_isEqual(graph, Graph.getGraph(this.props))) {
@@ -166,6 +171,8 @@ class Graph extends Component {
 			edgeLabelSize: 'proportional',
 			defaultLabelColor: this.saturatedDefaultColor,
 			defaultEdgeLabelColor: this.saturatedDefaultColor,
+			doubleClickEnabled: false,
+			// enableEdgeHovering: true,
 			edgeLabelSizePowRatio: 1.1,
 			...Graph.typeOptions[graph.type]
 		});
@@ -195,14 +202,14 @@ class Graph extends Component {
 
 Graph.defaultProps = {
 	optGraph: null,
-	customLabels: []
+	customLabels: {}
 };
 
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
 	optGraph: PropTypes.object,
-	customLabels: PropTypes.array,
+	customLabels: PropTypes.object,
 
 	input: PropTypes.objectOf(PropTypes.shape({
 		update: PropTypes.func.isRequired,

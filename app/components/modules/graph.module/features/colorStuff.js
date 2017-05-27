@@ -82,8 +82,8 @@ const colorStuff = (instance) => {
 		const clist = ColorList.revive(deadClist);
 		flashStack();
 
-		customLabels.forEach((mLab, i) => {
-			labelizeThing(i, mLab, 'nodes');
+		Object.keys(customLabels).forEach(key => {
+			labelizeThing(key, customLabels[key], 'nodes');
 		});
 
 		clist.forEachEdge((edge, idx) => {

@@ -57,7 +57,10 @@ const BFS = AlgorithmFactory({
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const q = [];
-		const vis = Array(graph.order).fill(false);
+		const vis = graph.nodes().reduce((acc, v) => {
+			acc[v] = false;
+			return acc;
+		}, {});
 
 		const snap = (...par) => rawSnap(vis, q, ...par);
 

@@ -25,6 +25,7 @@ class AppContainer extends Component {
 			view: initialView,
 			back: null,
 			headerRoutes: [],
+			modal: {},
 
 			rawSettings: ''
 		};
@@ -62,6 +63,19 @@ class AppContainer extends Component {
 		this._setView();
 	}
 
+	prompt = (message, continuation) => {
+		this.setState({
+			modal: {
+				type: 'prompt',
+				message,
+				exitStrategy: () => this.setState({ modal: {} }),
+				options: {
+					continuation
+				}
+			}
+		});
+	}
+
 	changeView = (view) => {
 		if (view.name === this.topHistory().name) { // BUGFIX: onClick triggers twice
 			return;
@@ -81,6 +95,7 @@ class AppContainer extends Component {
 			<MuiThemeProvider muiTheme={getMuiTheme(this.getThemeColors())} >
 				<AppView
 					view={this.state.view}
+					modal={this.state.modal}
 
 					backData={this.state.back}
 					goBack={this.goBack}
@@ -89,6 +104,7 @@ class AppContainer extends Component {
 					theme={this.settings('theme').get()}
 
 					settings={this.settings}
+					prompt={this.prompt}
 					changeTheme={this.changeTheme}
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}

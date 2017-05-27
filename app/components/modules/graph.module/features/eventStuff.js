@@ -12,9 +12,42 @@ const eventStuff = (instance, clas) => {
 		}
 	};
 
+	const removeNode = ({
+		handlerClickNode: commonWork((e, graph) => {
+			if (!e.data.captor.altKey) {
+				return;
+			}
+			graph.dropNode(e.data.node.id);
+
+			instance.sigma.graph.dropNode(e.data.node.id);
+			instance.layout();
+
+			notify(graph);
+		}),
+
+		get bind() {
+			return () => instance.sigma.bind('clickNode', this.handlerClickNode);
+		},
+
+		get unbind() {
+			return () => instance.sigma.unbind('clickNode', this.handlerClickNode);
+		}
+	});
+
 	const addNode = ({
 		handlerClickStage: commonWork((e, graph) => {
-			const id = graph.addNode(graph.order);
+			if (e.data.captor.altKey) {
+				return;
+			}
+			let predOrder = graph.order;
+			while (graph.hasNode(predOrder)) {
+				predOrder++;
+				if (predOrder > 1000) {
+					throw new Error('Sictin');
+				}
+			}
+
+			const id = graph.addNode(predOrder);
 
 			instance.sigma.graph.addNode(instance.node(id));
 			instance.layout();
@@ -34,17 +67,32 @@ const eventStuff = (instance, clas) => {
 	let previouslySelectedNode = null;
 	const addEdge = ({
 		handlerClickNode: commonWork((e, graph) => {
-			if (previouslySelectedNode !== null) {
+			if (e.data.captor.altKey) {
+				return;
+			}
+			if (previouslySelectedNode !== null && graph.hasNode(previouslySelectedNode)) {
 				const fromNode = previouslySelectedNode;
 				const toNode = e.data.node.id;
 
 				if (!graph.hasEdge(fromNode, toNode)) {
-					const id = graph.addEdge(fromNode, toNode);
+					const continuation = (weight) => {
+						const id = graph.addEdge(fromNode, toNode, {
+							weight
+						});
 
-					instance.sigma.graph.addEdge(instance.edge(id, graph));
-					instance.layout();
+						instance.sigma.graph.addEdge(instance.edge(id, graph));
+						instance.layout();
 
-					notify(graph);
+						notify(graph);
+					};
+
+					if (graph.edges().find(edge => graph.getEdgeAttribute(edge, 'weight'))) {
+						instance.props.app.prompt('Enter Weight', weight =>
+							continuation(parseInt(weight, 10))
+						);
+					} else {
+						continuation();
+					}
 				}
 
 				previouslySelectedNode = null;
@@ -66,11 +114,13 @@ const eventStuff = (instance, clas) => {
 
 	const attachEvents = () => {
 		addNode.bind();
+		removeNode.bind();
 		addEdge.bind();
 	};
 
 	const detachEvents = () => {
 		addNode.unbind();
+		removeNode.unbind();
 		addEdge.unbind();
 	};
 

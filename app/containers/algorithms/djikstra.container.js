@@ -50,8 +50,8 @@ const Djikstra = AlgorithmFactory({
 		kod: Modules.Code.snap(hgs),
 		graf: Modules.CustomLabeledGraph.snap(ce, cn, vis, short),
 		shortest: shortestTable.snap([
-			short.map((_, i) => i),
-			short.map(v => v.toString())
+			Object.keys(short),
+			Object.keys(short).map(k => short[k].toString())
 		]),
 		// priq: priq.snap(pq.map(v => v[0]), pq.map(v => v[1])),
 		vis: Modules.VisitedArray.snap(vis),
@@ -69,8 +69,14 @@ const Djikstra = AlgorithmFactory({
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const pair = (id, distance) => ({ id, distance });
 
-		const distance = Array(graph.order).fill(Infinity);
-		const vis = Array(graph.order).fill(false);
+		const distance = graph.nodes().reduce((acc, v) => {
+			acc[v] = Infinity;
+			return acc;
+		}, {});
+		const vis = graph.nodes().reduce((acc, v) => {
+			acc[v] = false;
+			return acc;
+		}, {});
 		const snap = (...p) => rawSnap(distance, vis, ...p);
 
 		const pq = new DataStructures.PriorityQueue((a, b) => {

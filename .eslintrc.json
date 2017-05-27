@@ -9,7 +9,7 @@
     "no-underscore-dangle": "off",
     "no-param-reassign": ["error", { "props": false }],
     "no-tabs": "off",
-    "indent": ["error", "tab"],
+    "indent": ["error", "tab", { "SwitchCase": 1 }],
     "arrow-parens": ["off"],
     "no-plusplus": "off",
     "consistent-return": "off",

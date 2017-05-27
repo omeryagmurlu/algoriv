@@ -58,7 +58,10 @@ const DFS = AlgorithmFactory({
 	}),
 	logic: ({ startVertex: st, graph }, rawSnap) => {
 		const reclist = [];
-		const vis = Array(graph.order).fill(false);
+		const vis = graph.nodes().reduce((acc, v) => {
+			acc[v] = false;
+			return acc;
+		}, {});
 
 		const snap = (...par) => rawSnap(vis, reclist, ...par);
 

@@ -1,3 +1,4 @@
+import _mapValues from 'lodash.mapvalues';
 import { ColorList, graphologyImportFix as gimport } from 'app/utils';
 import { ModuleInput } from 'app/features/input-types';
 import InputsRegistry from 'app/data/inputsRegistry';
@@ -98,7 +99,9 @@ export const DescriptionModule = Modules.Description = exporter(
 );
 
 const pushVis = (clist, vis) =>
-	clist.pushNodes(vis.map((v, i) => ((v !== true) ? -1 : i)).filter(v => (v !== -1))); // to high
+	clist.pushNodes(Object.keys(vis)
+		.map((k) => ((vis[k] !== true) ? -1 : k))
+		.filter(v => (v !== -1))); // to high
 
 export const VisitedAheadGraphModule = Modules.VisitedAheadGraph = exporter(
 	(currentEdge, currentNode, vis, q, ...params) => {
@@ -124,7 +127,7 @@ export const CustomLabeledGraphModule = Modules.CustomLabeledGraph = exporter(
 		clist.pushNode(currentNode);
 		clist.setEdge(currentEdge, 1);
 
-		return GraphModule.snap(clist, short.map(v => v.toString()), ...params);
+		return GraphModule.snap(clist, _mapValues(short, v => v.toString()), ...params);
 	},
 	(...p) => GraphModule.module({
 		colorCount: 2,
@@ -140,8 +143,8 @@ export const QueueModule = Modules.Queue = exporter(
 
 export const VisitedArrayModule = Modules.VisitedArray = exporter(
 	vis => TableModule.snap([
-		vis.map((v, i) => i),
-		vis.map(v => v.toString())
+		Object.keys(vis),
+		Object.keys(vis).map(k => vis[k].toString())
 	]),
 	() => TableModule.module(200, ['Node', 'Visited'])
 );

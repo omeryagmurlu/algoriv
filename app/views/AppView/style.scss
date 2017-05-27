@@ -12,3 +12,25 @@
 	position: relative;
 	height: calc(100vh - #{$headerHeight});
 }
+
+.content {
+	display: flex;
+	justify-content: center;
+
+	> div {
+		padding: 24px;
+
+		> :empty {
+			display: none;
+		}
+	}
+
+}
+
+.actions-container {
+	padding: 8px 0 0 0 !important;
+}
+
+.title {
+	padding: 0 0 8px 0 !important;
+}

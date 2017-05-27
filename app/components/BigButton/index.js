@@ -15,6 +15,7 @@ const BigButton = props => (
 		}}
 	>
 		<FlatButton
+			label="just to remove that warning"
 			{...getEvents(props)}
 		/>
 		<div className={css('innerContainer')}>

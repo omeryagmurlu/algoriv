@@ -52,6 +52,7 @@ class SideDrawer extends Component {
 				</section>
 				<div className={css('handle')}>
 					<FlatButton
+						label="just to remove that warning"
 						onClick={this.toggleActive}
 					/>
 					{React.createElement(
