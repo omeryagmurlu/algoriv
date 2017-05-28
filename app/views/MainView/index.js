@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AlgorithmPageView from 'app/views/AlgorithmPageView';
 import BigButton from 'app/components/BigButton';
+
+import AlgorithmPageView from 'app/views/AlgorithmPageView';
+import PageViewFactory from 'app/views/PageViewFactory';
+
+import usage from 'app/../docs/usage.md';
 
 import { mainView, container } from './style.scss';
 
@@ -28,15 +32,15 @@ const views = [
 	{
 		view: AlgorithmPageView,
 		name: 'Algorithms',
-		desc: 'Give \'em all what they want!'
+		desc: 'Choose from numerous algorithms to visualize'
+	},
+	{
+		view: PageViewFactory(usage),
+		name: 'Usage'
 	},
 	{
 		view: MainView,
-		name: 'Custom Code'
-	},
-	{
-		view: MainView,
-		name: 'CO-OP'
+		name: 'About'
 	}
 ];
 

@@ -23,7 +23,7 @@ module.exports = new Config().merge({
 	},
 	resolve: {
 		alias: {
-			'ALIAS-localstorage': path.resolve('node_modules/node-localstorage')
+			'ALIAS-localstorage': path.resolve('webpack/fake_modules/electron-localstorage')
 		}
 	},
 	plugins: [

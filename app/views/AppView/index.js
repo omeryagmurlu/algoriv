@@ -19,17 +19,20 @@ const commonApp = props => Object.keys(props).filter(v => !([
 	return acc;
 }, {});
 
-const modalSelector = modal => {
-	switch (modal.type) {
+const modalSelector = pops => {
+	switch (pops.modal.type) {
 		case 'prompt':
 			return [(
 				<Prompt
 					send={
 						(...p) => {
-							modal.options.continuation(...p);
-							modal.exitStrategy();
+							pops.modal.options.continuation(...p);
+							pops.modal.exitStrategy();
 						}
 					}
+					underlineFocusStyle={{
+						borderColor: themeVars(pops.theme)('accent1Color')
+					}}
 				/>
 			)];
 		default:
@@ -44,12 +47,13 @@ const AppView = props => {
 			<Dialog
 				open={Object.keys(props.modal).length !== 0}
 				title={props.modal.message}
-				actions={modalSelector(props.modal)}
+				actions={modalSelector(props)}
 				onRequestClose={props.modal.exitStrategy}
 
+				overlayClassName={css('overlay', props.theme)}
 				contentClassName={css('content')}
-				actionsContainerClassName={css('actionsContainer')}
-				titleClassName={css('title')}
+				actionsContainerClassName={css('actions-container', props.theme)}
+				titleClassName={css('title', props.theme)}
 			/>
 			<Header
 				disabled={!props.backData}

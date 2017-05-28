@@ -28,6 +28,7 @@ class Prompt extends Component {
 					hintText="Text Here"
 					value={this.state.value}
 					onChange={this.onInputChange}
+					underlineFocusStyle={this.props.underlineFocusStyle}
 				/>
 				<FlatButton
 					icon={<ContentSend />}

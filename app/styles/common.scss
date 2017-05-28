@@ -6,11 +6,11 @@
 	transition-duration: $dur;
 }
 
-@mixin wrapper {
+@mixin wrapper($width: $wrapperWidth) {
 	position: relative;
 	margin: auto;
 	padding-top: 4vh;
-	max-width: $wrapperWidth;
+	max-width: $width;
 	box-sizing: border-box;
 }
 

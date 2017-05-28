@@ -4,7 +4,7 @@
 		"primary2Color": "#FA6900",
 		"accent1Color": "#009688",
 		"accent2Color": "#A7DBD8",
-		"textColor": "#F38630",
+		"textColor": "#434743",
 		"alternativeTextColor": "#E0E4CC",
 		"backgroundColor": "#E0E4CC"
 	},
@@ -13,7 +13,7 @@
 		"primary2Color": "#542437",
 		"accent1Color": "#D95B43",
 		"accent2Color": "#ECD078",
-		"textColor": "#C69C85",
+		"textColor": "#ECD078",
 		"alternativeTextColor": "#774F38",
 		"backgroundColor": "#774F38"
 	}

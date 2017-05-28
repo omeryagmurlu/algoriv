@@ -8,7 +8,7 @@ import AppView from 'app/views/AppView';
 import Settings from 'app/features/settings';
 import { themes } from 'app/styles/themes.json'; // An Exception for da rule
 
-const storage = new LocalStorage('./storage.json');
+const storage = new LocalStorage();
 
 const themeNames = Object.keys(themes);
 
@@ -91,6 +91,7 @@ class AppContainer extends Component {
 	}
 
 	render() {
+		document.documentElement.setAttribute('data-theme', this.settings('theme').get());
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(this.getThemeColors())} >
 				<AppView

@@ -29,11 +29,11 @@ const appearanceStuff = (instance) => {
 
 	const defaultColor = theme('primary1Color');
 	const backgroundColor = theme('backgroundColor');
+	const textColor = theme('textColor');
 	const saturatedDefaultColor = chroma(defaultColor).saturate(2);
 
 	const colorsDP = {};
 	const colors = (count) => {
-		console.log(count);
 		if (colorsDP[count]) {
 			return colorsDP[count];
 		}
@@ -152,7 +152,7 @@ const appearanceStuff = (instance) => {
 		updateAppearence,
 		resetAppearence,
 		defaultColor,
-		textColor: saturatedDefaultColor,
+		textColor,
 		backgroundColor
 	};
 };

@@ -94,6 +94,20 @@ module.exports = new Config().merge({
 				}]
 			},
 			{
+				test: /\.md$/,
+				use: [
+					{
+						loader: 'html-loader'
+					},
+					{
+						loader: 'markdown-loader',
+						options: {
+						/* your options here */
+						}
+					}
+				]
+			},
+			{
 				test: /\.(jpg|png|gif)$/,
 				use: {
 					loader: 'url-loader?limit=8192'

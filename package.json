@@ -1,8 +1,9 @@
 {
-  "name": "graph-visualization",
-  "productName": "Graph Algorithms",
+  "name": "algoriv",
+  "productName": "AlgoriV - Algorithm Visualization",
   "version": "1.0.0",
   "description": "Visualization of Graph Algorithms",
+  "homepage": "omeryagmurlu.github.io",
   "main": "main.js",
   "scripts": {
     "start": "yarn run start:prod",
@@ -11,7 +12,6 @@
     "watch:electron": "yarn run prebuild && TARGET=electron NODE_ENV=dev webpack --watch",
     "watch:browser": "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack-dev-server --hot --history-api-fallback --open",
     "prebuild": "sed -e 's/dist\\//&browser.js/' -e 's/ing in/& browser/' index.base.html > index.html && sed -e 's/dist\\//&electron.js/' -e 's/ing in/& electron/' index.base.html > index.electron.html",
-    "build": "yarn run build:prod",
     "build:dev": "yarn run build:dev:electron && yarn run build:dev:browser",
     "build:prod": "yarn run build:prod:electron && yarn run build:prod:browser",
     "build:dev:electron": "yarn run prebuild && TARGET=electron NODE_ENV=dev webpack",
@@ -19,15 +19,60 @@
     "build:dev:browser": "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack",
     "build:prod:browser": "yarn run prebuild && TARGET=browser NODE_ENV=production webpack",
     "daily-banner": "convert /home/omer/.local/share/unsplashLinux/old/1494183705.jpg -font Docker-One -gravity Center -fill \"#FFEF00\" -pointsize       200 -annotate +0+75 \"$(expr '(' $(date -d 2017/06/20 +%s) - $(date +%s) + 86399 ')' / 86400)\" -pointsize 80 -font URWGothic-Demi -annotate +0+200 'Days Left Until Deadline' 'Days Left Until Deadline.jpg'",
-    "legal": "yarn licenses generate-disclaimer --prod --ignore-platform > COPYING"
+    "legal": "yarn licenses generate-disclaimer --prod --ignore-platform > COPYING",
+    "postinstall": "install-app-deps",
+    "pack": "yarn run build:prod:electron && build --dir",
+    "package-win": "yarn run build:prod:electron && build --win --x64",
+    "package-linux": "yarn run build:prod:electron && build --linux",
+    "package-all": "yarn run build:prod:electron && build -mwl"
   },
-  "author": "Omer Erdinc Yagmurlu",
+  "build": {
+    "appId": "com.algoriv.app",
+    "files": [
+      "dist/",
+      "node_modules/",
+      "main.js",
+      "index.electron.html",
+      "package.json"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable",
+        "7z",
+        "zip"
+      ]
+    },
+    "directories": {
+      "output": "release"
+    }
+  },
+  "author": "Omer Erdinc Yagmurlu <omeryagmurlu@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
     "buckets-js": "^1.98.2",
     "chroma-js": "^1.3.3",
     "classnames": "^2.2.5",
-    "electron": "^1.6.2",
     "electron-reload": "^1.1.0",
     "electron-window-state": "^4.1.1",
     "graphology": "^0.10.0",
@@ -40,9 +85,9 @@
     "lodash.sample": "^4.2.1",
     "lodash.union": "^4.6.0",
     "lodash.without": "^4.4.0",
+    "markdown-loader": "^2.0.0",
     "material-ui": "^0.18.0",
     "node-localstorage": "^1.3.0",
-    "node-sass-json-importer": "^3.0.2",
     "prop-types": "^15.5.6",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -59,6 +104,9 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.0",
+    "electron": "^1.6.2",
+    "electron-builder": "^18.1.0",
+    "electron-builder-squirrel-windows": "^18.0.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-import-resolver-webpack": "^0.8.1",
@@ -67,7 +115,9 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "file-loader": "^0.11.1",
+    "html-loader": "^0.4.5",
     "node-sass": "^4.5.2",
+    "node-sass-json-importer": "^3.0.2",
     "sass-lint": "^1.10.2",
     "sass-loader": "^6.0.3",
     "sass-material-colors": "^0.0.5",

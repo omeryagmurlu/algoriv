@@ -22,7 +22,7 @@ const createMain = () => {
 		width: mainWindowState.width,
 		height: mainWindowState.height,
 		minWidth: 600,
-		minHeight: 800,
+		minHeight: 300,
 		toolbar: false,
 		show: false, // FOUC FIX
 	});
