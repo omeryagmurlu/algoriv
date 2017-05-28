@@ -1,5 +1,5 @@
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { getRandomInt } from 'app/utils';
+import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
 const eventStuff = (instance, clas) => {
 	const notify = graph => instance.props.input[GRAPH].update(
@@ -76,9 +76,12 @@ const eventStuff = (instance, clas) => {
 
 				if (!graph.hasEdge(fromNode, toNode)) {
 					const continuation = (weight) => {
-						const id = graph.addEdge(fromNode, toNode, {
-							weight
-						});
+						const id = graph.addEdgeWithKey(
+							gO.edgeKeyGenerator(fromNode, toNode),
+							fromNode, toNode, {
+								weight
+							}
+						);
 
 						instance.sigma.graph.addEdge(instance.edge(id, graph, graph.getEdgeAttribute(id, 'weight')));
 						instance.layout();

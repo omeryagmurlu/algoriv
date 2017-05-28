@@ -25,8 +25,8 @@ export const AlgorithmsMap = {
 		view: DFS
 	},
 	SCC: {
-		name: 'Connected Components',
-		desc: 'Visualise Algorithm to find Connected Components',
+		name: 'Strongly Connected Components',
+		desc: 'Visualise Kosaraju\'s Algorithm to find Strongly Connected Components',
 		view: SCC
 	},
 	Prim: {

@@ -94,7 +94,7 @@ export const DescriptionModule = Modules.Description = exporter(
 	(text) => typee('description', 'left', { text })
 );
 
-export const RefinedGraphFuncModule = Modules.RefinedGraphFunc = (colLen) => exporter(
+export const RefinedGraphModule = Modules.RefinedGraph = exporter(
 	(nodesList, edgesList, glyphs = {}, ...params) => {
 		const clist = new ColorList();
 		nodesList.forEach(nodes => clist.pushNodes(Array.isArray(nodes) ? nodes : [nodes]));
@@ -102,10 +102,7 @@ export const RefinedGraphFuncModule = Modules.RefinedGraphFunc = (colLen) => exp
 
 		return GraphModule.snap(clist, _mapValues(glyphs, labelizer), ...params);
 	},
-	(...p) => GraphModule.module({
-		colorCount: colLen,
-		...p
-	}),
+	(...p) => GraphModule.module(...p),
 	(...p) => GraphModule.input(...p)
 );
 

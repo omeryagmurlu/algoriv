@@ -46,7 +46,7 @@ const Kruskal = AlgorithmFactory({
 	},
 	snap: (vis, posEdges, sum, hgs, text, cn, ce, noS1, noS2, eg1, eg2) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.RefinedGraphFunc(4).snap(
+		graf: Modules.RefinedGraph.snap(
 			[vis2array(vis), noS1, noS2, cn],
 			[posEdges, eg1, eg2, ce]
 		),
@@ -55,7 +55,7 @@ const Kruskal = AlgorithmFactory({
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.RefinedGraphFunc(4).module(),
+		graf: Modules.RefinedGraph.module(),
 		exp: Modules.Text.module(),
 		sum: Modules.Text.module(),
 		desc: Modules.Description.module(description),
@@ -82,7 +82,7 @@ const Kruskal = AlgorithmFactory({
 		sortedEdges.forEach(edge => {
 			const exts = graph.extremities(edge);
 			const weight = graph.getEdgeAttribute(edge, 'weight');
-			snap([3, 4], `Pop edge ${edge} with connection cost ${weight}`,
+			snap([3, 4], `Pop edge ${graph.extremities(edge).join('-')} with connection cost ${weight}`,
 				exts, edge
 			);
 			const findSets = exts.map(node => forest.find(tree => tree.includes(node)));

@@ -1,7 +1,7 @@
 import chroma from 'chroma-js';
-import { ColorList } from 'app/utils';
+import { ColorList, themeVars } from 'app/utils';
 
-const colorStuff = (instance) => {
+const appearanceStuff = (instance) => {
 	let temp = {
 		edges: {},
 		nodes: {}
@@ -25,12 +25,22 @@ const colorStuff = (instance) => {
 		}
 	};
 
-	const defaultColor = instance.theme('primary1Color');
+	const theme = (key) => themeVars(instance.props.theme)(key);
 
+	const defaultColor = theme('primary1Color');
+	const backgroundColor = theme('backgroundColor');
 	const saturatedDefaultColor = chroma(defaultColor).saturate(2);
-	const colors = Array(instance.props.options.colorCount).fill(1).map((_, i) =>
-		saturatedDefaultColor.set('hsl.h', `+${(360 / (instance.props.options.colorCount + 1)) * (i + 1)}`).hex(),
-	);
+
+	const colorsDP = {};
+	const colors = (count) => {
+		console.log(count);
+		if (colorsDP[count]) {
+			return colorsDP[count];
+		}
+		return (colorsDP[count] = Array(count).fill(1).map((_, i) =>
+			saturatedDefaultColor.set('hsl.h', `+${(360 / (count + 1)) * (i + 1)}`).hex(),
+		));
+	};
 
 	const colorizeThing = (thing, color, type) => {
 		setTemp(type, thing, 'col', color);
@@ -87,11 +97,11 @@ const colorStuff = (instance) => {
 		});
 
 		clist.forEachEdge((edge, idx) => {
-			colorizeThing(edge, colors[idx], 'edges');
+			colorizeThing(edge, colors(clist.neededColorVariety())[idx], 'edges');
 		});
 
 		clist.forEachNode((node, idx) => {
-			colorizeThing(node, colors[idx], 'nodes');
+			colorizeThing(node, colors(clist.neededColorVariety())[idx], 'nodes');
 		});
 
 		const scaleCache = {};
@@ -99,6 +109,10 @@ const colorStuff = (instance) => {
 
 		Object.keys(temp).forEach(type =>
 			Object.keys(temp[type]).forEach(id => {
+				if (!instance.sigma.graph[type](id)) {
+					return;
+				}
+
 				if (temp[type][id].col) {
 					animateColor({
 						scaleCache,
@@ -106,6 +120,9 @@ const colorStuff = (instance) => {
 						firstCol: instance.sigma.graph[type](id).color,
 						secCol: temp[type][id].col,
 						callback: col => {
+							if (!instance.sigma.graph[type](id)) {
+								return;
+							}
 							instance.sigma.graph[type](id).color = col;
 							instance.sigma.refresh({ skipIndexation: true });
 						}
@@ -120,6 +137,7 @@ const colorStuff = (instance) => {
 					} else {
 						thing.glyphs[0].draw = true;
 					}
+					instance.sigma.refresh({ skipIndexation: true });
 				}
 			})
 		);
@@ -132,10 +150,11 @@ const colorStuff = (instance) => {
 
 	return {
 		updateAppearence,
+		resetAppearence,
 		defaultColor,
-		saturatedDefaultColor,
-		resetAppearence
+		textColor: saturatedDefaultColor,
+		backgroundColor
 	};
 };
 
-export default colorStuff;
+export default appearanceStuff;

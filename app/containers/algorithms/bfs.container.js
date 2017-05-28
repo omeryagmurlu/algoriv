@@ -44,7 +44,7 @@ const BFS = AlgorithmFactory({
 	snap: (vis, q, posEd, hgs, text, cN, cE) => ({
 		kod: Modules.Code.snap(hgs),
 		explain: Modules.Text.snap(text),
-		graf: Modules.RefinedGraphFunc(3).snap(
+		graf: Modules.RefinedGraph.snap(
 			[vis2array(vis), q, cN],
 			[posEd, cE]
 		),
@@ -54,7 +54,7 @@ const BFS = AlgorithmFactory({
 	modules: settings => ({
 		kod: Modules.Code.module(code),
 		explain: Modules.Text.module(),
-		graf: Modules.RefinedGraphFunc(3).module(),
+		graf: Modules.RefinedGraph.module(),
 		queue: queueModule.module(),
 		visit: Modules.NodedTableFunc('Visited').module(),
 		desc: Modules.Description.module(description),

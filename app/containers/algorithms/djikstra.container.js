@@ -45,7 +45,7 @@ const Djikstra = AlgorithmFactory({
 	},
 	snap: (short, vis, posEdges, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.RefinedGraphFunc(2).snap(
+		graf: Modules.RefinedGraph.snap(
 			[vis2array(vis), cn],
 			[posEdges, ce],
 			short
@@ -56,7 +56,7 @@ const Djikstra = AlgorithmFactory({
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.RefinedGraphFunc(2).module(),
+		graf: Modules.RefinedGraph.module(),
 		exp: Modules.Text.module(),
 		shortest: Modules.NodedTableFunc('Distance').module(),
 		vis: Modules.NodedTableFunc('Visited').module(),

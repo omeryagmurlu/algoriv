@@ -1,9 +1,9 @@
 import _sample from 'lodash.sample';
-import { flatten } from 'app/utils';
+import { flatten, graphologyOptions as gO } from 'app/utils';
 import graphology from 'graphology';
 
 const create = (className, fn) => {
-	const graph = new graphology[className]();
+	const graph = new graphology[className](gO);
 	fn(graph);
 	if (graph.type === 'undirected') {
 		graph.inNeighbors = graph.outNeighbors = graph.neighbors;
@@ -20,9 +20,12 @@ export const createFrom = (className, data) => create(className, graph => {
 	data.forEach((negs, v) => negs.forEach(rawU => {
 		const u = Array.isArray(rawU) ? rawU[0] : rawU;
 		const weight = Array.isArray(rawU) ? rawU[1] : null;
-		graph.addEdge(v, u, {
-			weight
-		});
+		graph.addEdgeWithKey(
+			gO.edgeKeyGenerator({ source: v, target: u }),
+			v, u, Array.isArray(rawU) && {
+				weight
+			}
+		);
 	}));
 });
 
@@ -127,6 +130,26 @@ export const graphs = [
 					[[2, 8447], [4, 1922]],
 					[[1, 6144], [2, 5366]],
 					[[4, 1677]]
+				])
+			}
+		]
+	},
+	{
+		suits: ['BFS', 'DFS', 'SCC'],
+		graphs: [
+			{
+				name: 'Directed Cyclic 4 SCCs',
+				graph: createFrom('DirectedGraph', [
+					[1, 9],
+					[2, 8],
+					[3, 7],
+					[4, 5, 6, 7],
+					[5],
+					[4],
+					[5],
+					[2, 4],
+					[0, 7],
+					[8]
 				])
 			}
 		]

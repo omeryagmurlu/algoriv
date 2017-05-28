@@ -56,19 +56,23 @@ import _isEqual from 'lodash.isequal';
 import _isNil from 'lodash.isnil';
 
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { themeVars, graphologyImportFix as gimport } from 'app/utils';
+import { graphologyImportFix as gimport } from 'app/utils';
 
 import './features/custom-plugins/sigma.renderers.glyphs.min';
+import './features/custom-plugins/autoCurve.min';
 import './features/custom-plugins/sigma.layouts.forceLink.min';
 
-import colorStuff from './features/colorStuff';
+import appearanceStuff from './features/appearanceStuff';
 import eventStuff from './features/eventStuff';
+import updateStuff from './features/updateStuff';
 
 import { style } from './style.scss';
 import vars from './variables.json';
 
 class Graph extends Component {
-	static parseGraph = (props) => gimport(JSON.parse(JSON.stringify(props.optGraph || props.input[GRAPH].value)))
+	static parseGraph = (props) => gimport(JSON.parse(JSON.stringify(
+		props.optGraph || props.input[GRAPH].value
+	)))
 
 	static typeOptions = {
 		directed: {
@@ -83,14 +87,15 @@ class Graph extends Component {
 	constructor(props) {
 		super(props);
 		this.graphId = `graph${this.props.id}`;
+		this.graph = Graph.parseGraph(this.props);
 		Object.assign(this,
-			colorStuff(this, Graph),
-			eventStuff(this, Graph)
+			appearanceStuff(this, Graph),
+			eventStuff(this, Graph),
+			updateStuff(this, Graph)
 		);
 	}
 
 	componentDidMount() {
-		this.graph = Graph.parseGraph(this.props);
 		this.sigma = new sigma({ // eslint-disable-line new-cap
 			renderer: {
 				container: this.graphId,
@@ -101,22 +106,28 @@ class Graph extends Component {
 		sigma.utils.zoomTo(this.sigma.cameras[0], 0, 0, 1.2);
 		this.sigma.renderers[0].glyphs();
 		this.sigma.renderers[0].bind('render', () => this.sigma.renderers[0].glyphs());
-		this.createGraph();
 		this.attachEvents();
+		this.createGraph();
 	}
 
 	componentWillReceiveProps(newProps) {
 		const graph = Graph.parseGraph(newProps);
+		const continuation = () => {
+			this.updateAppearence(newProps.colors, newProps.customLabels);
+		};
+
 		if (!_isEqual(graph, this.graph)) {
-			// console.log('force update');
-			this.graph = graph;
-			this.createGraph();
+			// console.log('hard update');
+			this.updateGraphHard(graph, continuation);
+		} else if (!_isEqual(graph.export(), this.graph.export())) {
+			// console.log('soft update');
+			this.updateGraphSoft(graph, continuation);
+		} else {
+			continuation();
 		}
 	}
 
-	componentWillUpdate({ colors, customLabels }) {
-		this.updateAppearence(colors, customLabels);
-	}
+	shouldComponentUpdate = () => false
 
 	componentWillUnmount() {
 		this.detachEvents();
@@ -147,6 +158,7 @@ class Graph extends Component {
 		size: 1
 	})
 
+
 	readGraph = graph => ({
 		nodes: graph.nodes().map((id, i) => this.node(
 			id,
@@ -159,8 +171,6 @@ class Graph extends Component {
 			graph.getEdgeAttribute(id, 'weight')
 		))
 	})
-
-	theme = (key) => themeVars(this.props.theme)(key)
 
 	createGraph() {
 		const graph = this.graph;
@@ -176,8 +186,8 @@ class Graph extends Component {
 			maxNodeSize: 15,
 			defaultLabelSize: vars.labelSize,
 			edgeLabelSize: 'proportional',
-			defaultLabelColor: this.saturatedDefaultColor,
-			defaultEdgeLabelColor: this.saturatedDefaultColor,
+			defaultLabelColor: this.textColor,
+			defaultEdgeLabelColor: this.textColor,
 			doubleClickEnabled: false,
 			// enableEdgeHovering: true,
 			enableHovering: false,
@@ -186,9 +196,10 @@ class Graph extends Component {
 			glyphLineWidth: 5,
 			glyphFontScale: 1.5,
 			glyphThreshold: 6,
-			glyphFillColor: this.theme('backgroundColor'),
-			glyphTextColor: this.saturatedDefaultColor,
-			animationsTime: 500,
+			glyphFillColor: this.backgroundColor,
+			glyphTextColor: this.textColor,
+			animationsTime: 400,
+			autoCurveRatio: 10,
 			...Graph.typeOptions[graph.type]
 		});
 		this.sigma.graph.read(this.readGraph(graph));
@@ -197,6 +208,7 @@ class Graph extends Component {
 	}
 
 	layout() {
+		sigma.canvas.edges.autoCurve(this.sigma);
 		sigma.layouts.killForceLink(this.sigma);
 		sigma.layouts.startForceLink(this.sigma, {
 			worker: true,
@@ -233,7 +245,7 @@ Graph.propTypes = {
 	// 	value: PropTypes.object.isRequired
 	// })).isRequired,
 
-	theme: PropTypes.string.isRequired,
+	// theme: PropTypes.string.isRequired,
 
 	// animationNextFrameTime: PropTypes.number.isRequired
 };

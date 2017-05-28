@@ -14,7 +14,7 @@ import style from './style.scss';
 
 const css = themedStyle(style);
 
-const Table = props => (
+const Table = props => (props.data.length > 0 && (
 	<div
 		className={css('container', props.theme)}
 	>
@@ -50,7 +50,7 @@ const Table = props => (
 			</TableBody>
 		</TableView>
 	</div>
-);
+)) || null;
 
 Table.propTypes = {
 	width: PropTypes.number.isRequired,

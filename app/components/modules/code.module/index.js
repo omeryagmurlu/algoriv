@@ -9,7 +9,7 @@ const css = themedStyle(style);
 const Code = props => {
 	const lineTags = Array(props.code.length).fill('');
 	props.highlights.forEach((idx => (lineTags[idx] = css('active'))));
-	const lines = props.code.map((line, i) => <p key={line} className={lineTags[i]}>{line}</p>);
+	const lines = props.code.map((line, i) => <p key={line + i} className={lineTags[i]}>{line}</p>);
 	return (
 		<div className={css('code', props.theme)}>
 			{lines}

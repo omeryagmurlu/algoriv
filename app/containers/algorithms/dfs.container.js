@@ -43,7 +43,7 @@ const DFS = AlgorithmFactory({
 	},
 	snap: (vis, reclist, posEd, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.RefinedGraphFunc(3).snap(
+		graf: Modules.RefinedGraph.snap(
 			[vis2array(vis), reclist, cn],
 			[posEd, ce]
 		),
@@ -53,7 +53,7 @@ const DFS = AlgorithmFactory({
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.RefinedGraphFunc(3).module(),
+		graf: Modules.RefinedGraph.module(),
 		exp: Modules.Text.module(),
 		recurse: recurseStack.module(),
 		vis: Modules.NodedTableFunc('Visited').module(),

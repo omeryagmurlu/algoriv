@@ -4,6 +4,22 @@ import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 import Buckets from 'buckets-js';
 
+export function reverseGraph(graph) {
+	const reversed = graph.emptyCopy();
+	reversed.importNodes(graph.exportNodes());
+	reversed.importEdges(graph.exportUndirectedEdges());
+	graph.directedEdges().forEach(edge => {
+		const [source, target] = graph.extremities(edge);
+		reversed.addDirectedEdgeWithKey(
+			edge,
+			target,
+			source,
+			graph.getAttributes(edge)
+		);
+	});
+	return graphologyImportFix(reversed.export());
+}
+
 export const vis2array = vis => Object.keys(vis)
 	.map((k) => ((vis[k] !== true) ? -1 : k))
 	.filter(v => (v !== -1));
@@ -36,9 +52,15 @@ export const themedStyle = (style) => {
 
 export const isNotNil = (...a) => !_isNil(...a);
 
+export const graphologyOptions = {
+	edgeKeyGenerator({ source, target }) {
+		return `${source}->${target}: ${getRandomArbitrary(0, 100000)}`;
+	}
+};
+
 export const graphologyImportFix = obj => {
 	const type = obj.edges.find(o => o.undirected) ? 'UndirectedGraph' : 'DirectedGraph';
-	const graph = new graphology[type]();
+	const graph = new graphology[type](graphologyOptions);
 	graph.import(obj);
 	if (graph.type === 'undirected') {
 		graph.inNeighbors = graph.outNeighbors = graph.neighbors;
@@ -97,6 +119,8 @@ export class ColorList {
 			things.forEach(thing => callback(thing, idx));
 		});
 	}
+
+	neededColorVariety = () => Math.max(this.edgesList.length, this.nodesList.length)
 
 	forEachEdge = callback => ColorList.forEach(this.edgesList, callback)
 	forEachNode = callback => ColorList.forEach(this.nodesList, callback)

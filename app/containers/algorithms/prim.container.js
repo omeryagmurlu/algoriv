@@ -47,7 +47,7 @@ const Prim = AlgorithmFactory({
 	},
 	snap: (short, vis, posEdges, sum, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),
-		graf: Modules.RefinedGraphFunc(2).snap(
+		graf: Modules.RefinedGraph.snap(
 			[vis2array(vis), cn],
 			[posEdges, ce],
 			short
@@ -58,7 +58,7 @@ const Prim = AlgorithmFactory({
 	}),
 	modules: settings => ({
 		kod: Modules.Code.module(code),
-		graf: Modules.RefinedGraphFunc(2).module(),
+		graf: Modules.RefinedGraph.module(),
 		exp: Modules.Text.module(),
 		sum: Modules.Text.module(),
 		vis: Modules.NodedTableFunc('Visited').module(),
