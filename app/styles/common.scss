@@ -6,12 +6,18 @@
 	transition: $target $dur;
 }
 
-@mixin wrapper($width: $wrapperWidth) {
+@mixin wrapper($width: $minWrapperWidth) {
 	position: relative;
 	margin: auto;
 	padding-top: 4vh;
-	max-width: $width;
+	width: 70vw; // 960 / 1366
 	box-sizing: border-box;
+
+	min-width: $width;
+	@media (max-width: $width) {
+		width: 100vw;
+		min-width: 0;
+	}
 }
 
 @mixin vertical-center {

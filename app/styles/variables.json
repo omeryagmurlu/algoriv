@@ -7,7 +7,7 @@
 
 	"moduleMaxWidth": "300px",
 
-	"wrapperWidth": "960px",
+	"minWrapperWidth": "768px",
 
 	"uiFont": "'Raleway', 'Roboto', sans-serif",
 	"textFont": "'Slabo 27px', serif",

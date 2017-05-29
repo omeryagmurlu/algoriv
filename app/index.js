@@ -13,7 +13,7 @@ const render = (Component) => {
 		<ReactHotLoader>
 			<Component />
 		</ReactHotLoader>,
-		document.getElementById('content')
+		document.getElementById('react-binding')
 	);
 };
 

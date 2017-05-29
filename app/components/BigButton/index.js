@@ -11,7 +11,7 @@ const BigButton = props => (
 	<div
 		className={css('container', props.theme)}
 		style={{
-			width: `calc((100% - (${margin} * ${props.cols})) / ${props.cols})`
+			width: `calc((100% - ((${margin} * 2) * ${props.cols - 1})) / ${props.cols})`
 		}}
 	>
 		<FlatButton

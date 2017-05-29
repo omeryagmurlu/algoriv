@@ -38,6 +38,11 @@
 			background: map-get($themeMap, 'backgroundColor');
 		}
 
+
+		::-webkit-scrollbar {
+			background: map-get($themeMap, 'backgroundColor');
+		}
+
 		::-webkit-scrollbar-thumb {
 			background-color: rgba(map-get($themeMap, 'primary2Color'), 0.4) !important;
 

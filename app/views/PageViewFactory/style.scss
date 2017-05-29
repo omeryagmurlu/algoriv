@@ -7,6 +7,6 @@
 };
 
 .container {
-	@include wrapper($wrapperWidth - 300px);
+	@include wrapper($minWrapperWidth - 200px);
 	font-family: $textFont;
 }
