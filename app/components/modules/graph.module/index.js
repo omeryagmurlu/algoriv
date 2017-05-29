@@ -73,7 +73,7 @@ import vars from './variables.json';
 
 class Graph extends Component {
 	static parseGraph = (props) => gimport(JSON.parse(JSON.stringify(
-		props.optGraph || props.input[GRAPH].value
+		props.optGraph || props.input[GRAPH.graph].value
 	)))
 
 	static typeOptions = {
@@ -117,13 +117,18 @@ class Graph extends Component {
 		const continuation = () => {
 			this.updateAppearence(newProps.colors, newProps.customLabels);
 		};
+		const beforeGraphChange = () => {
+			this.killAppearenceAnimations();
+		}
 
+		this.killAppearenceAnimations();
 		if (!_isEqual(graph, this.graph)) {
 			// console.log('hard update');
-			this.updateGraphHard(graph, continuation);
+			this.resetAppearence();
+			this.updateGraphHard(graph, continuation, beforeGraphChange);
 		} else if (!_isEqual(graph.export(), this.graph.export())) {
 			// console.log('soft update');
-			this.updateGraphSoft(graph, continuation);
+			this.updateGraphSoft(graph, continuation, beforeGraphChange);
 		} else {
 			continuation();
 		}
@@ -132,6 +137,8 @@ class Graph extends Component {
 	shouldComponentUpdate = () => false
 
 	componentWillUnmount() {
+		console.log('unmount');
+		this.killAppearenceAnimations();
 		this.detachEvents();
 		this.sigma.kill();
 	}
@@ -177,7 +184,6 @@ class Graph extends Component {
 	createGraph() {
 		const graph = this.graph;
 		this.sigma.graph.clear();
-		this.resetAppearence();
 		this.sigma.settings({
 			// singleHover: true,
 			zoomMin: 0.3,

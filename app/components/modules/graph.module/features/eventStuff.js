@@ -2,7 +2,7 @@ import { Graph as GRAPH } from 'app/data/inputsRegistry';
 import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
 const eventStuff = (instance, clas) => {
-	const notify = graph => instance.props.input[GRAPH].update(
+	const notify = graph => instance.props.input[GRAPH.graph].update(
 		graph
 	);
 
@@ -17,6 +17,12 @@ const eventStuff = (instance, clas) => {
 			if (!e.data.captor.altKey) {
 				return;
 			}
+
+			if (e.data.node.id === instance.props.input[GRAPH.startNode].value) {
+				instance.props.app.alert(1, 'Cannot remove starting node');
+				return;
+			}
+
 			graph.dropNode(e.data.node.id);
 
 			instance.sigma.graph.dropNode(e.data.node.id);

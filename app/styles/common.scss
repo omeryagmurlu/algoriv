@@ -2,8 +2,8 @@
 @import 'app/styles/themes.json';
 @import 'app/styles/variables.json';
 
-@mixin trans($dur: 0.5s) {
-	transition-duration: $dur;
+@mixin trans($dur: 0.5s, $target: all) {
+	transition: $target $dur;
 }
 
 @mixin wrapper($width: $wrapperWidth) {

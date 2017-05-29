@@ -100,10 +100,7 @@ module.exports = new Config().merge({
 						loader: 'html-loader'
 					},
 					{
-						loader: 'markdown-loader',
-						options: {
-						/* your options here */
-						}
+						loader: 'markdown-loader'
 					}
 				]
 			},

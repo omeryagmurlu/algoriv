@@ -29,6 +29,19 @@ export const createFrom = (className, data) => create(className, graph => {
 	}));
 });
 
+export const adjacencyListify = g => {
+	const out = [];
+	g.nodes().forEach(v => (out[v] = []));
+	g.edges().forEach(edge => {
+		if (g.getEdgeAttribute(edge, 'weight')) {
+			out[g.source(edge)].push([g.target(edge), g.getEdgeAttribute(edge, 'weight')]);
+		} else {
+			out[g.source(edge)].push(g.target(edge));
+		}
+	});
+	return out;
+};
+
 export const graphs = [
 	{
 		suits: ['BFS', 'DFS'],
@@ -150,6 +163,28 @@ export const graphs = [
 					[2, 4],
 					[0, 7],
 					[8]
+				])
+			},
+			{
+				name: 'Directed Cyclic 5 SCCs',
+				graph: createFrom('DirectedGraph', [
+					[1, 9],
+					[2, 8],
+					[3, 7, 11],
+					[4, 5, 6, 7, 14],
+					[5],
+					[4],
+					[5, 12],
+					[2, 4],
+					[0, 7],
+					[8],
+					[2],
+					[10],
+					[13],
+					[6],
+					[15],
+					[16],
+					[14, 5]
 				])
 			}
 		]

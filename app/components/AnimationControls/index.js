@@ -50,6 +50,7 @@ const AnimationControls = props => (
 					value={props.animationSpeed}
 					defaultValue={props.animationSpeed}
 					onChange={(_, v) => props.onAnimationChangeSpeed(v)}
+					onDragStop={() => props.onAnimationChangeSpeed(null, true)}
 					style={{
 						flexGrow: 1,
 						maxWidth: sliderWidth

@@ -25,10 +25,12 @@ class Prompt extends Component {
 				}}
 			>
 				<TextField
-					hintText="Text Here"
+					hintText={this.props.hintText}
 					value={this.state.value}
 					onChange={this.onInputChange}
 					underlineFocusStyle={this.props.underlineFocusStyle}
+					underlineStyle={this.props.underlineStyle}
+					underlineShow={this.props.underlineShow}
 				/>
 				<FlatButton
 					icon={<ContentSend />}

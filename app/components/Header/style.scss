@@ -2,16 +2,13 @@
 
 @include themeable {
 	.container-#{$themeName} {
+		@include trans($target: background);
+
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		background: map-get($themeMap, 'primary1Color');
 		height: $headerHeight;
-
-		// -webkit-app-region: drag;
-		// > * {
-		// 	-webkit-app-region: no-drag;
-		// }
 
 		.nav {
 			display: block;

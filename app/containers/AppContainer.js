@@ -33,37 +33,37 @@ class AppContainer extends Component {
 			this.setState({ rawSettings: this.settings().get() });
 		});
 
-		this.settings('options')('theme').default('dark');
+		// These default settings cause warnings, which are OK, since the upper
+		// setState has no effect.
+		this.settings('options')('theme').default('giant-goldfish');
+		this.settings('options')('grayscale-visualizations').default(false);
 
 		this.history = [initialView];
 	}
 
-	topHistory = (a = 0) => this.history[this.history.length - (1 + a)] || null
-
-	getBack = () => this.topHistory(1)
-
-	updateHeader = (headerRoutes, cb) => { // must implement clearing this
-		this.setState({ headerRoutes }, cb);
+	componentDidMount() {
+		requestAnimationFrame(() => setTimeout(() => {
+			document.documentElement.removeAttribute('data-preload');
+		}, 0));
 	}
 
-	getThemeColors = () => ({
+	_topHistory = (a = 0) => this.history[this.history.length - (1 + a)] || null
+
+	_getThemeColors = () => ({
 		palette: themes[this.settings('options')('theme').get()],
 		fontFamily: uiFont
 	})
 
+	_getBack = () => this._topHistory(1)
+
 	_setView = () => {
 		this.setState({
-			view: this.topHistory() || initialView,
-			back: this.getBack()
+			view: this._topHistory() || initialView,
+			back: this._getBack()
 		});
 	}
 
-	goBack = () => {
-		this.history.pop();
-		this._setView();
-	}
-
-	prompt = (message, continuation) => {
+	prompt = (message, continuation = () => {}) => {
 		this.setState({
 			modal: {
 				type: 'prompt',
@@ -76,8 +76,28 @@ class AppContainer extends Component {
 		});
 	}
 
+	alert = (severity, message) => {
+		this.setState({
+			modal: {
+				type: 'alert',
+				message,
+				exitStrategy: (reason) => reason === 'timeout' && this.setState({ modal: {} }),
+				durationModifier: severity + 1
+			}
+		});
+	}
+
+	updateHeader = (headerRoutes, cb) => { // must implement clearing this
+		this.setState({ headerRoutes }, cb);
+	}
+
+	goBack = () => {
+		this.history.pop();
+		this._setView();
+	}
+
 	changeView = (view) => {
-		if (view.name === this.topHistory().name) { // BUGFIX: onClick triggers twice
+		if (view.name === this._topHistory().name) { // BUGFIX: onClick triggers twice
 			return;
 		}
 		this.history.push(view);
@@ -87,7 +107,7 @@ class AppContainer extends Component {
 	render() {
 		document.documentElement.setAttribute('data-theme', this.settings('options')('theme').get());
 		return (
-			<MuiThemeProvider muiTheme={getMuiTheme(this.getThemeColors())} >
+			<MuiThemeProvider muiTheme={getMuiTheme(this._getThemeColors())} >
 				<AppView
 					view={this.state.view}
 					modal={this.state.modal}
@@ -100,6 +120,7 @@ class AppContainer extends Component {
 
 					settings={this.settings}
 					prompt={this.prompt}
+					alert={this.alert}
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}
 				/>

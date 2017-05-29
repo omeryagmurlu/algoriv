@@ -42,7 +42,7 @@ const Kruskal = AlgorithmFactory({
 		graph: randomGraph('Kruskal').graph,
 	},
 	inputType: {
-		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
+		graph: [Modules.Graph.input().graph, Modules.ExampleGraphs.input()],
 	},
 	snap: (vis, posEdges, sum, hgs, text, cn, ce, noS1, noS2, eg1, eg2) => ({
 		kod: Modules.Code.snap(hgs),

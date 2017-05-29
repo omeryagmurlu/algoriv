@@ -1,5 +1,8 @@
 import chroma from 'chroma-js';
+import _mapValues from 'lodash.mapvalues';
 import { ColorList, themeVars } from 'app/utils';
+
+const grayScale = chroma.scale();
 
 const appearanceStuff = (instance) => {
 	let temp = {
@@ -17,23 +20,35 @@ const appearanceStuff = (instance) => {
 		};
 	};
 
-	let purgeStack = [];
+	const purgeStack = [];
 	const flashStack = () => {
-		resetTemp();
 		while (purgeStack.length !== 0) {
 			purgeStack.pop()();
 		}
 	};
 
+	let timeoutsToBeCleared = {};
+
+	const postProcessColors = v => {
+		if (instance.props.app.settings('options')('grayscale-visualizations').get()) {
+			return grayScale(1 - chroma(v).luminance()).hex();
+		}
+
+		return v;
+	};
+
 	const theme = (key) => themeVars(instance.props.theme)(key);
 
-	const defaultColor = theme('primary1Color');
+	const mainColorsRaw = {
+		default: theme('primary1Color'),
+		text: theme('textColor'),
+	};
+
 	const backgroundColor = theme('backgroundColor');
-	const textColor = theme('textColor');
-	const saturatedDefaultColor = chroma(defaultColor).saturate(2);
+	const saturatedDefaultColor = chroma(mainColorsRaw.default).saturate(2);
 
 	const colorsDP = {};
-	const colors = (count) => {
+	const sideColorsRaw = (count) => {
 		if (colorsDP[count]) {
 			return colorsDP[count];
 		}
@@ -42,14 +57,56 @@ const appearanceStuff = (instance) => {
 		));
 	};
 
+	const mainColors = _mapValues(mainColorsRaw, postProcessColors);
+	const sideColors = (...p) => sideColorsRaw(...p).map(postProcessColors);
+
 	const colorizeThing = (thing, color, type) => {
 		setTemp(type, thing, 'col', color);
-		purgeStack.push(() => setTemp(type, thing, 'col', defaultColor));
+		purgeStack.push(() => setTemp(type, thing, 'col', mainColors.default));
 	};
 
 	const labelizeThing = (thing, label, type) => {
 		setTemp(type, thing, 'lab', label);
 		purgeStack.push(() => setTemp(type, thing, 'lab', -1));
+	};
+
+	const processTemp = () => {
+		const scaleCache = {};
+		const eachTimeCache = {};
+
+		Object.keys(temp).forEach(type =>
+			Object.keys(temp[type]).forEach(id => {
+				if (!instance.sigma.graph[type](id)) {
+					return;
+				}
+
+				if (temp[type][id].col) {
+					animateColor({
+						scaleCache,
+						eachTimeCache,
+						firstCol: instance.sigma.graph[type](id).color,
+						secCol: temp[type][id].col,
+						callback: col => {
+							instance.sigma.graph[type](id).color = col;
+							instance.sigma.refresh({ skipIndexation: true });
+						}
+					});
+				}
+
+				if (temp[type][id].lab) {
+					const thing = instance.sigma.graph[type](id);
+					thing.glyphs[0].content = temp[type][id].lab;
+					if (temp[type][id].lab === -1) {
+						thing.glyphs[0].draw = false;
+					} else {
+						thing.glyphs[0].draw = true;
+					}
+					instance.sigma.refresh({ skipIndexation: true });
+				}
+			})
+		);
+
+		resetTemp();
 	};
 
 	const animateColor = ({
@@ -75,7 +132,16 @@ const appearanceStuff = (instance) => {
 			secCol
 		]).mode('lch').domain([0, sps - 1]));
 
-		const timeout = fn => setTimeout(fn, eachTime(steps()));
+		const timeout = fn => {
+			const timeoutId = setTimeout(() => {
+				timeoutsToBeCleared[timeoutId] = null;
+				fn();
+			}, eachTime(steps()));
+			timeoutsToBeCleared[timeoutId] = {
+				clear: () => clearTimeout(timeoutId),
+				fastforward: () => callback(secCol)
+			};
+		};
 		const fn = i => () => {
 			if (i >= steps()) {
 				// console.log('done', eachTime(steps()), steps())
@@ -97,62 +163,37 @@ const appearanceStuff = (instance) => {
 		});
 
 		clist.forEachEdge((edge, idx) => {
-			colorizeThing(edge, colors(clist.neededColorVariety())[idx], 'edges');
+			colorizeThing(edge, sideColors(clist.neededColorVariety())[idx], 'edges');
 		});
 
 		clist.forEachNode((node, idx) => {
-			colorizeThing(node, colors(clist.neededColorVariety())[idx], 'nodes');
+			colorizeThing(node, sideColors(clist.neededColorVariety())[idx], 'nodes');
 		});
 
-		const scaleCache = {};
-		const eachTimeCache = {};
+		processTemp();
+	};
 
-		Object.keys(temp).forEach(type =>
-			Object.keys(temp[type]).forEach(id => {
-				if (!instance.sigma.graph[type](id)) {
-					return;
-				}
-
-				if (temp[type][id].col) {
-					animateColor({
-						scaleCache,
-						eachTimeCache,
-						firstCol: instance.sigma.graph[type](id).color,
-						secCol: temp[type][id].col,
-						callback: col => {
-							if (!instance.sigma.graph[type](id)) {
-								return;
-							}
-							instance.sigma.graph[type](id).color = col;
-							instance.sigma.refresh({ skipIndexation: true });
-						}
-					});
-				}
-
-				if (temp[type][id].lab) {
-					const thing = instance.sigma.graph[type](id);
-					thing.glyphs[0].content = temp[type][id].lab;
-					if (temp[type][id].lab === -1) {
-						thing.glyphs[0].draw = false;
-					} else {
-						thing.glyphs[0].draw = true;
-					}
-					instance.sigma.refresh({ skipIndexation: true });
-				}
-			})
-		);
+	const killAppearenceAnimations = () => {
+		Object.keys(timeoutsToBeCleared).forEach(id => {
+			if (timeoutsToBeCleared[id]) {
+				timeoutsToBeCleared[id].clear();
+				timeoutsToBeCleared[id].fastforward();
+			}
+		});
+		timeoutsToBeCleared = {};
 	};
 
 	const resetAppearence = () => {
 		flashStack();
-		purgeStack = [];
+		processTemp();
 	};
 
 	return {
 		updateAppearence,
 		resetAppearence,
-		defaultColor,
-		textColor,
+		killAppearenceAnimations,
+		defaultColor: mainColors.default,
+		textColor: mainColors.text,
 		backgroundColor
 	};
 };

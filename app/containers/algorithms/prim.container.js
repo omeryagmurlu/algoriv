@@ -42,8 +42,8 @@ const Prim = AlgorithmFactory({
 		startVertex: '0'
 	},
 	inputType: {
-		graph: [Modules.Graph.input(), Modules.ExampleGraphs.input()],
-		startVertex: InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)
+		graph: [Modules.Graph.input().graph, Modules.ExampleGraphs.input()],
+		startVertex: [Modules.Graph.input().startNode, InitInput('Starting Vertex', (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`)]
 	},
 	snap: (short, vis, posEdges, sum, hgs, text, cn, ce) => ({
 		kod: Modules.Code.snap(hgs),

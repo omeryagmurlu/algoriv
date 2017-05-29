@@ -22,7 +22,9 @@ export const GraphModule = Modules.Graph = exporter(
 		optGraph: optMutatingGraph
 	}),
 	(options) => typee('graph', 'main', { options }),
-	(ifMultiModuleId) => ModuleInput('graph', ifMultiModuleId, InputsRegistry.Graph)
+	(ifMultiModuleId) => _mapValues(InputsRegistry.Graph, hash =>
+		ModuleInput('graph', ifMultiModuleId, hash)
+	)
 );
 
 export const TableModule = Modules.Table = exporter(

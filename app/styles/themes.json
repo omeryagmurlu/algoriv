@@ -9,12 +9,12 @@
 		"backgroundColor": "#E0E4CC"
 	},
 	"dark": {
-		"primary1Color": "#C69C85",
-		"primary2Color": "#542437",
-		"accent1Color": "#D95B43",
+		"primary1Color": "#946e58",
+		"primary2Color": "#D95B43",
+		"accent1Color": "#542437",
 		"accent2Color": "#ECD078",
 		"textColor": "#E0E4CC",
-		"alternativeTextColor": "#774F38",
+		"alternativeTextColor": "#E0E4CC",
 		"backgroundColor": "#774F38"
 	}
 }}

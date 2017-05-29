@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Checkbox from 'material-ui/Checkbox';
+import Slider from 'material-ui/Slider';
+import Subheader from 'material-ui/Subheader';
+import FlatButton from 'material-ui/FlatButton';
 
 import { themedStyle, themeVars } from 'app/utils';
 import { themes } from 'app/styles/themes.json';
@@ -38,7 +41,7 @@ const selectHOF = theme => ({
 			}}
 		>
 			{possib.map(pos => (
-				<MenuItem value={pos} primaryText={pos} />
+				<MenuItem key={pos} value={pos} primaryText={pos} />
 			))}
 		</SelectField>
 	</div>
@@ -57,10 +60,55 @@ const checkboxHOF = () => ({
 	</div>
 );
 
+const sliderHOF = () => ({
+	name,
+	option,
+	min,
+	max
+}) => (
+	<div className={css('control')} >
+		<Subheader
+			style={{
+				lineHeight: '36px'
+			}}
+		>{name}</Subheader>
+		<Slider
+			min={min}
+			max={max}
+			value={option().get()}
+			onChange={(_, v) => option().set(v)}
+
+			sliderStyle={{
+				margin: 0
+			}}
+		/>
+	</div>
+);
+
+const buttonHOF = theme => ({
+	name,
+	action
+}) => (
+	<div className={css('control')} >
+		<FlatButton
+			label={name}
+			onTouchTap={action}
+			backgroundColor={themeVars(theme)('primary1Color')}
+			hoverColor={themeVars(theme)('accent1Color')}
+			style={{
+				color: themeVars(theme)('alternativeTextColor')
+			}}
+			fullWidth
+		/>
+	</div>
+);
+
 const OptionsView = props => {
 	const options = () => props.app.settings('options');
 	const select = selectHOF(props.app.theme);
 	const checkbox = checkboxHOF(props.app.theme);
+	const slider = sliderHOF(props.app.theme);
+	const button = buttonHOF(props.app.theme);
 	return (
 		<div className={css('container')}>
 			<div className={css('control-group')} >
@@ -75,8 +123,30 @@ const OptionsView = props => {
 				})}
 				{checkbox({
 					name: 'Minimal Colored Visualizations',
-					option: () => options()('minimalColor')
+					option: () => options()('grayscale-visualizations')
 				})}
+				{slider({
+					name: 'Animation Speed',
+					option: () => options()('animation')('speed'),
+					min: 1,
+					max: 100
+				})}
+			</div>
+			<div className={css('control-group')} >
+				<header>
+					<h1>Module Options</h1>
+					<span>These options are specific to modules which only affect their behaviour.</span>
+				</header>
+				<div className={css('control-group')} >
+					<header>
+						<h2>Examples Module</h2>
+						<span>Options for the examples module.</span>
+					</header>
+					{button({
+						name: 'Purge Custom Inputs',
+						action: () => props.app.settings('examples').set({})
+					})}
+				</div>
 			</div>
 		</div>
 	);

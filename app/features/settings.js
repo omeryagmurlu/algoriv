@@ -45,14 +45,14 @@ const Settings = (storage, changeHandler = () => {}) => {
 	const getH = (initialKey = false, ctx = _get(), deadFlag = false) => { // FIXME: time, impl aga.
 		let context = ctx;
 		if (initialKey) {
-			if (ctx[initialKey]) {
+			if (!_isNil(ctx[initialKey])) {
 				context = ctx[initialKey];
 			} else {
 				deadFlag = true;
 			}
 		}
 		const fn = key => {
-			if (!deadFlag && fn.ctx[key]) {
+			if (!deadFlag && !_isNil(fn.ctx[key])) {
 				return getH(false, fn.ctx[key]);
 			}
 			return getH(false, {}, true);

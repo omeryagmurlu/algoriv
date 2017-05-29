@@ -13,6 +13,12 @@
 		}
 	}
 
+	.content-#{$themeName} {
+		> div {
+			background-color: map-get($themeMap, 'backgroundColor') !important;
+		}
+	}
+
 	.title-#{$themeName} {
 		color: map-get($themeMap, 'primary2Color') !important;
 	}
@@ -21,15 +27,27 @@
 		background-color: rgba(darken(map-get($themeMap, 'primary2Color'), 25%), 0.5) !important;
 	}
 
-	[data-theme='#{$themeName}'] ::-webkit-scrollbar-thumb {
-		background-color: rgba(map-get($themeMap, 'accent1Color'), 0.4) !important;
+	.snackbar-#{$themeName} {
+		> div {
+			background-color: map-get($themeMap, 'accent1Color') !important;
+		}
+	}
 
-		&:hover {
-			background-color: rgba(map-get($themeMap, 'accent1Color'), 0.8) !important;
+	[data-theme='#{$themeName}'] {
+		body {
+			background: map-get($themeMap, 'backgroundColor');
 		}
 
-		&:active {
-			background-color: rgba(map-get($themeMap, 'accent1Color'), 0.6) !important;
+		::-webkit-scrollbar-thumb {
+			background-color: rgba(map-get($themeMap, 'primary2Color'), 0.4) !important;
+
+			&:hover {
+				background-color: rgba(map-get($themeMap, 'primary2Color'), 0.8) !important;
+			}
+
+			&:active {
+				background-color: rgba(map-get($themeMap, 'primary2Color'), 0.6) !important;
+			}
 		}
 	}
 };
@@ -60,7 +78,6 @@
 .title {
 	padding: 0 0 8px 0 !important;
 }
-
 
 ::-webkit-scrollbar {
 	width: 9px !important;
@@ -105,4 +122,15 @@
 ::-webkit-scrollbar-corner {
 	border: 1px solid transparent;
 	background: transparent !important;
+}
+
+[data-preload] {
+	* {
+		transition: none !important;
+	}
+}
+
+body {
+	@include trans($target: background);
+	margin: 0;
 }
