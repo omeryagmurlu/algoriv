@@ -1,6 +1,6 @@
 export default class Animator {
-	constructor(frames, changeHandler, frameTime = 1) {
-		Object.assign(this, { frames, changeHandler, frameTime });
+	constructor(frames, setting, changeHandler, frameTime = 1) {
+		Object.assign(this, { frames, setting, changeHandler, frameTime });
 
 		this._init();
 	}
@@ -11,7 +11,7 @@ export default class Animator {
 
 		this.didEnd = false;
 
-		this.speed = 50;
+		this.setting()('speed').default(50);
 		this.progress = 0;
 		this.directives = this.frames[0];
 		this.isPaused = true;
@@ -25,7 +25,7 @@ export default class Animator {
 		this.changeHandler();
 	}
 
-	getSpeed = () => this.speed
+	getSpeed = () => this.setting()('speed').get()
 	getProgress = () => this.progress
 	getDirectives = () => this.directives
 	getIsPaused = () => this.isPaused
@@ -49,7 +49,7 @@ export default class Animator {
 		if (sp >= 100) { speed = 100; }
 		if (sp <= 0) { speed = 0; }
 
-		this.speed = speed;
+		const fakeSpeed = speed;
 
 		speed -= 50;
 		speed /= 10;
@@ -60,6 +60,7 @@ export default class Animator {
 		} else if (speed > 0) {
 			this.internalSpeed = 1 / (speed + 1);
 		}
+		this.setting()('speed').set(fakeSpeed);
 		this.changeHandler();
 	}
 

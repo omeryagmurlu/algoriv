@@ -5,6 +5,7 @@ import BigButton from 'app/components/BigButton';
 
 import AlgorithmPageView from 'app/views/AlgorithmPageView';
 import PageViewFactory from 'app/views/PageViewFactory';
+import OptionsView from 'app/views/OptionsView';
 
 import usage from 'app/../docs/usage.md';
 
@@ -35,13 +36,13 @@ const views = [
 		desc: 'Choose from numerous algorithms to visualize'
 	},
 	{
+		view: OptionsView,
+		name: 'Options'
+	},
+	{
 		view: PageViewFactory(usage),
 		name: 'Usage'
 	},
-	{
-		view: MainView,
-		name: 'About'
-	}
 ];
 
 MainView.propTypes = {

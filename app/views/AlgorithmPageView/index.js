@@ -11,11 +11,7 @@ const AlgorithmPageView = props => (
 	<div className={pageView}>
 		{AlgorithmsList.map(group => (
 			<nav key={group.title} >
-				<Subheader
-					style={{
-						color: themeVars(props.app.theme)('textColor')
-					}}
-				>{group.title}</Subheader>
+				<h1>{group.title}</h1>
 				<div
 					className={container}
 				>

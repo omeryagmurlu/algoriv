@@ -9,16 +9,16 @@
 
 	.actions-container-#{$themeName} {
 		svg {
-			fill: map-get($themeMap, 'accent1Color') !important;
+			fill: map-get($themeMap, 'primary2Color') !important;
 		}
 	}
 
 	.title-#{$themeName} {
-		color: map-get($themeMap, 'accent1Color') !important;
+		color: map-get($themeMap, 'primary2Color') !important;
 	}
 
 	.overlay-#{$themeName} {
-		background-color: rgba(darken(map-get($themeMap, 'accent1Color'), 25%), 0.5) !important;
+		background-color: rgba(darken(map-get($themeMap, 'primary2Color'), 25%), 0.5) !important;
 	}
 
 	[data-theme='#{$themeName}'] ::-webkit-scrollbar-thumb {

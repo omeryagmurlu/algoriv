@@ -1,0 +1,9 @@
+@import '~app/styles/common';
+
+.container {
+	@include wrapper;
+}
+
+.control {
+	margin-bottom: 20px;
+}

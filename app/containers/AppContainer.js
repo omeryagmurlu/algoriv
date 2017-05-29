@@ -7,10 +7,9 @@ import MainView from 'app/views/MainView';
 import AppView from 'app/views/AppView';
 import Settings from 'app/features/settings';
 import { themes } from 'app/styles/themes.json'; // An Exception for da rule
+import { uiFont } from 'app/styles/variables.json'; // An Exception for da rule
 
 const storage = new LocalStorage();
-
-const themeNames = Object.keys(themes);
 
 const initialView = {
 	view: MainView,
@@ -34,7 +33,7 @@ class AppContainer extends Component {
 			this.setState({ rawSettings: this.settings().get() });
 		});
 
-		this.settings('theme').default('dark');
+		this.settings('options')('theme').default('dark');
 
 		this.history = [initialView];
 	}
@@ -48,7 +47,8 @@ class AppContainer extends Component {
 	}
 
 	getThemeColors = () => ({
-		palette: themes[this.settings('theme').get()]
+		palette: themes[this.settings('options')('theme').get()],
+		fontFamily: uiFont
 	})
 
 	_setView = () => {
@@ -84,14 +84,8 @@ class AppContainer extends Component {
 		this._setView();
 	}
 
-	changeTheme = newTheme => {
-		if (themeNames.includes(newTheme)) {
-			this.settings('theme').set(newTheme);
-		}
-	}
-
 	render() {
-		document.documentElement.setAttribute('data-theme', this.settings('theme').get());
+		document.documentElement.setAttribute('data-theme', this.settings('options')('theme').get());
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(this.getThemeColors())} >
 				<AppView
@@ -102,11 +96,10 @@ class AppContainer extends Component {
 					goBack={this.goBack}
 					headerRoutes={this.state.headerRoutes}
 
-					theme={this.settings('theme').get()}
+					theme={this.settings('options')('theme').get()}
 
 					settings={this.settings}
 					prompt={this.prompt}
-					changeTheme={this.changeTheme}
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}
 				/>

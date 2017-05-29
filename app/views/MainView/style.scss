@@ -9,4 +9,5 @@
 	@include vertical-center;
 	display: flex;
 	flex-flow: row wrap;
+	justify-content: space-between;
 }

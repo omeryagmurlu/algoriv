@@ -31,7 +31,7 @@ const modalSelector = pops => {
 						}
 					}
 					underlineFocusStyle={{
-						borderColor: themeVars(pops.theme)('accent1Color')
+						borderColor: themeVars(pops.theme)('primary2Color')
 					}}
 				/>
 			)];

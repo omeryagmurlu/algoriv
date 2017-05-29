@@ -1,5 +1,12 @@
 import _isNil from 'lodash.isnil';
 
+// BUG: referencing a middle point causes undefined behaviour:
+//      eg.   const a = settings('a')('b');
+//            a('c').set(value) // => value
+//            a('c').set(anotherVal) => still value
+//            a(' ').get() => undefined!!!
+//      workaround: reference using functions, evaluate on call:
+//      eg.   const a = () => settings('a')('b')
 const Settings = (storage, changeHandler = () => {}) => {
 	const _get = () => JSON.parse((storage.getItem('settings') || '{}'));
 	const _set = (obj) => {

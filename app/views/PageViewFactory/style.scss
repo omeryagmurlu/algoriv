@@ -2,10 +2,11 @@
 
 @include themeable {
 	.container-#{$themeName} {
-		
+
 	}
 };
 
 .container {
 	@include wrapper($wrapperWidth - 300px);
+	font-family: $textFont;
 }

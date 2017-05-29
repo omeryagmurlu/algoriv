@@ -58,6 +58,8 @@ import _isNil from 'lodash.isnil';
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
 import { graphologyImportFix as gimport } from 'app/utils';
 
+import { uiFont } from 'app/styles/variables';
+
 import './features/custom-plugins/sigma.renderers.glyphs.min';
 import './features/custom-plugins/autoCurve.min';
 import './features/custom-plugins/sigma.layouts.forceLink.min';
@@ -185,6 +187,7 @@ class Graph extends Component {
 			minNodeSize: 15,
 			maxNodeSize: 15,
 			defaultLabelSize: vars.labelSize,
+			font: uiFont,
 			edgeLabelSize: 'proportional',
 			defaultLabelColor: this.textColor,
 			defaultEdgeLabelColor: this.textColor,

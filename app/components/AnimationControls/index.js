@@ -45,7 +45,7 @@ const AnimationControls = props => (
 			>
 				<Slider
 					max={100}
-					min={0}
+					min={1}
 					step={1}
 					value={props.animationSpeed}
 					defaultValue={props.animationSpeed}

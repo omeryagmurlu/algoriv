@@ -8,7 +8,7 @@ class AnimatorContainer extends Component {
 	constructor(props) {
 		super(props);
 
-		this.animator = new Animator(props.frames, this.handleAnimatorChange);
+		this.animator = new Animator(props.frames, () => props.app.settings('options')('animation'), this.handleAnimatorChange);
 		this.state = {
 			animationDirectives: this.animator.getDirectives(),
 			speed: this.animator.getSpeed(),

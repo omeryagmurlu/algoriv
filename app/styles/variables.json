@@ -9,7 +9,7 @@
 
 	"wrapperWidth": "960px",
 
-	"uiFont": "'Roboto', sans-serif",
+	"uiFont": "'Raleway', 'Roboto', sans-serif",
 	"textFont": "'Slabo 27px', serif",
 	"monospaceFont": "'AnkaCoderC75Regular', monospace"
 }
