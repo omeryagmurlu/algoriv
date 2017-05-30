@@ -18,7 +18,8 @@ const eventStuff = (instance, clas) => {
 				return;
 			}
 
-			if (e.data.node.id === instance.props.input[GRAPH.startNode].value) {
+			if (instance.props.input[GRAPH.startNode]
+				&& e.data.node.id === instance.props.input[GRAPH.startNode].value) {
 				instance.props.app.alert(1, 'Cannot remove starting node');
 				return;
 			}

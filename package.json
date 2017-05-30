@@ -71,6 +71,7 @@
   "author": "Omer Erdinc Yagmurlu <omeryagmurlu@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
+    "babel-standalone": "^6.24.2",
     "buckets-js": "^1.98.2",
     "chroma-js": "^1.3.3",
     "classnames": "^2.2.5",

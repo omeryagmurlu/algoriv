@@ -37,7 +37,7 @@ export const TableModule = Modules.Table = exporter(
 			}, [])
 		)
 	}),
-	(width, columns) => typee('table', 'right', {
+	(columns, width = 150) => typee('table', 'right', {
 		width,
 		columns
 	})
@@ -76,11 +76,6 @@ export const ExamplesModule = Modules.Examples = exporter(
 	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)
 );
 
-export const TableFuncModule = Modules.TableFunc = (title, width = 75) => exporter(
-	a => TableModule.snap(a),
-	() => TableModule.module(width, title)
-);
-
 export const CodeModule = Modules.Code = exporter(
 	highlights => ({ highlights }), // array of indexes
 	code => typee('code', 'right', { code })
@@ -112,12 +107,12 @@ export const RefinedGraphModule = Modules.RefinedGraph = exporter(
 	(...p) => GraphModule.input(...p)
 );
 
-export const NodedTableFuncModule = Modules.NodedTableFunc = (colName) => exporter(
-	vis => TableModule.snap([
+export const NodedTableModule = Modules.NodedTable = exporter(
+	(vis = {}) => TableModule.snap([
 		Object.keys(vis),
 		Object.keys(vis).map(k => vis[k].toString())
 	]),
-	() => TableModule.module(200, ['Node', colName])
+	(colName) => TableModule.module(['Node', colName], 200)
 );
 
 export default Modules;
