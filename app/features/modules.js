@@ -67,6 +67,10 @@ export const ExamplesModule = Modules.Examples = exporter(
 		deleteCustom: (name) => settings('examples')(stuffName).set(prev => {
 			prev.splice(prev.map(v => v.name).indexOf(name), 1);
 			return prev;
+		}),
+		renameCustom: (name, newName) => settings('examples')(stuffName).set(prev => {
+			prev[prev.map(v => v.name).indexOf(name)].name = newName;
+			return prev;
 		})
 	}),
 	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)

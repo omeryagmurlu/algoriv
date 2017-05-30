@@ -16,8 +16,8 @@ Grap a copy for your system from releases tab.
 ## Build
 
 ```bash
-	$ git clone git@gitlab.com:omeryagmurlu/TSA-Software.git algovis
-	$ cd algovis
+	$ git clone git@gitlab.com:omeryagmurlu/TSA-Software.git algoriv
+	$ cd algoriv
 	$ yarn
 	$ yarn run watch:browser
 ```

@@ -9,22 +9,22 @@
 
 	.actions-container-#{$themeName} {
 		svg {
-			fill: map-get($themeMap, 'primary2Color') !important;
+			fill: map-get($themeMap, 'alternativeTextColor') !important;
 		}
 	}
 
 	.content-#{$themeName} {
 		> div {
-			background-color: map-get($themeMap, 'backgroundColor') !important;
+			background-color: map-get($themeMap, 'accent1Color') !important;
 		}
 	}
 
 	.title-#{$themeName} {
-		color: map-get($themeMap, 'primary2Color') !important;
+		color: map-get($themeMap, 'alternativeTextColor') !important;
 	}
 
 	.overlay-#{$themeName} {
-		background-color: rgba(darken(map-get($themeMap, 'primary2Color'), 25%), 0.5) !important;
+		background-color: rgba(darken(map-get($themeMap, 'accent1Color'), 25%), 0.5) !important;
 	}
 
 	.snackbar-#{$themeName} {
@@ -53,6 +53,14 @@
 			&:active {
 				background-color: rgba(map-get($themeMap, 'primary2Color'), 0.6) !important;
 			}
+		}
+
+		// BUG in Material UI:
+		// A div, which has no options to set bgColor is causing flickers in MenuItem Component
+		// It is located at the top of the react tree, because of this there is no way to access
+		// it instead of this hack
+		[data-reactroot][style*='background-color: rgb(255, 255, 255);'] {
+			background: map-get($themeMap, 'accent1Color') !important;
 		}
 	}
 };

@@ -4,9 +4,19 @@
 	.container-#{$themeName} {
 		svg {
 			color: map-get($themeMap, 'accent1Color') !important;
+			fill: map-get($themeMap, 'accent1Color') !important;
+		}
+	}
+
+	// BUG in Material UI: see AppView/style
+	.menu-item-#{$themeName} {
+		color: map-get($themeMap, 'alternativeTextColor') !important;
+		svg {
+			fill: map-get($themeMap, 'alternativeTextColor') !important;
 		}
 	}
 };
+
 
 .container {
 	width: $moduleMaxWidth;

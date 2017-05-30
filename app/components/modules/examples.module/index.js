@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
+import MenuItem from 'material-ui/MenuItem';
+import IconMenu from 'material-ui/IconMenu';
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import ContentCreate from 'material-ui/svg-icons/content/create';
+import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
 
 import { Examples as TO_MUTATE } from 'app/data/inputsRegistry';
-import { themedStyle } from 'app/utils';
+import { themedStyle, themeVars } from 'app/utils';
 
 import style from './style.scss';
 
@@ -38,6 +42,15 @@ const list = (items, prefixName, that, mainAttr = {}, optAttr = () => ({}), suff
 	/>
 );
 
+const menuItem = (str, icon, theme, onClick) => (
+	<MenuItem
+		className={css('menu-item', theme)}
+		rightIcon={React.createElement(icon)}
+		onTouchTap={onClick}
+	>{str}</MenuItem>
+);
+
+
 class Examples extends Component {
 	constructor(props) {
 		super(props);
@@ -47,6 +60,13 @@ class Examples extends Component {
 		};
 	}
 	render() {
+		const uniqName = given => {
+			let name = given;
+			while (this.props.customs.map(v => v.name).includes(name)) {
+				name = `${name}!`;
+			}
+			return name;
+		};
 		return (
 			<div className={css('container', this.props.theme)} >
 				<List>
@@ -56,11 +76,9 @@ class Examples extends Component {
 							<IconButton
 								touch
 								onTouchTap={() => {
-									let name = `Untitled ${this.props.exampleGroup} ${this.props.customs.length}`;
-									while (this.props.customs.map(v => v.name).includes(name)) {
-										name = `${name}!`;
-									}
-									this.props.addCustom(name, this.props.input[TO_MUTATE].value);
+									this.props.app.prompt('Enter Name', name =>
+										this.props.addCustom(uniqName(name), this.props.input[TO_MUTATE].value)
+									);
 								}}
 							>
 								<ContentAdd />
@@ -68,12 +86,29 @@ class Examples extends Component {
 						)
 					}, item => ({
 						rightIconButton: (
-							<IconButton
-								touch
-								onTouchTap={() => this.props.deleteCustom(item.name)}
+							<IconMenu
+								anchorOrigin={{
+									vertical: 'center',
+									horizontal: 'middle'
+								}}
+								iconButtonElement={(
+									<IconButton
+										touch
+									>
+										<NavigationMoreVert />
+									</IconButton>
+								)}
+								menuStyle={{
+									backgroundColor: themeVars(this.props.theme)('accent1Color')
+								}}
 							>
-								<ActionDelete />
-							</IconButton>
+								{menuItem('Rename', ContentCreate, this.props.theme, () =>
+									this.props.app.prompt('Enter New Name', newName =>
+										this.props.renameCustom(item.name, uniqName(newName))
+									)
+								)}
+								{menuItem('Delete', ActionDelete, this.props.theme, () => this.props.deleteCustom(item.name))}
+							</IconMenu>
 						)
 					}))}
 				</List>
@@ -92,7 +127,7 @@ Examples.propTypes = {
 		name: PropTypes.string.isRequired,
 		data: PropTypes.any.isRequired
 	})).isRequired,
-	exampleGroup: PropTypes.string.isRequired
+	// exampleGroup: PropTypes.string.isRequired
 };
 
 export default Examples;
