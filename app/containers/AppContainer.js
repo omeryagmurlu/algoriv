@@ -37,6 +37,7 @@ class AppContainer extends Component {
 		// setState has no effect.
 		this.settings('options')('theme').default('giant-goldfish');
 		this.settings('options')('grayscale-visualizations').default(false);
+		this.settings('options')('animations-enabled').default(true);
 
 		this.history = [initialView];
 	}
@@ -106,6 +107,7 @@ class AppContainer extends Component {
 
 	render() {
 		document.documentElement.setAttribute('data-theme', this.settings('options')('theme').get());
+		document.documentElement.setAttribute('data-animations-enabled', this.settings('options')('animations-enabled').get());
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme(this._getThemeColors())} >
 				<AppView
@@ -117,6 +119,7 @@ class AppContainer extends Component {
 					headerRoutes={this.state.headerRoutes}
 
 					theme={this.settings('options')('theme').get()}
+					animationsEnabled={this.settings('options')('animations-enabled').get()}
 
 					settings={this.settings}
 					prompt={this.prompt}

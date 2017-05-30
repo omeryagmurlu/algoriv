@@ -206,7 +206,7 @@ class Graph extends Component {
 			glyphThreshold: 6,
 			glyphFillColor: this.backgroundColor,
 			glyphTextColor: this.textColor,
-			animationsTime: 400,
+			animationsTime: this.props.app.animationsEnabled ? 400 : 0,
 			autoCurveRatio: 10,
 			...Graph.typeOptions[graph.type]
 		});

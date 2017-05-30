@@ -137,9 +137,11 @@
 	background: transparent !important;
 }
 
+[data-animations-enabled='false'],
 [data-preload] {
 	* {
 		transition: none !important;
+		animation: none !important;
 	}
 }
 

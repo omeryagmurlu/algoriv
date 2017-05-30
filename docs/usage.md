@@ -26,4 +26,4 @@ Options for this module:
 * Theme
 * Algorithm speed
 * Minimal Colored Visualizations: whether or not to use color in Visualizations
-* **Animations: are animations enabled**
+* Animations: are animations enabled

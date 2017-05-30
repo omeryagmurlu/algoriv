@@ -125,6 +125,10 @@ const OptionsView = props => {
 					name: 'Minimal Colored Visualizations',
 					option: () => options()('grayscale-visualizations')
 				})}
+				{checkbox({
+					name: 'Animations',
+					option: () => options()('animations-enabled')
+				})}
 				{slider({
 					name: 'Animation Speed',
 					option: () => options()('animation')('speed'),

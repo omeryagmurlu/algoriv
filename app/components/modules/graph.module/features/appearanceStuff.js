@@ -81,16 +81,21 @@ const appearanceStuff = (instance) => {
 				}
 
 				if (temp[type][id].col) {
-					animateColor({
-						scaleCache,
-						eachTimeCache,
-						firstCol: instance.sigma.graph[type](id).color,
-						secCol: temp[type][id].col,
-						callback: col => {
-							instance.sigma.graph[type](id).color = col;
-							instance.sigma.refresh({ skipIndexation: true });
-						}
-					});
+					if (instance.props.app.animationsEnabled) {
+						animateColor({
+							scaleCache,
+							eachTimeCache,
+							firstCol: instance.sigma.graph[type](id).color,
+							secCol: temp[type][id].col,
+							callback: col => {
+								instance.sigma.graph[type](id).color = col;
+								instance.sigma.refresh({ skipIndexation: true });
+							}
+						});
+					} else {
+						instance.sigma.graph[type](id).color = temp[type][id].col;
+						instance.sigma.refresh({ skipIndexation: true });
+					}
 				}
 
 				if (temp[type][id].lab) {
