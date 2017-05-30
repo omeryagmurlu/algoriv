@@ -25,6 +25,7 @@ class Prompt extends Component {
 				}}
 			>
 				<TextField
+					id="prompt-text"
 					hintText={this.props.hintText}
 					value={this.state.value}
 					onChange={this.onInputChange}

@@ -119,7 +119,7 @@ class Graph extends Component {
 		};
 		const beforeGraphChange = () => {
 			this.killAppearenceAnimations();
-		}
+		};
 
 		this.killAppearenceAnimations();
 		if (!_isEqual(graph, this.graph)) {
@@ -137,7 +137,6 @@ class Graph extends Component {
 	shouldComponentUpdate = () => false
 
 	componentWillUnmount() {
-		console.log('unmount');
 		this.killAppearenceAnimations();
 		this.detachEvents();
 		this.sigma.kill();
@@ -246,17 +245,17 @@ Graph.defaultProps = {
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 
-	// optGraph: PropTypes.object,
+	optGraph: PropTypes.object,
 	customLabels: PropTypes.object,
 
-	// input: PropTypes.objectOf(PropTypes.shape({
-	// 	update: PropTypes.func.isRequired,
-	// 	value: PropTypes.object.isRequired
-	// })).isRequired,
+	input: PropTypes.objectOf(PropTypes.shape({
+		update: PropTypes.func.isRequired,
+		value: PropTypes.any.isRequired
+	})).isRequired,
 
-	// theme: PropTypes.string.isRequired,
+	theme: PropTypes.string.isRequired,
 
-	// animationNextFrameTime: PropTypes.number.isRequired
+	animationNextFrameTime: PropTypes.number.isRequired
 };
 
 export default Graph;

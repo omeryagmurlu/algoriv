@@ -86,7 +86,7 @@ export const graphs = [
 		]
 	},
 	{
-		suits: ['Djikstra'],
+		suits: ['Djikstra', 'BFS', 'DFS'],
 		graphs: [
 			{
 				name: 'Dengesiz Binary Tree Weighted',
@@ -113,7 +113,7 @@ export const graphs = [
 		]
 	},
 	{
-		suits: ['Prim', 'Djikstra', 'Kruskal'],
+		suits: ['Prim', 'Djikstra', 'Kruskal', 'BFS', 'DFS'],
 		graphs: [
 			{
 				name: 'Undirected Cyclic Weighted',

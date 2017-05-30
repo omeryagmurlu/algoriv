@@ -23,8 +23,13 @@ const AlgorithmInner = props => {
 		main: 0,
 		right: 0,
 		left: 0
-	}, (_, lay) => Object.keys(statics).filter(moduleId =>
-		statics[moduleId].layout === lay).map(moduleId =>
+	}, (_, lay) => {
+		const part = Object.keys(statics)
+		.filter(moduleId => statics[moduleId].layout.location === lay);
+
+		part.sort((a, b) => statics[b].layout.order - statics[a].layout.order);
+
+		return part.map(moduleId =>
 			React.createElement(modules[statics[moduleId].type], {
 				...passProps,
 
@@ -42,7 +47,8 @@ const AlgorithmInner = props => {
 				...statics[moduleId].data,
 				...directives[moduleId]
 			})
-	));
+		);
+	});
 
 	return (
 		<section className={css('top')} >

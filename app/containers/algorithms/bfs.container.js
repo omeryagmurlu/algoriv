@@ -26,7 +26,7 @@ BFS.addCode([
 	'            else, Q.push(u);'
 ]);
 
-BFS.addTable('queue', ['queue']);
+BFS.addTable('queue', ['Queue']);
 BFS.addNodedTable('visited', 'Visited');
 
 BFS.logic = ({ startVertex: st, graph }, snipe) => {

@@ -5,7 +5,12 @@ import InputsRegistry from 'app/data/inputsRegistry';
 
 const typee = (type, layout, data = {}) => ({
 	type,
-	layout,
+	layout: typeof layout === 'string'
+		? {
+			location: layout,
+			order: 0
+		}
+		: layout,
 	data
 });
 
@@ -50,7 +55,10 @@ export const TextModule = Modules.Text = exporter(
 
 export const ExamplesModule = Modules.Examples = exporter(
 	() => ({}),
-	(stuffName, examples, parser = x => x, settings) => typee('examples', 'left', {
+	(stuffName, examples, parser = x => x, settings) => typee('examples', {
+		location: 'left',
+		order: -100
+	}, {
 		exampleGroup: stuffName,
 		examples,
 		customs: (settings('examples')(stuffName).get() || []).map(({ data, name }) => ({
@@ -78,7 +86,10 @@ export const ExamplesModule = Modules.Examples = exporter(
 
 export const CodeModule = Modules.Code = exporter(
 	highlights => ({ highlights }), // array of indexes
-	code => typee('code', 'right', { code })
+	code => typee('code', {
+		location: 'right',
+		order: 100
+	}, { code })
 );
 
 export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(

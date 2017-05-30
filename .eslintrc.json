@@ -27,7 +27,7 @@
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/prefer-stateless-function": "error",
-    "react/no-unused-prop-types": "warn",
+    "react/no-unused-prop-types": "off",
 
     "import/no-extraneous-dependencies": "off",
     "import/extensions": "off",
