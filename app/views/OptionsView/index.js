@@ -143,9 +143,63 @@ const OptionsView = props => {
 				</header>
 				<div className={css('control-group')} >
 					<header>
-						<h2>Examples Module</h2>
-						<span>Options for the examples module.</span>
+						<h2>Code Module</h2>
+						<span>Options for the Code module.</span>
 					</header>
+					{checkbox({
+						name: 'Enabled',
+						option: () => options()('enabled-modules')('code')
+					})}
+				</div>
+				<div className={css('control-group')} >
+					<header>
+						<h2>Description Module</h2>
+						<span>Options for the Description module.</span>
+					</header>
+					{checkbox({
+						name: 'Enabled',
+						option: () => options()('enabled-modules')('description')
+					})}
+				</div>
+				<div className={css('control-group')} >
+					<header>
+						<h2>Graph Module</h2>
+						<span>Options for the Graph module.</span>
+					</header>
+					{checkbox({
+						name: 'Enabled',
+						option: () => options()('enabled-modules')('graph')
+					})}
+				</div>
+				<div className={css('control-group')} >
+					<header>
+						<h2>Table Module</h2>
+						<span>Options for the Table module.</span>
+					</header>
+					{checkbox({
+						name: 'Enabled',
+						option: () => options()('enabled-modules')('table')
+					})}
+				</div>
+				<div className={css('control-group')} >
+					<header>
+						<h2>Text Module</h2>
+						<span>Options for the Text module.</span>
+					</header>
+					{checkbox({
+						name: 'Enabled',
+						option: () => options()('enabled-modules')('text')
+					})}
+				</div>
+				<div className={css('control-group')} >
+					<header>
+						<h2>Examples Module</h2>
+						<span>Options for the Examples module.</span>
+					</header>
+					{checkbox({
+						name: 'Enabled',
+						option: () => options()('enabled-modules')('examples')
+					})}
 					{button({
 						name: 'Purge Custom Inputs',
 						action: () => props.app.settings('examples').set({})

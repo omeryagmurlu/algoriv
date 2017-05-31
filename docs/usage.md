@@ -1,6 +1,6 @@
 # Usage Manual
 
-There is a main visualization area, 2 sidebars and some controls in the algorithm views. Clicking on their handles opens sidebars. Animation controls consist of: back-to-beginning, one-step-back, pause/start/restart, one-step-forward, to-end and a speed slider to control animation speed. Necessary input is to be supplied upon clicking on the start button, which prompts for these inputs. Main area and sidebars consist of modules, which can be **customized or toggled on/off in settings.** The app has multiple themes to choose from.
+There is a main visualization area, 2 sidebars and some controls in the algorithm views. Clicking on their handles opens sidebars. Animation controls consist of: back-to-beginning, one-step-back, pause/start/restart, one-step-forward, to-end and a speed slider to control animation speed. Necessary input is to be supplied upon clicking on the start button, which prompts for these inputs. Main area and sidebars consist of modules, which can be customized or toggled on/off in settings. The app has multiple themes to choose from.
 
 ## Usage of modules
 

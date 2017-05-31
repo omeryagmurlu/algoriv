@@ -56,7 +56,7 @@ import _isEqual from 'lodash.isequal';
 import _isNil from 'lodash.isnil';
 
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { graphologyImportFix as gimport } from 'app/utils';
+import { graphologyImportFix as gimport, ifModuleEnabled } from 'app/utils';
 
 import { uiFont } from 'app/styles/variables';
 
@@ -232,7 +232,13 @@ class Graph extends Component {
 
 	render() {
 		return (
-			<div id={this.graphId} className={style} />
+			<div
+				id={this.graphId}
+				className={style}
+				style={{
+					display: ifModuleEnabled('graph', this.props, true) ? 'block' : 'none'
+				}}
+			/>
 		);
 	}
 }

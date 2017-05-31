@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { themedStyle } from 'app/utils';
+import { themedStyle, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
 
@@ -10,7 +10,7 @@ const Code = props => {
 	const lineTags = Array(props.code.length).fill('');
 	props.highlights.forEach((idx => (lineTags[idx] = css('active'))));
 	const lines = props.code.map((line, i) => <p key={line + i} className={lineTags[i]}>{line}</p>);
-	return (
+	return ifModuleEnabled('code', props,
 		<div className={css('code', props.theme)}>
 			{lines}
 		</div>

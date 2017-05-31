@@ -11,7 +11,7 @@ import ContentCreate from 'material-ui/svg-icons/content/create';
 import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
 
 import { Examples as TO_MUTATE } from 'app/data/inputsRegistry';
-import { themedStyle, themeVars } from 'app/utils';
+import { themedStyle, themeVars, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
 
@@ -67,7 +67,7 @@ class Examples extends Component {
 			}
 			return name;
 		};
-		return (
+		return ifModuleEnabled('examples', this.props,
 			<div className={css('container', this.props.theme)} >
 				<List>
 					{list(this.props.examples, 'Example', this)}

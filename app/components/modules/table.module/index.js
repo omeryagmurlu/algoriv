@@ -8,13 +8,13 @@ import {
 	TableRow,
 	TableRowColumn,
 } from 'material-ui/Table';
-import { themedStyle, themeVars } from 'app/utils';
+import { themedStyle, themeVars, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
 
 const css = themedStyle(style);
 
-const Table = props => (props.data.length > 0 && (
+const Table = props => ifModuleEnabled('table', props, (props.data.length > 0 && (
 	<div
 		className={css('container', props.theme)}
 	>
@@ -50,7 +50,7 @@ const Table = props => (props.data.length > 0 && (
 			</TableBody>
 		</TableView>
 	</div>
-)) || null;
+)) || null);
 
 Table.propTypes = {
 	width: PropTypes.number.isRequired,

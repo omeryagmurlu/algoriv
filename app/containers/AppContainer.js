@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { LocalStorage } from 'ALIAS-localstorage';
+import modules from 'app/components/modules'; // An Exception for da rule
 
 import MainView from 'app/views/MainView';
 import AppView from 'app/views/AppView';
@@ -38,6 +39,9 @@ class AppContainer extends Component {
 		this.settings('options')('theme').default('giant-goldfish');
 		this.settings('options')('grayscale-visualizations').default(false);
 		this.settings('options')('animations-enabled').default(true);
+		Object.keys(modules).forEach(mName => {
+			this.settings('options')('enabled-modules')(mName).default(true);
+		});
 
 		this.history = [initialView];
 	}
