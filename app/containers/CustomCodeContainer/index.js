@@ -12,9 +12,6 @@ import { initialCode, initialDescription, initialPseudocode, initialAlgName } fr
 const valSet = (value, set) => ({ value, set });
 
 class CustomCodeContainer extends Component {
-	static nativeBindings = {
-		log: (...p) => console.log(...p)
-	}
 
 	constructor(props) {
 		super(props);
@@ -28,9 +25,29 @@ ${initialCode}`,
 			typeFeatures: {},
 			pseudoCode: initialPseudocode,
 			description: initialDescription,
+
+			debugConsole: [],
 		};
 
 		this.saves = () => this.props.app.settings('custom-code')('saves');
+	}
+
+	debugBindings = {
+		log: (...p) => {
+			this.setState(prev => {
+				prev.debugConsole.push(p.map(arg => {
+					const type = typeof arg;
+					if (type === 'function') {
+						return `function ${arg.name}`;
+					}
+					if (type === 'object') {
+						return JSON.stringify(arg, (k, v) => (typeof v === 'function' ? `function ${v.name}` : v), 2);
+					}
+					return arg.toString();
+				}).join(' '));
+				return prev;
+			});
+		}
 	}
 
 	onCodeChange = code => {
@@ -83,16 +100,15 @@ ${initialCode}`,
 	}
 
 	run = () => {
+		this.addToState('debugConsole', []);
 		const Alg = this.createAlgFromInfo();
-		Alg.logic = this.getLogic(Alg, CustomCodeContainer.nativeBindings);
-		const b = [];
-		Alg.dryRun(b);
-		console.log(b);
+		Alg.logic = this.getLogic(Alg, this.debugBindings);
+		Alg.dryRun(/* Here coan pass an array */);
 	}
 
 	visualize = () => {
 		const Alg = this.createAlgFromInfo();
-		Alg.logic = this.getLogic(Alg, CustomCodeContainer.nativeBindings);
+		Alg.logic = this.getLogic(Alg, _mapValues(this.debugBindings, () => () => {}));
 		this.props.app.changeView(Alg.asView());
 	}
 
@@ -100,23 +116,31 @@ ${initialCode}`,
 		return (algInput, frame) => {
 			const ip = createInterpreter(algorithm, algInput, frame,
 				bindings, this.getCodeTranspiled(), this.state.name);
-			ip.run(); // TODO make it non-blocking, but do not need to be async at the same time
+			let iteration = 0;
+			while (ip.step()) {
+				iteration++;
+			} // TODO make it non-blocking, but do not need to be async at the same time
+			console.log(iteration);
 		};
 	}
 
-	checkAlgorithmValidity(isAlg) {
+	checkAlgorithmValidity() {
 		const Alg = this.createAlgFromInfo();
 		Alg.logic = this.getLogic(Alg,
-			_mapValues(CustomCodeContainer.nativeBindings, () => () => {}));
+			_mapValues(this.debugBindings, () => () => {}));
 		const logicErr = Alg.hasLogicErr();
 		if (logicErr) {
-			if (isAlg) {
-				if (logicErr.name === 'AlgorithmError') {
-					return `Problems with your code, can't visualize!\n${logicErr.toString()}`;
-				}
-			} else if (logicErr.name !== 'AlgorithmError') {
-				return logicErr.toString();
+			if (logicErr.name === 'AlgorithmError') {
+				return {
+					alg: true,
+					err: `Problems with your code, can't visualize!\n${logicErr.toString()}`
+				};
 			}
+
+			return {
+				alg: false,
+				err: logicErr.toString()
+			};
 		}
 
 		return undefined;
@@ -163,8 +187,9 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 	algDescription = () => valSet(this.state.description, (description) => this.addToState('description', description))
 
 	render() {
-		const runErr = this.checkAlgorithmValidity();
-		const visErr = this.checkAlgorithmValidity('AlgorithmError');
+		const errs = this.checkAlgorithmValidity();
+		const visErr = (errs && errs.alg) ? errs.err : undefined;
+		const runErr = (errs && !errs.alg) ? errs.err : undefined;
 		return (
 			<CustomCodeView
 				{...this.props}
@@ -179,6 +204,8 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 				visErr={visErr}
 				run={this.run}
 				runErr={runErr}
+
+				debugConsole={this.state.debugConsole}
 
 				algName={this.algName()}
 				algType={this.algType()}

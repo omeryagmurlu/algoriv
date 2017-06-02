@@ -10,17 +10,27 @@
 	width: 100%;
 }
 
-.error {
+%code-out {
 	position: relative;
-	background: #b51020;
 	padding: 10px;
 	width: 100%;
 	white-space: pre;
-	color: #fff;
 	font-family: $monospaceFont;
 	font-size: 10pt;
 	overflow-x: auto;
 	box-sizing: border-box;
+}
+
+.error {
+	@extend %code-out;
+	background: #b51020;
+	color: #fff;
+}
+
+.debug-console {
+	@extend %code-out;
+	background: darken(#40e0d0, 20%);
+	color: #fff;
 }
 
 .container {

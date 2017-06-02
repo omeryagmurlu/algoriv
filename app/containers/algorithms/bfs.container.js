@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array } from 'app/utils';
+import { vis2array, graphologyImportFix as gimport } from 'app/utils';
 
 const BFS = Algorithm('BFS', 'graph');
 BFS.addStartingNodeInput();
@@ -29,7 +29,8 @@ BFS.addCode([
 BFS.addTable('queue', ['Queue']);
 BFS.addNodedTable('visited', 'Visited');
 
-BFS.logic = ({ startVertex: st, graph }, snipe) => {
+BFS.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+	const graph = gimport(gNonParse);
 	const alg = BFS.algorithm;
 
 	const q = [];

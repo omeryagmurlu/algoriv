@@ -6,7 +6,7 @@ import { container } from './style.scss';
 
 const Description = props => ifModuleEnabled('description', props, (props.text && (
 	<div className={container}>
-		<Markdown source={props.text} />
+		<Markdown escapeHtml source={props.text} />
 	</div>
 )) || null);
 

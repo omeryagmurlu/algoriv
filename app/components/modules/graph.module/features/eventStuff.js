@@ -3,7 +3,7 @@ import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
 const eventStuff = (instance, clas) => {
 	const notify = graph => instance.props.input[GRAPH.graph].update(
-		graph
+		graph.export()
 	);
 
 	const commonWork = fn => e => {

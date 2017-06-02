@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array } from 'app/utils';
+import { vis2array, graphologyImportFix as gimport } from 'app/utils';
 import _isEqual from 'lodash.isequal';
 import _without from 'lodash.without';
 import _union from 'lodash.union';
@@ -34,7 +34,8 @@ Kruskal.addCode([
 
 Kruskal.addText('sum');
 
-Kruskal.logic = ({ graph }, snipe) => {
+Kruskal.logic = ({ graph: gNonParse }, snipe) => {
+	const graph = gimport(gNonParse);
 	const alg = Kruskal.algorithm;
 
 	let ans = 0;

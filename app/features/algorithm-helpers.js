@@ -2,7 +2,7 @@ import Modules from 'app/features/modules';
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 import { suitingGraphs, randomGraph } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
-import { AlgorithmError } from 'app/utils';
+import { AlgorithmError, graphologyImportFix as gimport } from 'app/utils';
 
 export const Algorithm = (algorithmName, algorithmType) => {
 	const getHelperSnaps = () => helpers.reduce((obj, helper, i) => {
@@ -112,7 +112,7 @@ export const Algorithm = (algorithmName, algorithmType) => {
 		instance.addStartingNodeInput = () => {
 			addInput('startVertex', '0', {
 				description: 'Starting Vertex',
-				invalid: (sV, { graph }) => !graph.hasNode(sV) && `node doesn't exist (${sV})`
+				invalid: (sV, { graph }) => !gimport(graph).hasNode(sV) && `node doesn't exist (${sV})`
 			});
 		};
 

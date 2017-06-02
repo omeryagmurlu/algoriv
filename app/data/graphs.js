@@ -27,7 +27,7 @@ export const createFrom = (className, data) => create(className, graph => {
 			}
 		);
 	}));
-});
+}).export();
 
 export const adjacencyListify = g => {
 	const out = [];

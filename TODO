@@ -7,3 +7,4 @@
 * ~~Make a class which has helper methods to generate an `AlgorithmPrototype` in an imperative way!~~ !DONE
 * WRITE SOME FUCKING TESTS ASSHOLE
 * Rewrite InformationDemandingButton, it is implemented poorly
+* Make getting frames out of logic async, and move it to a webworker

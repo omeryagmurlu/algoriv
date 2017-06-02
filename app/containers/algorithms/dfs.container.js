@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array } from 'app/utils';
+import { vis2array, graphologyImportFix as gimport } from 'app/utils';
 
 const DFS = Algorithm('DFS', 'graph');
 DFS.addStartingNodeInput();
@@ -28,7 +28,8 @@ DFS.addCode([
 DFS.addTable('recursion', ['Recursion Stack']);
 DFS.addNodedTable('visited', 'Visited');
 
-DFS.logic = ({ startVertex: st, graph }, snipe) => {
+DFS.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+	const graph = gimport(gNonParse);
 	const alg = DFS.algorithm;
 
 	const reclist = [];

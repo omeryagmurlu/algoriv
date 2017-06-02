@@ -1,5 +1,5 @@
 import _mapValues from 'lodash.mapvalues';
-import { ColorList, graphologyImportFix as gimport, labelizer } from 'app/utils';
+import { ColorList, labelizer } from 'app/utils';
 import { ModuleInput } from 'app/features/input-types';
 import InputsRegistry from 'app/data/inputsRegistry';
 
@@ -97,7 +97,7 @@ export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 	(graphs, ...rest) => ExamplesModule.module('Graph', graphs.map(({ name, graph }) => ({
 		name,
 		data: graph
-	})), gimport, ...rest),
+	})), undefined, ...rest),
 	ExamplesModule.input
 );
 

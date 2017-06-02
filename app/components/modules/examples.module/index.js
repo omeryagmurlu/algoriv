@@ -59,7 +59,7 @@ class Examples extends Component {
 		return ifModuleEnabled('examples', this.props,
 			<div className={css('container', this.props.theme)} >
 				<List>
-					{list(this.props.examples, 'Example', this)}
+					{this.props.examples.length > 0 ? list(this.props.examples, 'Example', this) : null}
 					{list(this.props.customs, 'Custom', this, {
 						rightIconButton: (
 							<IconButton

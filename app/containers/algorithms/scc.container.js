@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, reverseGraph } from 'app/utils';
+import { vis2array, reverseGraph, graphologyImportFix as gimport } from 'app/utils';
 
 const SCC = Algorithm('SCC', 'graph');
 SCC.addStartingNodeInput();
@@ -7,7 +7,7 @@ SCC.addStartingNodeInput();
 SCC.addDescription(`
 In the mathematical theory of directed graphs, a graph is said to be strongly \
 connected or diconnected if every vertex is reachable from every other vertex. \
-The strongly connected components or diconnected components of an arbitrary \
+The strongly connected components or disconnected components of an arbitrary \
 directed graph form a partition into subgraphs that are themselves strongly connected.
 
 Kosaraju's algorithm uses two passes of depth first search. The first, in the original \
@@ -54,7 +54,8 @@ SCC.addCode([
 SCC.addTable('f1', ['Nodes', 'Finish Times']);
 SCC.addTable('scc', ['SCCs']);
 
-SCC.logic = ({ startVertex: st, graph }, snipe) => {
+SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+	const graph = gimport(gNonParse);
 	const alg = SCC.algorithm;
 
 	const mp = (fi, se) => ({ fi, se });

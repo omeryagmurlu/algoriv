@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, DataStructures } from 'app/utils';
+import { vis2array, DataStructures, graphologyImportFix as gimport } from 'app/utils';
 
 const Djikstra = Algorithm('Djikstra', 'graph');
 Djikstra.addStartingNodeInput();
@@ -32,7 +32,8 @@ Djikstra.addCode([
 
 Djikstra.addNodedTable('shortest', 'Distance');
 Djikstra.addNodedTable('visited', 'Visited');
-Djikstra.logic = ({ startVertex: st, graph }, snipe) => {
+Djikstra.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+	const graph = gimport(gNonParse);
 	const alg = Djikstra.algorithm;
 
 	const pair = (id, distance, parent) => ({ id, distance, parent });

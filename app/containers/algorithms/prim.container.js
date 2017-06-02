@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, DataStructures } from 'app/utils';
+import { vis2array, DataStructures, graphologyImportFix as gimport } from 'app/utils';
 
 const Prim = Algorithm('Prim', 'graph');
 Prim.addStartingNodeInput();
@@ -34,7 +34,8 @@ Prim.addCode([
 Prim.addText('sum');
 Prim.addNodedTable('visited', 'Visited');
 
-Prim.logic = ({ startVertex: st, graph }, snipe) => {
+Prim.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+	const graph = gimport(gNonParse);
 	const alg = Prim.algorithm;
 
 	const pair = (id, weight, parent) => ({ id, weight, parent });

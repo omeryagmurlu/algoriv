@@ -169,12 +169,7 @@ const CustomCodeView = props => {
 					}}
 				/>
 				{(props.runErr || props.visErr) ? (
-					<div
-						style={{
-							position: 'relative',
-							width: '100%'
-						}}
-					>
+					<div style={{ width: '100%' }}>
 						<div
 							className={css('error', props.app.theme)}
 						>
@@ -182,18 +177,29 @@ const CustomCodeView = props => {
 						</div>
 					</div>
 				) : null}
-				<div className={css('button-container', props.app.theme)}>
-					<RaisedButton
-						label="Run"
-						onTouchTap={props.run}
-						disabled={!!props.runErr}
-					/>
-					<RaisedButton
-						label="Visualize"
-						onTouchTap={props.visualize}
-						disabled={!!props.visErr}
-					/>
+				<div style={{ width: '100%' }}>
+					<div className={css('button-container', props.app.theme)}>
+						<RaisedButton
+							label="Run"
+							onTouchTap={props.run}
+							disabled={!!props.runErr}
+						/>
+						<RaisedButton
+							label="Visualize"
+							onTouchTap={props.visualize}
+							disabled={!!props.visErr || !!props.runErr}
+						/>
+					</div>
 				</div>
+				{(props.debugConsole.length > 0) ? (
+					<div style={{ width: '100%' }}>
+						<div
+							className={css('debug-console', props.app.theme)}
+						>
+							{(props.debugConsole.map(line => `> ${line}`).join('\n'))}
+						</div>
+					</div>
+				) : null}
 			</SideDrawer>
 		</div>
 	);
@@ -204,6 +210,7 @@ CustomCodeView.defaultProps = {
 	savedCodes: [],
 	visErr: '',
 	runErr: '',
+	debugConsole: [],
 };
 
 const algGetterSetterPropType = PropTypes.shape({
@@ -227,7 +234,7 @@ CustomCodeView.propTypes = {
 	run: PropTypes.func.isRequired,
 	visErr: PropTypes.string.isRequired,
 	runErr: PropTypes.string.isRequired,
-	debugConsole: PropTypes.string.isRequired,
+	debugConsole: PropTypes.array,
 
 	algName: algGetterSetterPropType.isRequired,
 	algType: algGetterSetterPropType.isRequired,
