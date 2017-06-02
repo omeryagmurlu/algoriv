@@ -2,8 +2,13 @@ import Modules from 'app/features/modules';
 import AlgorithmFactory from 'app/containers/AlgorithmContainer';
 import { suitingGraphs, randomGraph } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
+import { AlgorithmError } from 'app/utils';
 
-const Algorithm = (algorithmName, algorithmType) => {
+export const Algorithm = (algorithmName, algorithmType) => {
+	const getHelperSnaps = () => helpers.reduce((obj, helper, i) => {
+		obj[i] = helper._internals.getSnap();
+		return obj;
+	}, {});
 	const instance = {
 		create: () => AlgorithmFactory(prot),
 		set logic(fn) {
@@ -13,7 +18,21 @@ const Algorithm = (algorithmName, algorithmType) => {
 			name: algorithmName,
 			view: AlgorithmFactory(prot)
 		}),
-		algorithm: {}
+		algorithm: {},
+		dryRun: (optSave = []) => prot.logic(prot.input, () => optSave.push(getHelperSnaps())),
+		hasLogicErr: () => {
+			try {
+				const simFrames = [];
+				const snap = () => simFrames.push(getHelperSnaps());
+				prot.logic(prot.input, snap);
+				if (simFrames.length === 0) {
+					throw AlgorithmError('Algorithm must frame at least once');
+				}
+			} catch (e) {
+				return e;
+			}
+			return false;
+		}
 	};
 
 	const prot = {
@@ -22,11 +41,7 @@ const Algorithm = (algorithmName, algorithmType) => {
 		},
 		input: {},
 		inputType: {},
-		snap: (/* yes, we are not passing any shit to snap */) =>
-			helpers.reduce((obj, helper, i) => {
-				obj[i] = helper._internals.getSnap();
-				return obj;
-			}, {}),
+		snap: (/* yes, we are not passing any shit to snap */) => getHelperSnaps(),
 		modules: settings =>
 			helpers.reduce((obj, helper, i) => {
 				obj[i] = helper._internals.getModule(settings);
@@ -110,6 +125,21 @@ const Algorithm = (algorithmName, algorithmType) => {
 	}
 
 	return instance;
+};
+
+export const AlgorithmTypes = {
+	graph: [
+		{
+			name: 'Starting Vertex',
+			method: 'addStartingNodeInput',
+			propName: 'startVertex'
+		}
+	]
+};
+
+export const DefaultAlgorithmProps = {
+	code: 'Code',
+	explanation: 'Explanation'
 };
 
 const _internals = ({

@@ -202,7 +202,10 @@ export const suitingGraphs = alg => flatten(graphs.map(v => (
 
 export const randomGraph = (alg = false) => {
 	if (alg) {
-		return _sample(suitingGraphs(alg));
+		const sample = _sample(suitingGraphs(alg));
+		if (sample) {
+			return _sample(suitingGraphs(alg));
+		}
 	}
 
 	return _sample(flatGraphs);

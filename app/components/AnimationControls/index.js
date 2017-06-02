@@ -18,6 +18,7 @@ import ContentSend from 'material-ui/svg-icons/content/send';
 import { themedStyle, themeVars } from 'app/utils';
 
 import InformationDemandingButton from 'app/components/InformationDemandingButton';
+import globVars from 'app/styles/variables';
 
 import { sliderWidth } from './variables.json';
 
@@ -92,10 +93,11 @@ const AnimationControls = props => (
 			mode="determinate"
 			color={themeVars(props.theme)('accent1Color')}
 			style={{
-				height: '7px',
+				height: globVars.footerHeight,
 				position: 'absolute',
 				bottom: 0,
-				backgroundColor: themeVars(props.theme)('primary1Color')
+				backgroundColor: themeVars(props.theme)('primary1Color'),
+				zIndex: -1
 			}}
 		/>
 	</div>

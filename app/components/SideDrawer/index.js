@@ -46,8 +46,9 @@ class SideDrawer extends Component {
 					[this.side(css('right'), css('left'))]: true,
 					[css('active')]: this.state.active,
 				})}
+				style={this.props.style}
 			>
-				<section className={css('container')}>
+				<section className={css('container')} style={this.props.contentStyle}>
 					{this.props.children}
 				</section>
 				<div className={css('handle')}>
@@ -71,13 +72,17 @@ class SideDrawer extends Component {
 }
 
 SideDrawer.defaultProps = {
-	children: null
+	children: null,
+	style: {},
+	contentStyle: {}
 };
 
 SideDrawer.propTypes = {
 	theme: PropTypes.string.isRequired,
 	side: PropTypes.oneOf(['right', 'left']).isRequired,
-	children: PropTypes.any
+	children: PropTypes.any,
+	style: PropTypes.object,
+	contentStyle: PropTypes.object
 };
 
 export default SideDrawer;

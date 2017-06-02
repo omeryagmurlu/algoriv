@@ -11,11 +11,11 @@ Most modules are static, meaning that they don't support interactions, they are 
 
 ### Graph module
 
-Graph used in the visualization can be changed by ctrl-clicking on the graph. To add an edge ctrl-click on two nodes consequently. To add a node ctrl-click on the stage, to remove one ctrl-alt-click. If the graph is weighted, then a modal asks for weight when you add an edge. If a node/edge cannot be removed/added because of reasons, an info message pops informing the user of these reasons. Graph module, by default, features colors and animations to visualize graphs better.
+Graph used in the visualization can be changed by ctrl-clicking on the graph. To add an edge ctrl-click on two nodes consequently. To add a node ctrl-click on the stage, to remove one ctrl-alt-click. If the graph is weighted, then a modal asks for weight when you add an edge. If a node/edge cannot be removed/added because of reasons, an info message pops up, informing the user of these reasons. Graph module, by default, features colors and animations to visualize graphs better.
 
 ### Examples module
 
-Examples and Custom Input module is found by default on the left sidebar. Users have the ability to select from multiple examples which are fine tuned for the algorithm, or can save their own customized input and use it. Users can later delete or rename these inputs. Custom inputs are persistent and will persist after application exits.
+Examples and Custom Input module is found by default on the left sidebar. Users have the ability to select from multiple examples which are fine tuned for the algorithm, or can save their own customized input and use it. Users can later delete or rename these inputs. Custom inputs are persistent and will stay after application exits.
 
 Options for this module:
 

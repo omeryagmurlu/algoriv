@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
-import MenuItem from 'material-ui/MenuItem';
-import IconMenu from 'material-ui/IconMenu';
+import IconMenu from 'app/components/IconMenu';
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentCreate from 'material-ui/svg-icons/content/create';
-import NavigationMoreVert from 'material-ui/svg-icons/navigation/more-vert';
 
 import { Examples as TO_MUTATE } from 'app/data/inputsRegistry';
-import { themedStyle, themeVars, ifModuleEnabled } from 'app/utils';
+import { themedStyle, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
 
@@ -41,15 +39,6 @@ const list = (items, prefixName, that, mainAttr = {}, optAttr = () => ({}), suff
 		}
 	/>
 );
-
-const menuItem = (str, icon, theme, onClick) => (
-	<MenuItem
-		className={css('menu-item', theme)}
-		rightIcon={React.createElement(icon)}
-		onTouchTap={onClick}
-	>{str}</MenuItem>
-);
-
 
 class Examples extends Component {
 	constructor(props) {
@@ -86,29 +75,21 @@ class Examples extends Component {
 						)
 					}, item => ({
 						rightIconButton: (
-							<IconMenu
-								anchorOrigin={{
-									vertical: 'center',
-									horizontal: 'middle'
-								}}
-								iconButtonElement={(
-									<IconButton
-										touch
-									>
-										<NavigationMoreVert />
-									</IconButton>
-								)}
-								menuStyle={{
-									backgroundColor: themeVars(this.props.theme)('accent1Color')
-								}}
-							>
-								{menuItem('Rename', ContentCreate, this.props.theme, () =>
-									this.props.app.prompt('Enter New Name', newName =>
-										this.props.renameCustom(item.name, uniqName(newName))
-									)
-								)}
-								{menuItem('Delete', ActionDelete, this.props.theme, () => this.props.deleteCustom(item.name))}
-							</IconMenu>
+							IconMenu({
+								theme: this.props.app.theme,
+								items: [{
+									name: 'Rename',
+									icon: ContentCreate,
+									onTouch: () =>
+										this.props.app.prompt('Enter New Name', newName =>
+											this.props.renameCustom(item.name, uniqName(newName))
+										)
+								}, {
+									name: 'Delete',
+									icon: ActionDelete,
+									onTouch: () => this.props.deleteCustom(item.name)
+								}]
+							})
 						)
 					}))}
 				</List>

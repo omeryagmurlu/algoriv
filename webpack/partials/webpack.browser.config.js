@@ -10,8 +10,18 @@ module.exports = new Config().merge({
 	},
 	resolve: {
 		alias: {
-			'ALIAS-localstorage': path.resolve('webpack/fake_modules/browser-localstorage')
+			'ALIAS-localstorage': path.resolve('webpack/fake_modules/browser-localstorage'),
+			'ALIAS-babel': path.resolve('webpack/fake_modules/browser-babel')
 		}
+	},
+	module: {
+		rules: [
+			{
+				test: /babel-standalone.*\.js?$/,
+				exclude: ['app'],
+				use: ['script-loader']
+			}
+		]
 	},
 	plugins: [
 		new webpack.DefinePlugin({

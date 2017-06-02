@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import { themedStyle, themeVars } from 'app/utils';
 import { themes } from 'app/styles/themes.json';
+import { selectProps, subheaderProps } from 'app/styles/module-component-props';
 
 import style from './style.scss';
 
@@ -27,18 +28,7 @@ const selectHOF = theme => ({
 			fullWidth
 			value={option().get()}
 			onChange={(e, i, v) => option().set(v)}
-			listStyle={{
-				backgroundColor: themeVars(theme)('primary2Color')
-			}}
-			floatingLabelStyle={{
-				color: themeVars(theme)('textColor')
-			}}
-			underlineStyle={{
-				display: 'none'
-			}}
-			iconStyle={{
-				fill: themeVars(theme)('textColor')
-			}}
+			{...selectProps(theme)}
 		>
 			{possib.map(pos => (
 				<MenuItem key={pos} value={pos} primaryText={pos} />
@@ -68,9 +58,7 @@ const sliderHOF = () => ({
 }) => (
 	<div className={css('control')} >
 		<Subheader
-			style={{
-				lineHeight: '36px'
-			}}
+			{...subheaderProps()}
 		>{name}</Subheader>
 		<Slider
 			min={min}

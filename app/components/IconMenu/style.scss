@@ -1,0 +1,12 @@
+@import '~app/styles/common';
+
+@include themeable {
+	// BUG in Material UI: see AppView/style
+	.menu-item-#{$themeName} {
+		color: map-get($themeMap, 'alternativeTextColor') !important;
+
+		svg {
+			fill: map-get($themeMap, 'alternativeTextColor') !important;
+		}
+	}
+};

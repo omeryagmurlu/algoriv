@@ -3,8 +3,6 @@
 @include themeable {
 	.container-#{$themeName} {
 		color: map-get($themeMap, 'textColor');
-		font-family: $uiFont;
-		user-select: none;
 	}
 
 	.actions-container-#{$themeName} {
@@ -64,6 +62,11 @@
 		}
 	}
 };
+
+.container {
+	font-family: $uiFont;
+	user-select: none;
+}
 
 .main {
 	position: relative;

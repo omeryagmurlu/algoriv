@@ -42,6 +42,7 @@ class AppContainer extends Component {
 		Object.keys(modules).forEach(mName => {
 			this.settings('options')('enabled-modules')(mName).default(true);
 		});
+		this.settings('custom-code')('saves').default([]);
 
 		this.history = [initialView];
 	}

@@ -24,6 +24,7 @@ module.exports = new Config().merge({
 	resolve: {
 		alias: {
 			'ALIAS-localstorage': path.resolve('webpack/fake_modules/electron-localstorage')
+			'ALIAS-babel': path.resolve('webpack/fake_modules/electron-babel')
 		}
 	},
 	plugins: [

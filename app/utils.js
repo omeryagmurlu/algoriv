@@ -4,6 +4,14 @@ import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 import Buckets from 'buckets-js';
 
+export const AlgorithmError = message => ({
+	toString: () => `AlgorithmError: ${message}`,
+	message,
+	name: 'AlgorithmError'
+});
+
+export const trimPx = pix => parseFloat(pix.slice(0, -2));
+
 export const ifModuleEnabled = (mName, props, element) => {
 	if (props.app.settings('options')('enabled-modules')(mName).get()) {
 		return element;

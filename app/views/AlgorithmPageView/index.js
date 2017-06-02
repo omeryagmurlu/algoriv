@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Subheader from 'material-ui/Subheader';
 
 import { AlgorithmsList } from 'app/data/algorithms';
-import { themeVars } from 'app/utils';
 import BigButton from 'app/components/BigButton';
 import { pageView, container } from './style.scss';
 

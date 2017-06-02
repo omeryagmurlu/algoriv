@@ -4,7 +4,7 @@
 	.container-#{$themeName} {
 		display: flex;
 		flex-direction: column;
-		background: map-get($themeMap, 'primary1Color');
+		// background: map-get($themeMap, 'primary1Color');
 		height: 100%;
 
 		.upper {

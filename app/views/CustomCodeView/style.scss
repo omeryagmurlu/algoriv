@@ -1,0 +1,43 @@
+@import '~app/styles/common';
+
+@include themeable {
+
+};
+
+.button-container {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+}
+
+.error {
+	position: relative;
+	background: #b51020;
+	padding: 10px;
+	width: 100%;
+	white-space: pre;
+	color: #fff;
+	font-family: $monospaceFont;
+	font-size: 10pt;
+	overflow-x: auto;
+	box-sizing: border-box;
+}
+
+.container {
+	margin: auto;
+	width: calc(100vw - #{2 * $drawerHandleWidth});
+	height: 100%;
+	overflow: hidden;
+
+	> div {
+		margin: auto;
+		height: 100%;
+	}
+}
+
+.ace-editor {
+	width: 100% !important;
+	height: 100% !important;
+	font-family: $monospaceFont;
+	font-size: 15pt !important;
+}
