@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
 import _pickBy from 'lodash.pickby';
+import { makeCancelable, cancelCatch, AlgorithmError } from 'app/utils';
 
 import AnimatorContainer from 'app/containers/AnimatorContainer';
+import LoadingView from 'app/views/LoadingView';
 
-export const snapshot = (payload, object) => {
+const snapshot = (payload, object) => {
 	payload.push(JSON.parse(JSON.stringify(object))); // get rid of reference
 };
 
-export const snapFactoryProxy = (frames, fn) =>
+const snapProxy = (frames, fn) =>
 	(...params) => snapshot(frames, fn(...params));
 
 const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !== 'undefined'));
+
+export const framer = (logic, snap) => (input) => {
+	const frames = [];
+	return Promise.resolve(logic(input, snapProxy(frames, snap)))
+		.catch(err => {
+			throw err;
+		})
+		.then(() => {
+			if (frames.length === 0) {
+				throw AlgorithmError('Algorithm must frame at least once');
+			}
+		})
+		.then(() => frames);
+};
 
 const AlgorithmFactory = ({
 	logic: algLogic,
@@ -22,11 +38,7 @@ const AlgorithmFactory = ({
 }) => ((({
 	revampedAlgInputType
 }) => class AlgorithmPrototype extends Component {
-	static logic = input => {
-		const frames = [];
-		algLogic(input, snapFactoryProxy(frames, algSnap));
-		return frames;
-	}
+	static logic = framer(algLogic, algSnap)
 
 	static selectInput = inType => revampedAlgInputType.filter(
 		({ inputType: { type } }) => type === inType
@@ -36,15 +48,47 @@ const AlgorithmFactory = ({
 		super(props);
 
 		this.state = { ...algInput }; // BUGFIX: multiple instances, deepCopy needed
-		this.state.frames = AlgorithmPrototype.logic(algInput);
+		this.state.frames = null; // TODO make a loading screen
+		this.state.updating = true;
+
+		this.cancellables = [];
+	}
+
+	componentDidMount() {
+		this.cancellable(AlgorithmPrototype.logic(algInput))
+		.then(frames => {
+			this.setState({ frames, updating: false });
+		}).catch(cancelCatch).catch(err => {
+			throw new Error(`Algorithm can't init, ${err}`);
+		});
+	}
+
+	componentWillUnmount() {
+		this.cancelRunning();
+	}
+
+	cancellable = prom => {
+		const cancellable = makeCancelable(prom);
+		this.cancellables.push(cancellable);
+		return cancellable.promise;
+	}
+
+	cancelRunning = () => {
+		while (this.cancellables.length > 0) {
+			this.cancellables.pop().cancel();
+		}
 	}
 
 	inputHandler(inputObj, cb) {
-		this.setState(prevState => {
-			const newState = { ...prevState, ...inputObj };
-			newState.frames = AlgorithmPrototype.logic(filterObjectByKeys(newState, algInput));
-			return newState;
-		}, cb);
+		this.setState({ updating: true });
+		const fakeStateForLogic = { ...this.state, ...inputObj };
+		this.cancellable(AlgorithmPrototype.logic(
+			filterObjectByKeys(fakeStateForLogic, algInput)
+		)).then(frames => {
+			this.setState({ ...inputObj, frames, updating: false }, cb);
+		}).catch(cancelCatch).catch(err => {
+			throw new Error(`Input is faulty, ${err}`);
+		});
 	}
 
 	getInput = () => filterObjectByKeys(this.state, algInput)
@@ -68,14 +112,29 @@ const AlgorithmFactory = ({
 
 	render() {
 		return (
-			<AnimatorContainer
+			<LoadingView
 				{...this.props}
+				overlay={this.state.frames ? (<AnimatorContainer
+					{...this.props}
 
-				frames={this.state.frames}
+					frames={this.state.frames}
 
-				algorithmInfo={algInfo}
-				algorithmStatic={typeof algModules === 'function' ? algModules(this.props.app.settings) : algModules}
-				algorithmInput={this.inputs()}
+					algorithmInfo={algInfo}
+					algorithmStatic={typeof algModules === 'function' ? algModules(this.props.app.settings) : algModules}
+					algorithmInput={this.inputs()}
+				/>) : null}
+				disabled={!this.state.updating}
+				message={!this.state.frames ? 'Loading Algorithm' : 'Evaluating'}
+				tooLongTime={3000}
+				tooLongMessage="Algorithm logic is taking too long to compute"
+				tooLongEscape={() => {
+					this.cancelRunning();
+					if (!this.state.frames) {
+						return this.props.app.goBack();
+					}
+
+					return this.setState({ updating: false });
+				}}
 			/>
 		);
 	}

@@ -18,7 +18,6 @@
     "build:prod:electron": "yarn run prebuild && TARGET=electron NODE_ENV=production webpack",
     "build:dev:browser": "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack",
     "build:prod:browser": "yarn run prebuild && TARGET=browser NODE_ENV=production webpack",
-    "daily-banner": "convert /home/omer/.local/share/unsplashLinux/old/1494183705.jpg -font Docker-One -gravity Center -fill \"#FFEF00\" -pointsize       200 -annotate +0+75 \"$(expr '(' $(date -d 2017/06/20 +%s) - $(date +%s) + 86399 ')' / 86400)\" -pointsize 80 -font URWGothic-Demi -annotate +0+200 'Days Left Until Deadline' 'Days Left Until Deadline.jpg'",
     "legal": "yarn licenses generate-disclaimer --prod --ignore-platform > COPYING",
     "postinstall": "install-app-deps",
     "pack": "yarn run build:prod:electron && build --dir",
@@ -29,7 +28,7 @@
   "build": {
     "appId": "com.algoriv.app",
     "files": [
-      "dist/",
+      "dist/electron.js",
       "node_modules/",
       "main.js",
       "index.electron.html",
@@ -80,6 +79,7 @@
     "electron-window-state": "^4.1.1",
     "graphology": "^0.10.0",
     "js-interpreter": "^1.4.3",
+    "loaders.css": "^0.1.2",
     "lodash.isequal": "^4.5.0",
     "lodash.isnil": "^4.0.0",
     "lodash.isplainobject": "^4.0.6",
@@ -98,11 +98,12 @@
     "react-dom": "^15.5.4",
     "react-hot-loader": "next",
     "react-markdown": "^2.5.0",
+    "react-promise": "^1.1.3",
     "react-tap-event-plugin": "^2.0.1",
-    "sigma": "^1.2.0"
+    "sigma": "^1.2.0",
+    "babel-core": "^6.24.1"
   },
   "devDependencies": {
-    "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.1",
     "babel-loader": "7",
     "babel-plugin-transform-class-properties": "^6.24.1",

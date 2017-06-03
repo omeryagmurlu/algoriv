@@ -16,14 +16,14 @@ const Config = webpackConfig.Config;
 module.exports = new Config().merge({
 	target: 'electron-renderer',
 	externals: [nodeExternals({
-		whitelist: [/sigma/, 'app']
+		whitelist: [/sigma/, 'app', /loaders.css/]
 	})],
 	output: {
 		filename: 'electron.js'
 	},
 	resolve: {
 		alias: {
-			'ALIAS-localstorage': path.resolve('webpack/fake_modules/electron-localstorage')
+			'ALIAS-localstorage': path.resolve('webpack/fake_modules/electron-localstorage'),
 			'ALIAS-babel': path.resolve('webpack/fake_modules/electron-babel')
 		}
 	},

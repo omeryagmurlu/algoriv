@@ -6,6 +6,38 @@
 	transition: $target $dur;
 }
 
+@mixin box-gradient($col1, $col2, $outset: 0%, $inset: 50%) {
+	background:
+	linear-gradient(180deg,
+		$col1,
+		$col1 $outset,
+		$col2 $inset,
+		$col2,
+		$col2 100% - $inset,
+		$col1 100% - $outset,
+		$col1
+	), linear-gradient(90deg,
+		$col1,
+		$col1 $outset,
+		$col2 $inset,
+		$col2,
+		$col2 100% - $inset,
+		$col1 100% - $outset,
+		$col1
+	),;
+}
+
+@mixin loader {
+	display: flex;
+	flex: 0 1 auto;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
 @mixin wrapper($width: $minWrapperWidth) {
 	position: relative;
 	margin: auto;

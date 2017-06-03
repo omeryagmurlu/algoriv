@@ -1,8 +1,8 @@
 import Modules from 'app/features/modules';
-import AlgorithmFactory from 'app/containers/AlgorithmContainer';
+import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
 import { suitingGraphs, randomGraph } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
-import { AlgorithmError, graphologyImportFix as gimport } from 'app/utils';
+import { graphologyImportFix as gimport } from 'app/utils';
 
 export const Algorithm = (algorithmName, algorithmType) => {
 	const getHelperSnaps = () => helpers.reduce((obj, helper, i) => {
@@ -19,20 +19,7 @@ export const Algorithm = (algorithmName, algorithmType) => {
 			view: AlgorithmFactory(prot)
 		}),
 		algorithm: {},
-		dryRun: (optSave = []) => prot.logic(prot.input, () => optSave.push(getHelperSnaps())),
-		hasLogicErr: () => {
-			try {
-				const simFrames = [];
-				const snap = () => simFrames.push(getHelperSnaps());
-				prot.logic(prot.input, snap);
-				if (simFrames.length === 0) {
-					throw AlgorithmError('Algorithm must frame at least once');
-				}
-			} catch (e) {
-				return e;
-			}
-			return false;
-		}
+		dryRun: (logic = prot.logic) => framer(logic, () => getHelperSnaps())(prot.input)
 	};
 
 	const prot = {
@@ -62,7 +49,7 @@ export const Algorithm = (algorithmName, algorithmType) => {
 
 	const addModule = instance.addModule = helper => {
 		helpers.push(helper);
-		helper._internals.getInput(helpers.length - 1).forEach(({ id: inputId, inputType }) => {
+		helper._internals.getInputType(helpers.length - 1).forEach(({ id: inputId, inputType }) => {
 			prot.inputType[inputId] = prot.inputType[inputId] || [];
 			prot.inputType[inputId].push(inputType);
 		});
@@ -157,7 +144,7 @@ const _internals = ({
 	},
 	getModule: (settings) => Modules[mod].module(...moduleArgs,
 		shouldPassSettings ? settings : undefined),
-	getInput: (moduleId) => input.map(({ id, input: inputWhich }) => ({
+	getInputType: (moduleId) => input.map(({ id, input: inputWhich }) => ({
 		id,
 		inputType: inputWhich
 			? Modules[mod].input(moduleId)[inputWhich]

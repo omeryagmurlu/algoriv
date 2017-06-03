@@ -4,6 +4,32 @@ import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 import Buckets from 'buckets-js';
 
+export const cancelCatch = err => {
+	if (!err.isCanceled) {
+		throw err;
+	}
+};
+
+export const makeCancelable = (promise) => { // https://facebook.github.io/react/blog/2015/12/16/ismounted-antipattern.html
+	let hasCanceled_ = false;
+
+	const wrappedPromise = new Promise((resolve, reject) => {
+		promise.then((val) =>
+			(hasCanceled_ ? reject({ isCanceled: true }) : resolve(val))
+		);
+		promise.catch((error) =>
+			(hasCanceled_ ? reject({ isCanceled: true }) : reject(error))
+		);
+	});
+
+	return {
+		promise: wrappedPromise,
+		cancel() {
+			hasCanceled_ = true;
+		},
+	};
+};
+
 export const AlgorithmError = message => ({
 	toString: () => `AlgorithmError: ${message}`,
 	message,

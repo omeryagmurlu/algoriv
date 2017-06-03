@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
 import Checkbox from 'material-ui/Checkbox';
 import AceEditor from 'react-ace';
+import Async from 'react-promise';
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -35,6 +36,18 @@ const CustomCodeView = props => {
 	const rightWidth = uiVariables.moduleMaxWidth;
 	const itemWidth = uiVariables.moduleMaxWidth;
 	const editorOneLineHeight = '30px';
+	const errBox = (txt) => (<div style={{ width: '100%' }}>
+		<div
+			className={css('error', props.app.theme)}
+		>
+			{txt}
+		</div>
+	</div>);
+	const promButton = (labl, isDis, other) => (<RaisedButton
+		label={labl}
+		disabled={isDis}
+		{...other}
+	/>);
 	return (
 		<div className={css('container', props.app.theme)}>
 			<AceEditor
@@ -168,26 +181,26 @@ const CustomCodeView = props => {
 						minHeight: props.algPseudoCode.value.includes('\n') ? `${0.5 * trimPx(itemWidth)}px` : editorOneLineHeight,
 					}}
 				/>
-				{(props.runErr || props.visErr) ? (
-					<div style={{ width: '100%' }}>
-						<div
-							className={css('error', props.app.theme)}
-						>
-							{(props.runErr || props.visErr)}
-						</div>
-					</div>
-				) : null}
+				<Async
+					promise={props.errProms}
+					then={v => (v ? errBox(v.err) : null)}
+					pendingRender={errBox('Processing')}
+				/>
 				<div style={{ width: '100%' }}>
 					<div className={css('button-container', props.app.theme)}>
-						<RaisedButton
-							label="Run"
-							onTouchTap={props.run}
-							disabled={!!props.runErr}
+						<Async
+							promise={props.errProms}
+							then={v => promButton('Run', v && !v.alg, {
+								onTouchTap: props.run
+							})}
+							pendingRender={promButton('Run', true)}
 						/>
-						<RaisedButton
-							label="Visualize"
-							onTouchTap={props.visualize}
-							disabled={!!props.visErr || !!props.runErr}
+						<Async
+							promise={props.errProms}
+							then={v => promButton('Visualize', !!v, {
+								onTouchTap: props.visualize
+							})}
+							pendingRender={promButton('Visualize', true)}
 						/>
 					</div>
 				</div>
@@ -208,8 +221,6 @@ const CustomCodeView = props => {
 CustomCodeView.defaultProps = {
 	code: '// type your code...',
 	savedCodes: [],
-	visErr: '',
-	runErr: '',
 	debugConsole: [],
 };
 
@@ -232,9 +243,8 @@ CustomCodeView.propTypes = {
 	addSave: PropTypes.func.isRequired,
 	visualize: PropTypes.func.isRequired,
 	run: PropTypes.func.isRequired,
-	visErr: PropTypes.string.isRequired,
-	runErr: PropTypes.string.isRequired,
 	debugConsole: PropTypes.array,
+	errProms: PropTypes.object.isRequired, // Async
 
 	algName: algGetterSetterPropType.isRequired,
 	algType: algGetterSetterPropType.isRequired,

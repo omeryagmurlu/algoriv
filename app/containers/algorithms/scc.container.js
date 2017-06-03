@@ -104,7 +104,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	};
 
 	let snap = (...p) => {
-		alg.graph.setOverrideGraph(graph);
+		alg.graph.setOverrideGraph(graph.export());
 		semiSnap(...p);
 	};
 
@@ -144,7 +144,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	snap([12], 'Computation of finish orders finished, reset vars');
 	const revGraph = reverseGraph(graph);
 	snap = (...p) => {
-		alg.graph.setOverrideGraph(revGraph);
+		alg.graph.setOverrideGraph(revGraph.export());
 		semiSnap(...p);
 	};
 	snap([14], 'Reverse the graph');
@@ -196,7 +196,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 		sccId++;
 	}
 	snap = (...p) => {
-		alg.graph.setOverrideGraph(graph);
+		alg.graph.setOverrideGraph(graph.export());
 		semiSnap(...p);
 	};
 	snap([], `SCC from ${st} completed ${sccId}`);

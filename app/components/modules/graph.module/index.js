@@ -56,7 +56,7 @@ import _isEqual from 'lodash.isequal';
 import _isNil from 'lodash.isnil';
 
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
-import { graphologyImportFix as gimport, ifModuleEnabled } from 'app/utils';
+import { graphologyImportFix as gimport, ifModuleEnabled, themedStyle } from 'app/utils';
 
 import { uiFont } from 'app/styles/variables';
 
@@ -68,8 +68,10 @@ import appearanceStuff from './features/appearanceStuff';
 import eventStuff from './features/eventStuff';
 import updateStuff from './features/updateStuff';
 
-import { style } from './style.scss';
+import style from './style.scss';
 import vars from './variables.json';
+
+const css = themedStyle(style);
 
 class Graph extends Component {
 	static parseGraph = (props) => gimport(JSON.parse(JSON.stringify(
@@ -234,7 +236,7 @@ class Graph extends Component {
 		return (
 			<div
 				id={this.graphId}
-				className={style}
+				className={css('style', this.props.theme)}
 				style={{
 					display: ifModuleEnabled('graph', this.props, true) ? 'block' : 'none'
 				}}

@@ -45,7 +45,6 @@ module.exports = new Config().merge({
 			},
 			{
 				test: /\.css$/,
-				exclude: /(node_modules|bower_components)/,
 				use: [{
 					loader: 'style-loader'
 				}, {
@@ -53,19 +52,6 @@ module.exports = new Config().merge({
 					options: {
 						modules: true,
 						localIdentName: '[path][name]__[local]--[hash:base64:5]',
-						minimize: true,
-						camelCase: true
-					}
-				}]
-			},
-			{ // Module Css Files
-				test: /\.css$/,
-				include: /(node_modules|bower_components)/,
-				use: [{
-					loader: 'style-loader'
-				}, {
-					loader: 'css-loader',
-					options: {
 						minimize: true,
 						camelCase: true
 					}
@@ -113,6 +99,10 @@ module.exports = new Config().merge({
 			{
 				loader: 'url-loader',
 				test: /\.(svg|eot|ttf|woff|woff2)?$/
+			},
+			{
+				loader: 'raw-loader',
+				test: /\.(txt)?$/
 			},
 		]
 	}

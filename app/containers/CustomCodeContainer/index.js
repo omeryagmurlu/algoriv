@@ -5,6 +5,7 @@ import CustomCodeView from 'app/views/CustomCodeView';
 import Babel from 'ALIAS-babel';
 import _mapValues from 'lodash.mapvalues';
 
+import shimString from './features/shim.txt';
 import createInterpreter from './features/interpreter';
 
 import { initialCode, initialDescription, initialPseudocode, initialAlgName } from './features/assets';
@@ -12,7 +13,6 @@ import { initialCode, initialDescription, initialPseudocode, initialAlgName } fr
 const valSet = (value, set) => ({ value, set });
 
 class CustomCodeContainer extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -40,10 +40,10 @@ ${initialCode}`,
 					if (type === 'function') {
 						return `function ${arg.name}`;
 					}
-					if (type === 'object') {
-						return JSON.stringify(arg, (k, v) => (typeof v === 'function' ? `function ${v.name}` : v), 2);
+					if (type === 'undefined') {
+						return 'undefined';
 					}
-					return arg.toString();
+					return JSON.stringify(arg, (k, v) => (typeof v === 'function' ? `function ${v.name}` : v), 2);
 				}).join(' '));
 				return prev;
 			});
@@ -82,7 +82,11 @@ ${initialCode}`,
 		});
 	}
 
-	getCodeTranspiled = () => Babel.transform(this.state.code, { presets: ['es2015'] }).code
+	getCodeTranspiled = () => `\
+"use strict";\
+;${shimString};\
+!(function() {;${Babel.transform(this.state.code, { presets: ['es2015'] }).code}\n\
+;}());`
 
 	createAlgFromInfo() {
 		const Alg = Algorithm(this.state.name, this.state.type);
@@ -102,8 +106,12 @@ ${initialCode}`,
 	run = () => {
 		this.addToState('debugConsole', []);
 		const Alg = this.createAlgFromInfo();
-		Alg.logic = this.getLogic(Alg, this.debugBindings);
-		Alg.dryRun(/* Here coan pass an array */);
+		Alg.dryRun(this.getLogic(Alg, this.debugBindings))
+		.catch(e => {
+			if (e.name !== 'AlgorithmError') {
+				throw e;
+			}
+		});
 	}
 
 	visualize = () => {
@@ -113,37 +121,67 @@ ${initialCode}`,
 	}
 
 	getLogic({ algorithm } = {}, bindings) {
-		return (algInput, frame) => {
-			const ip = createInterpreter(algorithm, algInput, frame,
-				bindings, this.getCodeTranspiled(), this.state.name);
-			let iteration = 0;
-			while (ip.step()) {
-				iteration++;
-			} // TODO make it non-blocking, but do not need to be async at the same time
-			console.log(iteration);
-		};
+		return (algInput, frame) => new Promise((resolve, reject) => {
+			let ip;
+			try {
+				ip = createInterpreter(algorithm, algInput, frame, bindings, this.getCodeTranspiled());
+			} catch (e) {
+				return reject(e);
+			}
+
+			let stillRunning = true;
+
+			const out = setTimeout(() => {
+				stillRunning = false;
+				ip = undefined;
+				reject(new Error('Algorithm is taking too long to complete, check for infinite loops'));
+			}, 7000); // 7000 must be configurable in options
+
+			const nextStep = () => {
+				if (!stillRunning) {
+					return;
+				}
+
+				let runResult = false;
+				try {
+					runResult = ip.step();
+				} catch (e) {
+					return reject(e);
+				}
+
+				if (runResult) {
+					return setImmediate(nextStep);
+				}
+
+				clearTimeout(out);
+				return resolve();
+			};
+			nextStep();
+		});
 	}
 
 	checkAlgorithmValidity() {
 		const Alg = this.createAlgFromInfo();
-		Alg.logic = this.getLogic(Alg,
-			_mapValues(this.debugBindings, () => () => {}));
-		const logicErr = Alg.hasLogicErr();
-		if (logicErr) {
-			if (logicErr.name === 'AlgorithmError') {
-				return {
-					alg: true,
-					err: `Problems with your code, can't visualize!\n${logicErr.toString()}`
-				};
-			}
+		return new Promise(resolve => {
+			Alg.dryRun(this.getLogic(Alg,
+				_mapValues(this.debugBindings, () => () => {})))
+			.then(() => resolve(false))
+			.catch(err => {
+				if (err.name === 'AlgorithmError') {
+					resolve({
+						alg: true,
+						err: `Problems with your code, can't visualize!\n${err.toString()}`
+					});
 
-			return {
-				alg: false,
-				err: logicErr.toString()
-			};
-		}
+					return;
+				}
 
-		return undefined;
+				resolve({
+					alg: false,
+					err: err.toString()
+				});
+			});
+		});
 	}
 
 	prependCode = (stuff) => {
@@ -187,9 +225,6 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 	algDescription = () => valSet(this.state.description, (description) => this.addToState('description', description))
 
 	render() {
-		const errs = this.checkAlgorithmValidity();
-		const visErr = (errs && errs.alg) ? errs.err : undefined;
-		const runErr = (errs && !errs.alg) ? errs.err : undefined;
 		return (
 			<CustomCodeView
 				{...this.props}
@@ -201,9 +236,8 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 				deleteSave={this.deleteSave}
 				addSave={this.addSave}
 				visualize={this.visualize}
-				visErr={visErr}
 				run={this.run}
-				runErr={runErr}
+				errProms={this.checkAlgorithmValidity()}
 
 				debugConsole={this.state.debugConsole}
 
