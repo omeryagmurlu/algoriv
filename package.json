@@ -101,6 +101,7 @@
     "react-promise": "^1.1.3",
     "react-tap-event-plugin": "^2.0.1",
     "sigma": "^1.2.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-core": "^6.24.1"
   },
   "devDependencies": {
@@ -108,7 +109,6 @@
     "babel-loader": "7",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.0",
     "electron": "^1.6.2",
