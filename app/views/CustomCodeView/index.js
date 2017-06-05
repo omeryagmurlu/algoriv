@@ -72,18 +72,6 @@ const CustomCodeView = props => {
 						primaryTogglesNestedList
 						autoGenerateNestedIndicator={false}
 						open
-						rightIconButton={(
-							<IconButton
-								touch
-								onTouchTap={() => {
-									props.app.prompt('Enter Name', name =>
-										props.addSave(name)
-									);
-								}}
-							>
-								<ContentAdd />
-							</IconButton>
-						)}
 						nestedItems={props.savedCodes.map(save =>
 							<ListItem
 								key={save.name}
@@ -202,6 +190,9 @@ const CustomCodeView = props => {
 							})}
 							pendingRender={promButton('Visualize', true)}
 						/>
+						{promButton('Save', false, {
+							onTouchTap: () => props.addSave(props.algName.value)
+						})}
 					</div>
 				</div>
 				{(props.debugConsole.length > 0) ? (

@@ -74,6 +74,14 @@ ${initialCode}`,
 
 	addSave = (name) => {
 		this.saves().set(prev => {
+			const vorhanden = prev.findIndex(o => o.name === name);
+			if (vorhanden !== -1) {
+				prev[vorhanden] = {
+					name,
+					data: { ...this.state }
+				};
+				return prev;
+			}
 			prev.push({
 				name,
 				data: { ...this.state }
@@ -115,9 +123,24 @@ ${initialCode}`,
 	}
 
 	visualize = () => {
-		const Alg = this.createAlgFromInfo();
-		Alg.logic = this.getLogic(Alg, _mapValues(this.debugBindings, () => () => {}));
-		this.props.app.changeView(Alg.asView());
+		const continuation = () => {
+			const Alg = this.createAlgFromInfo();
+			Alg.logic = this.getLogic(Alg, _mapValues(this.debugBindings, () => () => {}));
+			this.props.app.changeView(Alg.asView());
+		};
+
+		// Ask for save if not saved
+		const saveIndex = this.saves().get().findIndex(o => o.name === this.state.name);
+		if (saveIndex === -1 || this.saves().get()[saveIndex].data.code !== this.state.code) {
+			// If no save or code modified
+			this.props.app.confirm('Save before visualizing?', () => {
+				this.addSave(this.state.name);
+				continuation();
+			}, continuation);
+			return;
+		}
+
+		continuation();
 	}
 
 	getLogic({ algorithm } = {}, bindings) {

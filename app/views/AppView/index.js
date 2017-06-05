@@ -2,9 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
+import FlatButton from 'material-ui/FlatButton';
 import Header from 'app/components/Header';
 import Prompt from 'app/components/Prompt';
 import { themedStyle, themeVars } from 'app/utils';
+
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import ContentBlock from 'material-ui/svg-icons/content/block';
+import ActionDone from 'material-ui/svg-icons/action/done';
 
 import style from './style.scss';
 
@@ -24,7 +29,8 @@ const modalSelector = pops => (
 	<div>
 		<Dialog
 			open={Object.keys(pops.modal).length !== 0 && [
-				'prompt'
+				'prompt',
+				'confirm'
 			].includes(pops.modal.type)}
 			title={pops.modal.message}
 			actions={((() => {
@@ -46,11 +52,51 @@ const modalSelector = pops => (
 								}}
 							/>
 						)];
+					case 'confirm': {
+						const button = (icon, str, action) => (<FlatButton
+							icon={icon}
+							label={pops.modal.options[str]}
+							style={{
+								color: themeVars(pops.theme)('alternativeTextColor')
+							}}
+							onTouchTap={() => {
+								pops.modal.options[action]();
+								pops.modal.exitStrategy();
+							}}
+						/>);
+						return [
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'space-around'
+								}}
+							>
+								{button(<ActionDone />, 'yes', 'affirmative')}
+								{button(<ContentBlock />, 'no', 'negative')}
+								{button(<ActionDone />, 'cancel', 'cancellor')}
+							</div>
+						];
+					}
 					default:
 						return [];
 				}
 			})())}
-			onRequestClose={pops.modal.exitStrategy}
+			onRequestClose={((() => {
+				switch (pops.modal.type) {
+					case 'prompt':
+						return () => {
+							pops.modal.options.refuse();
+							pops.modal.exitStrategy();
+						};
+					case 'confirm':
+						return () => {
+							pops.modal.options.cancellor();
+							pops.modal.exitStrategy();
+						};
+					default:
+						return pops.modal.exitStrategy;
+				}
+			})())}
 
 			overlayClassName={css('overlay', pops.theme)}
 			contentClassName={css('content', pops.theme)}

@@ -69,19 +69,56 @@ class AppContainer extends Component {
 		});
 	}
 
-	prompt = (message, continuation = () => {}) => {
+	/**
+	 * @param message {string} message to display
+	 * @param continuation? {function} onSend
+	 * @param refuse? {function} on refusal
+	 */
+	prompt = (message, continuation = () => {}, refuse = () => {}) => {
 		this.setState({
 			modal: {
 				type: 'prompt',
 				message,
-				exitStrategy: () => this.setState({ modal: {} }),
+				exitStrategy: () => {
+					this.setState({ modal: {} });
+				},
 				options: {
-					continuation
+					continuation,
+					refuse
 				}
 			}
 		});
 	}
 
+	/**
+	 * @param message {string} message to display
+	 * @param affirmative {function} onSend
+	 * @param negative? {function} on refusal
+	 */
+	confirm = (message, affirmative, negative = () => {}, cancellor = () => {}, yes = 'Yes', no = 'No', cancel = 'Cancel') => {
+		this.setState({
+			modal: {
+				type: 'confirm',
+				message,
+				exitStrategy: () => {
+					this.setState({ modal: {} });
+				},
+				options: {
+					affirmative,
+					negative,
+					cancellor,
+					yes,
+					no,
+					cancel
+				}
+			}
+		});
+	}
+
+	/**
+	 * @param severity {number} severity of alert
+	 * @param message {string} message to display
+	 */
 	alert = (severity, message) => {
 		this.setState({
 			modal: {
@@ -127,8 +164,11 @@ class AppContainer extends Component {
 					animationsEnabled={this.settings('options')('animations-enabled').get()}
 
 					settings={this.settings}
+
 					prompt={this.prompt}
 					alert={this.alert}
+					confirm={this.confirm}
+
 					updateHeader={this.updateHeader}
 					changeView={this.changeView}
 				/>
