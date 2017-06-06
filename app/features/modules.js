@@ -81,7 +81,9 @@ export const ExamplesModule = Modules.Examples = exporter(
 			return prev;
 		})
 	}),
-	(ifMultiModuleId) => ModuleInput('examples', ifMultiModuleId, InputsRegistry.Examples)
+	(ifMultiModuleId) => _mapValues(InputsRegistry.Examples, hash =>
+		ModuleInput('examples', ifMultiModuleId, hash)
+	)
 );
 
 export const CodeModule = Modules.Code = exporter(

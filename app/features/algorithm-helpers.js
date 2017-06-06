@@ -109,7 +109,11 @@ export const Algorithm = (algorithmName, algorithmType) => {
 		addModule(instance.algorithm.graph);
 		const suiting = suitingGraphs(algorithmName);
 		addModule(ExampleGraphs([{
-			id: 'graph'
+			id: 'graph',
+			input: 'graph'
+		}, {
+			id: 'startVertex',
+			input: 'startNode'
 		}])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
 	}
 

@@ -257,8 +257,8 @@ Graph.propTypes = {
 	customLabels: PropTypes.object,
 
 	input: PropTypes.objectOf(PropTypes.shape({
-		update: PropTypes.func.isRequired,
-		value: PropTypes.any.isRequired
+		update: PropTypes.func,
+		value: PropTypes.any
 	})).isRequired,
 
 	theme: PropTypes.string.isRequired,

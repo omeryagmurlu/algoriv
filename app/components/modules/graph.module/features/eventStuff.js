@@ -1,7 +1,7 @@
 import { Graph as GRAPH } from 'app/data/inputsRegistry';
 import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
-const eventStuff = (instance, clas) => {
+const eventStuff = (instance) => {
 	const notify = graph => instance.props.input[GRAPH.graph].update(
 		graph.export()
 	);

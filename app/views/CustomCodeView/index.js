@@ -27,14 +27,13 @@ import 'brace/mode/markdown';
 import 'brace/snippets/javascript';
 
 import style from './style.scss';
-import Tables from './components/Tables'
+import Tables from './components/Tables';
 
 const css = themedStyle(style);
 
 const CustomCodeView = props => {
 	const rightWidth = uiVariables.moduleMaxWidth;
 	const itemWidth = uiVariables.moduleMaxWidth;
-	const editorOneLineHeight = '30px';
 	const errBox = (txt) => (<div style={{ width: '100%' }}>
 		<div
 			className={css('error', props.app.theme)}
@@ -168,8 +167,8 @@ const CustomCodeView = props => {
 		value={props.algPseudoCode.value}
 		style={{
 			width: itemWidth,
-			height: props.algPseudoCode.value.includes('\n') ? `${0.5 * trimPx(itemWidth)}px` : editorOneLineHeight,
-			minHeight: props.algPseudoCode.value.includes('\n') ? `${0.5 * trimPx(itemWidth)}px` : editorOneLineHeight,
+			height: `${0.5 * trimPx(itemWidth)}px`,
+			minHeight: `${0.5 * trimPx(itemWidth)}px`,
 		}}
 	/>);
 	const algErrorBox = () => (<Async
