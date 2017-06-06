@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
+import { textFieldProps } from 'app/styles/module-component-props';
 import { themedStyle } from 'app/utils';
+
 
 import style from './style.scss';
 
@@ -74,6 +76,7 @@ class InformationDemandingButton extends Component {
 
 		const textFields = demandings.map((demand, i) => (
 			<TextField
+				{...textFieldProps(this.props.theme)}
 				key={demand.text}
 				floatingLabelText={demand.text}
 				value={this.state.inputs[i]}

@@ -73,8 +73,12 @@
 
 $themeName: 1;
 $themeMap: 1;
+// http://www.colourlovers.com/lover/manekineko/loveNote
+// http://www.colourlovers.com/lover/Miss_Anthropy/loveNote
+// http://www.colourlovers.com/lover/sugar%21/loveNote
+// http://www.colourlovers.com/lover/electrikmonk/loveNote
 @mixin themeable {
-	$names: dark, giant-goldfish;
+	$names: dark, giant-goldfish, sugar, thought-provoking, cheer-up, fresh-cut;
 	@each $name in $names {
 		$themeName: $name !global;
 		$themeMap: map-get($themes, $name) !global;

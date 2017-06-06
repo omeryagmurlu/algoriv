@@ -5,8 +5,44 @@
 		"accent1Color": "#009688",
 		"accent2Color": "#A7DBD8",
 		"textColor": "#434743",
+		"alternativeTextColor": "#fdf0ca",
+		"backgroundColor": "#fdf0ca"
+	},
+	"sugar": {
+		"primary1Color": "#FE4365",
+		"primary2Color": "#FE4365",
+		"accent1Color": "#4ECDC4",
+		"accent2Color": "#649b82",
+		"textColor": "#434743",
+		"alternativeTextColor": "#fceadd",
+		"backgroundColor": "#fceadd"
+	},
+	"cheer-up": {
+		"primary1Color": "#00A8C6",
+		"primary2Color": "#c8f761",
+		"accent1Color": "#C44D58",
+		"accent2Color": "#FF6B6B",
+		"textColor": "#434743",
+		"alternativeTextColor": "#edeff1",
+		"backgroundColor": "#edeff1"
+	},
+	"fresh-cut": {
+		"primary1Color": "#8FBE00",
+		"primary2Color": "#AEE239",
+		"accent1Color": "#00A8C6",
+		"accent2Color": "#40C0CB",
+		"textColor": "#434743",
+		"alternativeTextColor": "#F9F2E7",
+		"backgroundColor": "#F9F2E7"
+	},
+	"thought-provoking": {
+		"primary1Color": "#C02942",
+		"primary2Color": "#D95B43",
+		"accent1Color": "#c89f1c",
+		"accent2Color": "#53777A",
+		"textColor": "#E0E4CC",
 		"alternativeTextColor": "#E0E4CC",
-		"backgroundColor": "#E0E4CC"
+		"backgroundColor": "#542437"
 	},
 	"dark": {
 		"primary1Color": "#946e58",

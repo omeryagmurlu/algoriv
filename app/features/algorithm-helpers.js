@@ -1,6 +1,6 @@
 import Modules from 'app/features/modules';
 import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
-import { graphs, randomGraph } from 'app/data/graphs';
+import { graphs, randomGraph, suitingGraphs } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
 import { graphologyImportFix as gimport, flatten } from 'app/utils';
 
@@ -107,9 +107,10 @@ export const Algorithm = (algorithmName, algorithmType) => {
 		addInput('graph', randomGraph(algorithmName).graph);
 
 		addModule(instance.algorithm.graph);
+		const suiting = suitingGraphs(algorithmName);
 		addModule(ExampleGraphs([{
 			id: 'graph'
-		}])(flatten(graphs.map(o => o.graphs))));
+		}])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
 	}
 
 	return instance;

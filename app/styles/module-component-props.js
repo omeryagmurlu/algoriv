@@ -1,17 +1,12 @@
 import { themeVars } from 'app/utils';
 
+import 'brace';
 import 'brace/mode/plain_text';
 import 'brace/theme/monokai';
-// import 'brace/theme/github';
-// import 'brace/theme/tomorrow';
 import 'brace/theme/tomorrow_night_eighties';
-// import 'brace/theme/kuroir';
-// import 'brace/theme/twilight';
-// import 'brace/theme/xcode';
-// import 'brace/theme/textmate';
-// import 'brace/theme/solarized_dark';
 import 'brace/theme/solarized_light';
-// import 'brace/theme/terminal';
+import 'brace/theme/katzenmilch';
+import 'brace/theme/tomorrow_night';
 
 // const themes = [
 //   'monokai',
@@ -64,7 +59,11 @@ export const textFieldProps = theme => ({
 
 const themeToSyntaxTheme = {
 	dark: 'tomorrow_night_eighties',
-	'giant-goldfish': 'solarized_light'
+	'giant-goldfish': 'solarized_light',
+	'cheer-up': 'katzenmilch',
+	sugar: 'solarized_light',
+	'thought-provoking': 'tomorrow_night',
+	'fresh-cut': 'katzenmilch',
 };
 
 export const aceEditorProps = theme => ({
