@@ -72,6 +72,8 @@ const AnimationControls = props => (
 							? AvPlayArrow
 							: AvPause
 					), props)}
+					elevation={globVars.footerHeight}
+					theme={props.theme}
 					demandCondition={props.animationProgress === 0}
 					demandings={props.input.map(({
 						data: { description: text },

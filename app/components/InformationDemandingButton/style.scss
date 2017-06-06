@@ -1,0 +1,23 @@
+@import '~app/styles/common';
+
+@include themeable {
+	.fields-container-#{$themeName} {
+		border-color: map-get($themeMap, 'primary1Color');
+	}
+};
+
+.fields-container {
+	position: absolute;
+	transition: border-width 0.1s 0.4s, max-height 0.5s;
+	border-width: 0;
+	border-style: solid;
+	padding: 0 15px;
+	max-height: 0;
+	overflow: hidden;
+
+	&.open {
+		transition: border-width 0s 0s, max-height 0.5s;
+		border-width: 5px 0 0;
+		max-height: 80px;
+	}
+}

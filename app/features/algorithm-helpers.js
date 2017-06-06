@@ -1,8 +1,8 @@
 import Modules from 'app/features/modules';
 import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
-import { suitingGraphs, randomGraph } from 'app/data/graphs';
+import { graphs, randomGraph } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
-import { graphologyImportFix as gimport } from 'app/utils';
+import { graphologyImportFix as gimport, flatten } from 'app/utils';
 
 export const Algorithm = (algorithmName, algorithmType) => {
 	const getHelperSnaps = () => helpers.reduce((obj, helper, i) => {
@@ -83,6 +83,7 @@ export const Algorithm = (algorithmName, algorithmType) => {
 	instance.algorithm.explanation = Text();
 	addModule(instance.algorithm.explanation);
 
+
 	if (algorithmType === 'graph') {
 		/**
 		 * Input ids for type 'graph':
@@ -108,7 +109,7 @@ export const Algorithm = (algorithmName, algorithmType) => {
 		addModule(instance.algorithm.graph);
 		addModule(ExampleGraphs([{
 			id: 'graph'
-		}])(suitingGraphs(algorithmName)));
+		}])(flatten(graphs.map(o => o.graphs))));
 	}
 
 	return instance;

@@ -43,7 +43,7 @@ Used text editor is Ace Editor, you can find it's [default keyboard shotcuts her
 | `Algorithm` | object | Visualization API populated depending on configuration | - |
 | `Algorithm.code` | function | used to highlight lines in pseudo-code | `lines`: array of integers |
 | `Algorithm.explanation` | function | used to inform user about current state of algorithm | `text`: string |
-| `Algorithm[name]` where name is a Table name | function | **used to update Table's data** | `data`: array `rows` of array `columns` |
+| `Algorithm[name]` where name is a Table name | function | used to update Table's data | `data`: array `rows` of array `columns` |
 | `Algorithm[name]` where name is a Text name | function | **used to update Text's text** | `text`: string |
 | `Algorithm[type]` where type is Algorithm's type | object | Collection of functions for Algorithm's type | - |
 | `Algorithm[type = graph]` | object | Collection of methods to operate on the graph | - |

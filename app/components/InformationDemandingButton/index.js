@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
-import { rippleWait } from 'app/utils';
+import { themedStyle } from 'app/utils';
+
+import style from './style.scss';
+
+const css = themedStyle(style);
 
 class InformationDemandingButton extends Component {
 	constructor(props) {
@@ -25,7 +30,7 @@ class InformationDemandingButton extends Component {
 
 	passiveHandler = () => {
 		if (this.canBeShown()) {
-			rippleWait(() => this.setState({ opened: true }));
+			this.setState({ opened: true });
 		} else {
 			this.props.resolve();
 		}
@@ -62,21 +67,38 @@ class InformationDemandingButton extends Component {
 			formatter,
 			activeIcon,
 			passiveIcon,
+			theme,
+			elevation,
 			...pTB
 		} = this.props;
 
-		const textFields = this.isOpened() && demandings.map((demand, i) => (
-			<input
+		const textFields = demandings.map((demand, i) => (
+			<TextField
 				key={demand.text}
-				placeholder={demand.text}
+				floatingLabelText={demand.text}
 				value={this.state.inputs[i]}
 				onChange={this.inputHandler(demand, i)}
+				style={{
+					marginTop: '-14px',
+					width: '125px'
+				}}
+				errorStyle={{
+					display: 'none'
+				}}
 			/>
 		));
 
 		return (
 			<div style={{ display: 'inline-flex', alignItems: 'center' }}>
-				{textFields}
+				<div
+					className={`
+						${css('fields-container', theme)}
+						${this.isOpened() && css('open', theme)}
+					`}
+					style={{ bottom: elevation }}
+				>
+					{textFields}
+				</div>
 				<FlatButton
 					{...pTB}
 					disabled={this.isButtonDisabled()}
@@ -91,7 +113,8 @@ class InformationDemandingButton extends Component {
 InformationDemandingButton.defaultProps = {
 	formatter: v => v,
 	demandings: [],
-	demandCondition: false
+	demandCondition: false,
+	elevation: '0px',
 };
 
 InformationDemandingButton.propTypes = {
@@ -105,7 +128,9 @@ InformationDemandingButton.propTypes = {
 	formatter: PropTypes.func,
 	activeIcon: PropTypes.element.isRequired,
 	passiveIcon: PropTypes.element.isRequired,
-	resolve: PropTypes.func.isRequired
+	resolve: PropTypes.func.isRequired,
+	elevation: PropTypes.string,
+	theme: PropTypes.string.isRequired,
 };
 
 export default InformationDemandingButton;
