@@ -34,15 +34,12 @@ class AppContainer extends Component {
 			this.setState({ rawSettings: this.settings().get() });
 		});
 
-		// These default settings cause warnings, which are OK, since the upper
-		// setState has no effect.
 		this.settings('options')('theme').default('giant-goldfish');
 		this.settings('options')('grayscale-visualizations').default(false);
 		this.settings('options')('animations-enabled').default(true);
 		Object.keys(modules).forEach(mName => {
 			this.settings('options')('enabled-modules')(mName).default(true);
 		});
-		this.settings('custom-code')('saves').default([]);
 
 		this.history = [initialView];
 	}

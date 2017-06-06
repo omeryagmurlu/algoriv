@@ -9,9 +9,11 @@ import _isNil from 'lodash.isnil';
 //      eg.   const a = () => settings('a')('b')
 const Settings = (storage, changeHandler = () => {}) => {
 	const _get = () => JSON.parse((storage.getItem('settings') || '{}'));
-	const _set = (obj) => {
+	const _set = (obj, causeChange) => {
 		storage.setItem('settings', JSON.stringify(obj));
-		changeHandler();
+		if (causeChange) {
+			changeHandler();
+		}
 	};
 
 	const setH = (key = false, context = _get(), wC) => {
@@ -29,7 +31,7 @@ const Settings = (storage, changeHandler = () => {}) => {
 			const stuff = typeof val === 'function' ? val : () => val;
 			// Well, we are already getting shit from localstorage, so parsed, once more wont hurt
 			context[key] = stuff(context[key]);
-			_set(wholeCtx);
+			_set(wholeCtx, true); // .set must cause change since it mutates
 		};
 		fn.default = (val) => {
 			const stuff = typeof val === 'function' ? val : () => val;
@@ -37,7 +39,7 @@ const Settings = (storage, changeHandler = () => {}) => {
 				return;
 			}
 			context[key] = stuff(context[key]);
-			_set(wholeCtx);
+			_set(wholeCtx, false); // but default is just prep, no need to change value
 		};
 		return fn;
 	};

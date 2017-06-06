@@ -8,7 +8,7 @@ import _mapValues from 'lodash.mapvalues';
 import shimString from './features/shim.txt';
 import createInterpreter from './features/interpreter';
 
-import { initialCode, initialDescription, initialPseudocode, initialAlgName } from './features/assets';
+import { initialCode, initialDescription, initialPseudocode, initialAlgName, initialSaves } from './features/assets';
 
 const valSet = (value, set) => ({ value, set });
 
@@ -30,6 +30,7 @@ ${initialCode}`,
 		};
 
 		this.saves = () => this.props.app.settings('custom-code')('saves');
+		this.saves().default(initialSaves);
 	}
 
 	debugBindings = {

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SideDrawer from 'app/components/SideDrawer';
 import { ListItem, List } from 'material-ui/List';
-import IconButton from 'material-ui/IconButton';
 import IconMenu from 'app/components/IconMenu';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -14,7 +13,6 @@ import AceEditor from 'react-ace';
 import Async from 'react-promise';
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 
 import { themedStyle, trimPx, themeVars } from 'app/utils';
@@ -48,6 +46,10 @@ const CustomCodeView = props => {
 		disabled={isDis}
 		{...other}
 	/>);
+
+	const visCache = () => props.app.settings('visual-cache')('customCodeView');
+	visCache()('algConfigDrawer')('isOpened').default(true);
+
 	return (
 		<div className={css('container', props.app.theme)}>
 			<AceEditor
@@ -103,6 +105,7 @@ const CustomCodeView = props => {
 				contentStyle={{
 					width: rightWidth,
 				}}
+				visualCache={() => visCache()('algConfigDrawer')}
 			>
 				<TextField
 					floatingLabelText="Algorithm/Code Name"

@@ -29,6 +29,7 @@ const AlgorithmView = props => (
 				}, {}))}
 				input={props.algorithmInput.filter(v => v.type === 'module')}
 				theme={props.app.theme}
+				visualCache={() => props.app.settings('visual-cache')('algorithmView')}
 			/>
 		</section>
 		<footer className={footer}>

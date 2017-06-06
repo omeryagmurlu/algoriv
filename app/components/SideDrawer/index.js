@@ -17,7 +17,7 @@ class SideDrawer extends Component {
 		super(props);
 
 		this.state = {
-			active: false
+			active: props.visualCache() ? props.visualCache()('isOpened').get() : false
 		};
 	}
 
@@ -27,7 +27,7 @@ class SideDrawer extends Component {
 		this.setState(prevState => {
 			prevState.active = !prevState.active;
 			return prevState;
-		});
+		}, () => this.props.visualCache() && this.props.visualCache()('isOpened').set(this.state.active));
 	}
 
 	side(r, l) {
@@ -74,7 +74,8 @@ class SideDrawer extends Component {
 SideDrawer.defaultProps = {
 	children: null,
 	style: {},
-	contentStyle: {}
+	contentStyle: {},
+	visualCache: () => false,
 };
 
 SideDrawer.propTypes = {
@@ -82,7 +83,8 @@ SideDrawer.propTypes = {
 	side: PropTypes.oneOf(['right', 'left']).isRequired,
 	children: PropTypes.any,
 	style: PropTypes.object,
-	contentStyle: PropTypes.object
+	contentStyle: PropTypes.object,
+	visualCache: PropTypes.func,
 };
 
 export default SideDrawer;

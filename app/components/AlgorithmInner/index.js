@@ -50,15 +50,18 @@ const AlgorithmInner = props => {
 		);
 	});
 
+	props.visualCache()('leftDrawer')('isOpened').default(false);
+	props.visualCache()('rightDrawer')('isOpened').default(true);
+
 	return (
 		<section className={css('top')} >
 			<section className={css('main')}>
 				{parts.main}
 			</section>
-			<SideDrawer side="left" theme={props.theme} >
+			<SideDrawer side="left" theme={props.theme} visualCache={() => props.visualCache()('leftDrawer')}>
 				{parts.left}
 			</SideDrawer>
-			<SideDrawer side="right" theme={props.theme} >
+			<SideDrawer side="right" theme={props.theme} visualCache={() => props.visualCache()('rightDrawer')}>
 				{parts.right}
 			</SideDrawer>
 		</section>
@@ -69,7 +72,8 @@ AlgorithmInner.propTypes = {
 	animationDirectives: PropTypes.object.isRequired,
 	algorithmStatic: PropTypes.object.isRequired,
 	input: PropTypes.arrayOf(PropTypes.object).isRequired,
-	theme: PropTypes.string.isRequired
+	theme: PropTypes.string.isRequired,
+	visualCache: PropTypes.func.isRequired,
 };
 
 export default AlgorithmInner;
