@@ -79,9 +79,10 @@ Used text editor is Ace Editor, you can find it's [default keyboard shotcuts her
 * Algorithm speed
 * Minimal Colored Visualizations: whether or not to use color in Visualizations
 * Animations: are animations enabled
+* Timeout for Custom Code
 
-[1]: [https://babeljs.io/] (Babel)
-[2]: [https://github.com/NeilFraser/JS-Interpreter] (JS-Interpreter)
-[3]: [https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts] (Ace Keyboard Shortcuts)
-[4]: [https://graphology.github.io/] (Graphology)
-[5]: [https://github.com/mauriciosantos/Buckets-JS] (Buckets-JS)
+[1]: https://babeljs.io/ (Babel)
+[2]: https://github.com/NeilFraser/JS-Interpreter (JS-Interpreter)
+[3]: https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts (Ace Keyboard Shortcuts)
+[4]: https://graphology.github.io/ (Graphology)
+[5]: https://github.com/mauriciosantos/Buckets-JS (Buckets-JS)

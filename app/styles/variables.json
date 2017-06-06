@@ -11,5 +11,8 @@
 
 	"uiFont": "'Raleway', 'Roboto', sans-serif",
 	"textFont": "'Slabo 27px', serif",
-	"monospaceFont": "'AnkaCoderC75Regular', monospace"
+	"monospaceFont": "'AnkaCoderC75Regular', monospace",
+
+	"errorRed": "#b51020",
+	"infoBlue": "darken(#40e0d0, 20%)"
 }

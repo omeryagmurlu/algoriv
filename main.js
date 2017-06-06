@@ -29,6 +29,13 @@ const createMain = () => {
 
 	mainWindowState.manage(mainWindow);
 
+	mainWindow.webContents.on('will-navigate', (e, url) => {
+		if (url !== mainWindow.webContents.getURL()) {
+			e.preventDefault();
+			electron.shell.openExternal(url);
+		}
+	});
+
 	mainWindow.loadURL(`file://${path.join(__dirname, '/index.electron.html')}`);
 
 	// mainWindow.webContents.openDevTools();

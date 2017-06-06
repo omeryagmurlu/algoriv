@@ -2,11 +2,158 @@
 
 @include themeable {
 	.container-#{$themeName} {
+		code {
+			background-color: saturate(map-get($themeMap, 'backgroundColor'), 20%)
+		}
 
+		table {
+			border: 1px solid map-get($themeMap, 'primary1Color');
+
+			td,
+			th {
+				border-left: 1px solid map-get($themeMap, 'primary1Color');
+			}
+
+			caption {
+				color: map-get($themeMap, 'alternativeTextColor');
+			}
+
+			thead {
+				background-color: map-get($themeMap, 'primary1Color');
+				color: map-get($themeMap, 'alternativeTextColor');
+			}
+
+			td {
+				border-bottom: 1px solid map-get($themeMap, 'primary1Color');
+			}
+
+			tr {
+				&:nth-child(2n-1) {
+					td {
+						background-color: darken(map-get($themeMap, 'backgroundColor'), 5%);
+					}
+				}
+				&:nth-child(2n) {
+					td {
+						background-color: lighten(map-get($themeMap, 'backgroundColor'), 5%);
+					}
+				}
+			}
+		}
+
+		a {
+			color: map-get($themeMap, 'accent1Color');
+
+			&::before,
+			&::after {
+				background: map-get($themeMap, 'accent1Color');
+			}
+
+			&:hover,
+			&:focus {
+				color: map-get($themeMap, 'textColor');
+			}
+		}
 	}
 };
 
 .container {
 	@include wrapper($minWrapperWidth - 200px);
 	font-family: $textFont;
+
+	code {
+		margin: 0;
+		border-radius: 3px;
+		padding: 0;
+		padding-top: 0.2em;
+		padding-bottom: 0.2em;
+		font-family: $monospaceFont;
+		font-size: 85%;
+	}
+
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		empty-cells: show;
+
+		caption {
+			padding: 1em 0;
+			text-align: center;
+			font: italic (85% / 1) arial, sans-serif;
+		}
+
+		td,
+		th {
+			margin: 0;
+			border-width: 0 0 0 1px;
+			padding: 0.5em 1em;
+			overflow: visible;
+			font-size: inherit;
+
+			&:first-child {
+				border-left-width: 0;
+			}
+		}
+
+		thead {
+			vertical-align: bottom;
+			text-align: left;
+		}
+
+		td {
+			background-color: transparent;
+		}
+
+		tbody > tr {
+			&:last-child > td {
+				border-bottom-width: 0;
+			}
+		}
+	}
+
+	a {
+		position: relative;
+		transition: color 0.3s;
+		z-index: 1;
+		margin: 0 4px;
+		text-decoration: none;
+
+		&::before,
+		&::after {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			transition: transform 0.3s, opacity 0.3s;
+			z-index: -1;
+			margin-top: -1px;
+			width: 100%;
+			height: 2px;
+			content: '';
+			pointer-events: none;
+		}
+
+		&::before {
+			transform: translateY(-10px);
+		}
+
+		&::after {
+			transform: translateY(10px);
+		}
+
+		&:hover,
+		&:focus {
+			&::before,
+			&::after {
+				opacity: 0.7;
+			}
+
+			&::before {
+				transform: rotate(45deg);
+			}
+
+			&::after {
+				transform: rotate(-45deg);
+			}
+		}
+	}
 }

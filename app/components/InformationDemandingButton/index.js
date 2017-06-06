@@ -78,12 +78,10 @@ class InformationDemandingButton extends Component {
 				floatingLabelText={demand.text}
 				value={this.state.inputs[i]}
 				onChange={this.inputHandler(demand, i)}
+				errorText={demand.invalid(this.state.inputs[i])}
 				style={{
 					marginTop: '-14px',
 					width: '125px'
-				}}
-				errorStyle={{
-					display: 'none'
 				}}
 			/>
 		));

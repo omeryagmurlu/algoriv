@@ -24,13 +24,13 @@
 
 .error {
 	@extend %code-out;
-	background: #b51020;
+	background: $errorRed;
 	color: #fff;
 }
 
 .debug-console {
 	@extend %code-out;
-	background: darken(#40e0d0, 20%);
+	background: $infoBlue;
 	color: #fff;
 	max-height: $moduleMaxWidth;
 }

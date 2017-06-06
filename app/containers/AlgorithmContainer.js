@@ -98,6 +98,7 @@ const AlgorithmFactory = ({
 		data,
 		value: this.getInput()[inputName],
 		validate: newInput => !invalid(newInput, this.getInput()),
+		invalid: newInput => invalid(newInput, this.getInput()),
 		update: (newInput, cb = () => {}) => {
 			const error = invalid(newInput, this.getInput());
 			if (error) {
