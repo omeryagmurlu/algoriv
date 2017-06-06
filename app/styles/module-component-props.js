@@ -47,6 +47,21 @@ export const subheaderProps = () => ({
 	}
 });
 
+export const textFieldProps = theme => ({
+	underlineFocusStyle: {
+		borderColor: themeVars(theme)('primary2Color')
+	},
+	underlineStyle: {
+		borderColor: themeVars(theme)('primary1Color')
+	},
+	floatingLabelStyle: {
+		color: themeVars(theme)('textColor'),
+	},
+	floatingLabelFocusStyle: {
+		color: themeVars(theme)('primary2Color'),
+	},
+});
+
 const themeToSyntaxTheme = {
 	dark: 'tomorrow_night_eighties',
 	'giant-goldfish': 'solarized_light'

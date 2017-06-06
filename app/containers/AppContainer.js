@@ -17,9 +17,15 @@ const initialView = {
 	name: 'Main'
 };
 
+const getVisualCacheStringified = (p) => JSON.stringify(JSON.parse(p.rawSettings)['visual-cache']);
+
 class AppContainer extends Component {
 	constructor(props) {
 		super(props);
+
+		this.settings = Settings(storage, () => {
+			this.setState({ rawSettings: JSON.stringify(this.settings().get()) }); // FIXME
+		});
 
 		this.state = {
 			view: initialView,
@@ -27,16 +33,13 @@ class AppContainer extends Component {
 			headerRoutes: [],
 			modal: {},
 
-			rawSettings: ''
+			rawSettings: JSON.stringify(this.settings().get()),
 		};
-
-		this.settings = Settings(storage, () => {
-			this.setState({ rawSettings: this.settings().get() });
-		});
 
 		this.settings('options')('theme').default('giant-goldfish');
 		this.settings('options')('grayscale-visualizations').default(false);
 		this.settings('options')('animations-enabled').default(true);
+		this.settings('options')('custom-code')('timeout').default(5);
 		Object.keys(modules).forEach(mName => {
 			this.settings('options')('enabled-modules')(mName).default(true);
 		});
@@ -48,6 +51,13 @@ class AppContainer extends Component {
 		requestAnimationFrame(() => setTimeout(() => {
 			document.documentElement.removeAttribute('data-preload');
 		}, 0));
+	}
+
+	shouldComponentUpdate(_, next) {
+		if (getVisualCacheStringified(this.state) !== getVisualCacheStringified(next)) {
+			return false;
+		}
+		return true;
 	}
 
 	_topHistory = (a = 0) => this.history[this.history.length - (1 + a)] || null
@@ -161,6 +171,7 @@ class AppContainer extends Component {
 					animationsEnabled={this.settings('options')('animations-enabled').get()}
 
 					settings={this.settings}
+					rawSettings={this.state.rawSettings}
 
 					prompt={this.prompt}
 					alert={this.alert}

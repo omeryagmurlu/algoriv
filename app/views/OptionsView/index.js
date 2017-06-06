@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import Checkbox from 'material-ui/Checkbox';
 import Slider from 'material-ui/Slider';
@@ -9,7 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import { themedStyle, themeVars } from 'app/utils';
 import { themes } from 'app/styles/themes.json';
-import { selectProps, subheaderProps } from 'app/styles/module-component-props';
+import { selectProps, subheaderProps, textFieldProps } from 'app/styles/module-component-props';
 
 import style from './style.scss';
 
@@ -34,6 +35,22 @@ const selectHOF = theme => ({
 				<MenuItem key={pos} value={pos} primaryText={pos} />
 			))}
 		</SelectField>
+	</div>
+);
+
+const textHOF = theme => ({
+	name,
+	option,
+	parser = x => x
+}) => (
+	<div className={css('control')} >
+		<TextField
+			{...textFieldProps(theme)}
+			floatingLabelText={name}
+			fullWidth
+			value={option().get()}
+			onChange={(e, v) => option().set(parser(v))}
+		/>
 	</div>
 );
 
@@ -97,6 +114,7 @@ const OptionsView = props => {
 	const checkbox = checkboxHOF(props.app.theme);
 	const slider = sliderHOF(props.app.theme);
 	const button = buttonHOF(props.app.theme);
+	const text = textHOF(props.app.theme);
 	return (
 		<div className={css('container')}>
 			<div className={css('control-group')} >
@@ -122,6 +140,11 @@ const OptionsView = props => {
 					option: () => options()('animation')('speed'),
 					min: 1,
 					max: 100
+				})}
+				{text({
+					name: 'Timeout for Custom Code',
+					option: () => options()('custom-code')('timeout'),
+					parser: parseInt
 				})}
 			</div>
 			<div className={css('control-group')} >

@@ -25,6 +25,7 @@ ${initialCode}`,
 			typeFeatures: {},
 			pseudoCode: initialPseudocode,
 			description: initialDescription,
+			tables: [],
 
 			debugConsole: [],
 		};
@@ -106,6 +107,10 @@ ${initialCode}`,
 				Alg[feature]();
 			});
 
+		this.state.tables.forEach(table => {
+			Alg.addTable(table.id, table.columns);
+		});
+
 		Alg.addDescription(this.state.description);
 		Alg.addCode(this.state.pseudoCode);
 
@@ -159,28 +164,32 @@ ${initialCode}`,
 				stillRunning = false;
 				ip = undefined;
 				reject(new Error('Algorithm is taking too long to complete, check for infinite loops'));
-			}, 7000); // 7000 must be configurable in options
+			}, 1000 * this.props.app.settings('options')('custom-code')('timeout').get()); // 7000 must be configurable in options
 
-			const nextStep = () => {
+			const nextSync = () => {
 				if (!stillRunning) {
 					return;
 				}
 
 				let runResult = false;
 				try {
-					runResult = ip.step();
+					let syncEnd = true; // not everything is async, for c.alg to be fast, do 1000 blocks sync
+					for (let syncLimit = 1000; syncLimit > 0 && syncEnd; syncLimit--) {
+						syncEnd = ip.step();
+					}
+					runResult = syncEnd;
 				} catch (e) {
 					return reject(e);
 				}
 
 				if (runResult) {
-					return setImmediate(nextStep);
+					return setImmediate(nextSync);
 				}
 
 				clearTimeout(out);
 				return resolve();
 			};
-			nextStep();
+			nextSync();
 		});
 	}
 
@@ -247,6 +256,29 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 	})
 	algPseudoCode = () => valSet(this.state.pseudoCode.join('\n'), (pseudoCode) => this.addToState('pseudoCode', pseudoCode.split('\n')))
 	algDescription = () => valSet(this.state.description, (description) => this.addToState('description', description))
+	algTables = () => valSet(this.state.tables, () => ({
+		add: (id, columns, optNewId, cb = () => {}) => {
+			this.setState(prev => {
+				const vorhanden = prev.tables.find(o => o.id === id);
+				if (vorhanden) {
+					vorhanden.columns = columns;
+					vorhanden.id = optNewId || id;
+					return prev;
+				}
+				prev.tables.push({ id, columns });
+				return prev;
+			}, cb);
+		},
+		remove: (id, cb = () => {}) => {
+			this.setState(prev => {
+				const index = prev.tables.findIndex(o => o.id === id);
+				if (index !== -1) {
+					prev.tables.splice(index, 1);
+				}
+				return prev;
+			}, cb);
+		}
+	}))
 
 	render() {
 		return (
@@ -270,6 +302,7 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 				algTypeFeatures={this.algTypeFeatures()}
 				algPseudoCode={this.algPseudoCode()}
 				algDescription={this.algDescription()}
+				algTables={this.algTables()}
 			/>
 		);
 	}

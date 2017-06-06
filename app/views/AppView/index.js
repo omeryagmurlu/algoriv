@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
 import FlatButton from 'material-ui/FlatButton';
 import Header from 'app/components/Header';
 import Prompt from 'app/components/Prompt';
+import Dialog from 'app/components/Dialog';
 import { themedStyle, themeVars } from 'app/utils';
 
-import ContentClear from 'material-ui/svg-icons/content/clear';
 import ContentBlock from 'material-ui/svg-icons/content/block';
 import ActionDone from 'material-ui/svg-icons/action/done';
+
+import { textFieldProps } from 'app/styles/module-component-props';
 
 import style from './style.scss';
 
@@ -28,6 +29,10 @@ const commonApp = props => Object.keys(props).filter(v => !([
 const modalSelector = pops => (
 	<div>
 		<Dialog
+			style={{
+				zIndex: 2500
+			}}
+			theme={pops.theme}
 			open={Object.keys(pops.modal).length !== 0 && [
 				'prompt',
 				'confirm'
@@ -44,12 +49,7 @@ const modalSelector = pops => (
 										pops.modal.exitStrategy();
 									}
 								}
-								underlineFocusStyle={{
-									borderColor: themeVars(pops.theme)('primary2Color')
-								}}
-								underlineStyle={{
-									borderColor: themeVars(pops.theme)('primary1Color')
-								}}
+								{...textFieldProps(pops.theme)}
 							/>
 						)];
 					case 'confirm': {
@@ -97,11 +97,6 @@ const modalSelector = pops => (
 						return pops.modal.exitStrategy;
 				}
 			})())}
-
-			overlayClassName={css('overlay', pops.theme)}
-			contentClassName={css('content', pops.theme)}
-			actionsContainerClassName={css('actions-container', pops.theme)}
-			titleClassName={css('title', pops.theme)}
 		/>
 		<Snackbar
 			open={Object.keys(pops.modal).length !== 0 && [

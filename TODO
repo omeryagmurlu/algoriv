@@ -8,3 +8,4 @@
 * WRITE SOME FUCKING TESTS ASSHOLE
 * Rewrite InformationDemandingButton, it is implemented poorly
 * ~~Make getting frames out of logic async~~, // RECALLED, JS-Interpreter is nice ~~and move it to a webworker~~
+* settings..set causes whole rerender of app, rewrite ALL components and views to selectively rerender

@@ -5,26 +5,6 @@
 		color: map-get($themeMap, 'textColor');
 	}
 
-	.actions-container-#{$themeName} {
-		svg {
-			fill: map-get($themeMap, 'alternativeTextColor') !important;
-		}
-	}
-
-	.content-#{$themeName} {
-		> div {
-			background-color: map-get($themeMap, 'accent1Color') !important;
-		}
-	}
-
-	.title-#{$themeName} {
-		color: map-get($themeMap, 'alternativeTextColor') !important;
-	}
-
-	.overlay-#{$themeName} {
-		background-color: rgba(darken(map-get($themeMap, 'accent1Color'), 25%), 0.5) !important;
-	}
-
 	.snackbar-#{$themeName} {
 		> div {
 			background-color: map-get($themeMap, 'accent1Color') !important;
@@ -71,28 +51,6 @@
 .main {
 	position: relative;
 	height: calc(100vh - #{$headerHeight});
-}
-
-.content {
-	display: flex;
-	justify-content: center;
-
-	> div {
-		padding: 24px;
-
-		> :empty {
-			display: none;
-		}
-	}
-
-}
-
-.actions-container {
-	padding: 8px 0 0 0 !important;
-}
-
-.title {
-	padding: 0 0 8px 0 !important;
 }
 
 ::-webkit-scrollbar {

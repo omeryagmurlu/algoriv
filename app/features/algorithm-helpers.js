@@ -65,13 +65,13 @@ export const Algorithm = (algorithmName, algorithmType) => {
 		addModule(instance.algorithm.code);
 	};
 
-	instance.addTable = (name, stuff) => {
-		instance.algorithm[name] = Table(stuff);
+	instance.addTable = (name, ...stuff) => {
+		instance.algorithm[name] = Table(...stuff);
 		addModule(instance.algorithm[name]);
 	};
 
-	instance.addNodedTable = (name, stuff) => {
-		instance.algorithm[name] = NodedTable(stuff);
+	instance.addNodedTable = (name, ...stuff) => {
+		instance.algorithm[name] = NodedTable(...stuff);
 		addModule(instance.algorithm[name]);
 	};
 
