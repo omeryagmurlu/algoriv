@@ -1,5 +1,4 @@
 const webpackConfig = require('webpack-config');
-const jsonImporter = require('node-sass-json-importer');
 const path = require('path');
 
 const Config = webpackConfig.Config;
@@ -42,42 +41,6 @@ module.exports = new Config().merge({
 					}
 					// 'eslint-loader'
 				]
-			},
-			{
-				test: /\.css$/,
-				use: [{
-					loader: 'style-loader'
-				}, {
-					loader: 'css-loader',
-					options: {
-						modules: true,
-						localIdentName: '[path][name]__[local]--[hash:base64:5]',
-						minimize: true,
-						camelCase: true
-					}
-				}]
-			},
-			{
-				test: /\.scss$/,
-				exclude: /(node_modules|bower_components)/,
-				use: [{
-					loader: 'style-loader'
-				}, {
-					loader: 'css-loader',
-					options: {
-						modules: true,
-						localIdentName: '[path][name]__[local]--[hash:base64:5]',
-						minimize: true,
-						camelCase: true,
-						importLoaders: 1
-					}
-				}, {
-					loader: 'sass-loader',
-					options: {
-						includePaths: [],
-						importer: jsonImporter
-					}
-				}]
 			},
 			{
 				test: /\.md$/,
