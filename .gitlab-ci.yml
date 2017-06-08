@@ -8,6 +8,6 @@ pages:
   - echo 'Nothing to do...'
   artifacts:
     paths:
-    - /
+    - .
   only:
   - master
