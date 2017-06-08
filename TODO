@@ -6,6 +6,6 @@
 	* ~~a click on a node and then on an another node -> add edge~~ (if edges are weighted, ask by means of a popup)
 * ~~Make a class which has helper methods to generate an `AlgorithmPrototype` in an imperative way!~~ !DONE
 * WRITE SOME FUCKING TESTS ASSHOLE
-* Rewrite InformationDemandingButton, it is implemented poorly
+* ~~Rewrite InformationDemandingButton, it is implemented poorly~~
 * ~~Make getting frames out of logic async~~, // RECALLED, JS-Interpreter is nice ~~and move it to a webworker~~
-* settings..set causes whole rerender of app, rewrite ALL components and views to selectively rerender
+* ~~settings..set causes whole rerender of app, rewrite ALL components and views to selectively rerender~~
