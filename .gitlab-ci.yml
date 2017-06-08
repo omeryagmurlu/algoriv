@@ -1,10 +1,11 @@
 # This file is a template, and might need editing before it works on your project.
 # Full project: https://gitlab.com/pages/plain-html
-image: alpine:latest
+image: node:7.10.0
 
 pages:
   stage: deploy
   script:
+  - yarn run build:prod:browser
   - mkdir .public
   - cp -r dist .public
   - cp -r index.html .public
