@@ -51,6 +51,8 @@ pages:
 
 win-binary:
   stage: deploy
+  before_script:
+  - apt-get update -qq && apt-get install -y -qq wine
   script:
   - yarn run package-win
   artifacts:
