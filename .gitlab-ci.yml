@@ -60,6 +60,8 @@ win-binary:
   - echo "deb http://download.mono-project.com/repo/debian jessie main" | tee /etc/apt/sources.list.d/mono-official.list
   - apt-get update
   - apt-get install --no-install-recommends -y winehq-stable mono-devel ca-certificates-mono
+  - rm -rf node_modules
+  - yarn install --production=false
   script:
   - yarn run package-win
   artifacts:
