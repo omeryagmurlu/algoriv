@@ -52,7 +52,7 @@ pages:
 win-binary:
   stage: deploy
   before_script:
-  - apt-get update -qq && apt-get install -y -qq wine
+  - add-apt-repository ppa:ubuntu-wine/ppa -y && apt-get update -qq && apt-get install --no-install-recommends -y wine1.8
   script:
   - yarn run package-win
   artifacts:
