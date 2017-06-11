@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, DataStructures, graphologyImportFix as gimport } from 'app/utils';
+import { vis2array, DataStructures, graphologyImportFix as gimport, visCreator } from 'app/utils';
 
 const Prim = Algorithm('Prim', 'graph');
 Prim.addStartingNodeInput();
@@ -34,7 +34,7 @@ Prim.addCode([
 Prim.addText('sum');
 Prim.addNodedTable('visited', 'Visited');
 
-Prim.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+Prim.logic = ({ startVertex: starting, graph: gNonParse }, snipe) => {
 	const graph = gimport(gNonParse);
 	const alg = Prim.algorithm;
 
@@ -46,10 +46,7 @@ Prim.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 		acc[v] = Infinity;
 		return acc;
 	}, {});
-	const vis = graph.nodes().reduce((acc, v) => {
-		acc[v] = false;
-		return acc;
-	}, {});
+	const vis = visCreator(graph);
 
 	const snap = (hgs, text, cn, ce) => {
 		alg.code(hgs);
@@ -73,15 +70,15 @@ Prim.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	});
 
 	snap([], undefined);
-	snap([0], `Starting MST-Prim from node ${st}`, st);
-	pq.enqueue(pair(st, 0));
-	snap([1], `Enqueue the starting node ${st} with connection cost 0`, st);
+	snap([0], `Starting MST-Prim from arbitrary node ${starting}`, starting);
+	pq.enqueue(pair(starting, 0));
+	snap([1], `Enqueue the starting node ${starting} with connection cost of 0`, starting);
 	while (!pq.isEmpty()) {
 		const { weight, id: v, parent } = pq.dequeue();
 		snap([2, 3], `Dequeued node ${v} with connection cost ${weight}`, v);
 		if (vis[v]) {
 			snap([4], `Node ${v} is visited, continue`, v);
-			continue;
+			continue; // eslint-disable-line no-continue
 		}
 		ans += weight;
 		keyy[v] = weight;
@@ -96,7 +93,7 @@ Prim.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 			pq.enqueue(pair(u, newWeight, v));
 		});
 	}
-	snap([], `MST-Prim from ${st} completed, MST is ${ans}`);
+	snap([], `MST-Prim from ${starting} completed, MST is ${ans}`);
 };
 
 export default Prim.create();

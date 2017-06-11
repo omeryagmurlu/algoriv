@@ -37,7 +37,7 @@ const Table = props => ifModuleEnabled('table', props, (props.data.length > 0 &&
 			>
 				{props.data.map((row, i) => (
 					<TableRow
-						key={`row${i}${JSON.stringify(row)}`}
+						key={`row${i}${JSON.stringify(row)}${props.columns}`} // eslint-disable-line react/no-array-index-key
 						hoverable
 					>
 						{row.map((v, idx) => (

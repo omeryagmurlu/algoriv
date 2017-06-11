@@ -12,9 +12,7 @@ exports[`OptionsView renders correctly 1`] = `
         Core Options
       </h1>
       <span>
-        These options are 
-        application's
-         core settings which affect behaviour unrelated to modules and algorithms.
+        These options are application's core settings which affect behaviour unrelated to modules and algorithms.
       </span>
     </header>
     <div

@@ -4,6 +4,11 @@ import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
 import Buckets from 'buckets-js';
 
+export const visCreator = (graph) => graph.nodes().reduce((acc, v) => {
+	acc[v] = false;
+	return acc;
+}, {});
+
 export const cancelCatch = err => {
 	if (!err.isCanceled) {
 		throw err;

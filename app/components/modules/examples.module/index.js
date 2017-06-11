@@ -8,7 +8,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 
-import { Examples as EXAMPLES } from 'app/data/inputsRegistry';
+import { ExamplesRegistry as EXAMPLES } from 'app/data/inputsRegistry';
 import { themedStyle, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';

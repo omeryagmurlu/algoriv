@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, graphologyImportFix as gimport } from 'app/utils';
+import { vis2array, graphologyImportFix as gimport, visCreator } from 'app/utils';
 
 const BFS = Algorithm('BFS', 'graph');
 BFS.addStartingNodeInput();
@@ -36,10 +36,7 @@ BFS.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	const q = [];
 	const parentQ = [];
 	const posEd = [];
-	const vis = graph.nodes().reduce((acc, v) => {
-		acc[v] = false;
-		return acc;
-	}, {});
+	const vis = visCreator(graph);
 
 	const snap = (a, b, c, d) => {
 		alg.visited(vis);

@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, graphologyImportFix as gimport } from 'app/utils';
+import { vis2array, graphologyImportFix as gimport, visCreator } from 'app/utils';
 import _isEqual from 'lodash.isequal';
 import _without from 'lodash.without';
 import _union from 'lodash.union';
@@ -40,10 +40,7 @@ Kruskal.logic = ({ graph: gNonParse }, snipe) => {
 
 	let ans = 0;
 	const mstEdges = [];
-	const vis = graph.nodes().reduce((acc, v) => {
-		acc[v] = false;
-		return acc;
-	}, {});
+	const vis = visCreator(graph);
 
 	const snap = (hgs, text, cn, ce, noS1, noS2, eg1, eg2) => {
 		alg.code(hgs);

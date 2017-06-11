@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, reverseGraph, graphologyImportFix as gimport } from 'app/utils';
+import { vis2array, reverseGraph, graphologyImportFix as gimport, visCreator } from 'app/utils';
 
 const SCC = Algorithm('SCC', 'graph');
 SCC.addStartingNodeInput();
@@ -64,10 +64,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	let reclist;
 	let recedge;
 	const reset = () => {
-		vis = graph.nodes().reduce((acc, v) => {
-			acc[v] = false;
-			return acc;
-		}, {});
+		vis = visCreator(graph);
 		reclist = [];
 		recedge = [];
 		posEd = [];
@@ -183,7 +180,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	while (f1.length > 0) {
 		const se = f1.pop().se;
 		if (vis[se]) {
-			continue;
+			continue; // eslint-disable-line no-continue
 		}
 		snap([17, 28], `Traversing SCC ${sccId} starting with node ${se}`, se);
 		sccs[sccId] = [];

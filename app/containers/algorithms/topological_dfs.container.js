@@ -1,5 +1,5 @@
 import React from 'react';
 
-const TopologicalDFS = props => <div className="TopologicalDFS" > </div>;
+const TopologicalDFS = () => <div className="TopologicalDFS" />;
 
 export default TopologicalDFS;
