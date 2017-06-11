@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppView renders correctly 1`] = `
+<div
+  className="container theme"
+>
+  <div>
+    <div
+      mockName="Dialog"
+      mockProps={
+        Object {
+          "actions": Array [],
+          "onRequestClose": undefined,
+          "open": false,
+          "style": Object {
+            "zIndex": 2500,
+          },
+          "theme": "theme",
+          "title": undefined,
+        }
+      }
+    />
+    <div
+      mockName="Snackbar"
+      mockProps={
+        Object {
+          "autoHideDuration": 1500,
+          "className": "snackbar theme",
+          "message": "",
+          "onRequestClose": undefined,
+          "open": false,
+        }
+      }
+    />
+  </div>
+  <div
+    mockName="Header"
+    mockProps={
+      Object {
+        "app": Object {
+          "alert": "alert",
+          "animationsEnabled": "animationsEnabled",
+          "changeView": "changeView",
+          "confirm": "confirm",
+          "goBack": "goBack",
+          "prompt": "prompt",
+          "rawSettings": "rawSettings",
+          "settings": "settings",
+          "theme": "theme",
+          "updateHeader": "updateHeader",
+        },
+        "back": "backData",
+        "current": Object {
+          "view": [Function],
+        },
+        "disabled": false,
+        "routes": "headerRoutes",
+      }
+    }
+  />
+  <div
+    className="main undefined"
+  >
+    <div
+      mockName="JustANoopComponent"
+      mockProps={
+        Object {
+          "app": Object {
+            "alert": "alert",
+            "animationsEnabled": "animationsEnabled",
+            "changeView": "changeView",
+            "confirm": "confirm",
+            "goBack": "goBack",
+            "prompt": "prompt",
+            "rawSettings": "rawSettings",
+            "settings": "settings",
+            "theme": "theme",
+            "updateHeader": "updateHeader",
+          },
+        }
+      }
+    />
+  </div>
+</div>
+`;

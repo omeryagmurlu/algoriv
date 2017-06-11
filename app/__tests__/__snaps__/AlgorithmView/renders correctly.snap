@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AlgorithmView renders correctly 1`] = `
+<div
+  mockName="Stretch"
+  mockProps={Object {}}
+>
+  <section
+    className="section undefined"
+  >
+    <div
+      mockName="AlgorithmInner"
+      mockProps={
+        Object {
+          "app": Object {
+            "theme": "asdfd",
+          },
+          "input": Array [],
+          "theme": "asdfd",
+          "visualCache": [Function],
+        }
+      }
+    />
+  </section>
+  <footer
+    className="footer undefined"
+  >
+    <div
+      mockName="AnimationControls"
+      mockProps={
+        Object {
+          "algorithmInput": Array [],
+          "app": Object {
+            "theme": "asdfd",
+          },
+          "input": Array [],
+          "theme": "asdfd",
+        }
+      }
+    />
+  </footer>
+</div>
+`;

@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AlgorithmPageView renders correctly 1`] = `
+<div
+  className="page-view undefined"
+>
+  <nav>
+    <h1>
+      Graph Algorithms
+    </h1>
+    <div
+      className="container undefined"
+    >
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Visualise Djikstra's Single Source Shortest Path Algorithm",
+            "name": "Djikstra",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Visualise Breadth-First Search Algorithm",
+            "name": "BFS",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Visualise Depth-First Search Algorithm",
+            "name": "DFS",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Visualise Kosaraju's Algorithm to find Strongly Connected Components",
+            "name": "Strongly Connected Components",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Find a Minimum Spanning Tree using Prim's MST Algorithm",
+            "name": "Prim's MST",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Find a Minimum Spanning Tree using Kruskal's MST Algorithm",
+            "name": "Kruskal's MST",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Sort topologically using DFS",
+            "name": "Topological Sort (DFS)",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Sort topologically using Indegree Array",
+            "name": "Topological Sort (Indegree Array)",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+    </div>
+  </nav>
+</div>
+`;

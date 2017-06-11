@@ -42,7 +42,8 @@
     "__BROWSER__": false,
     "__ELECTRON__": false,
     "__PRODUCTION__": false,
-    "__DEVELOPMENT__": false
+    "__DEVELOPMENT__": false,
+    "expect": false
   },
   "plugins": [
     "react",

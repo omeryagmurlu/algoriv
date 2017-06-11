@@ -1,0 +1,246 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CustomCodeView renders correctly 1`] = `
+<div
+  className="container undefined"
+>
+  <div
+    mockName="Ace"
+    mockProps={
+      Object {
+        "className": "ace-editor undefined",
+        "enableBasicAutocompletion": true,
+        "enableLiveAutocompletion": true,
+        "mode": "javascript",
+        "name": "text-editor-logic-code",
+        "onChange": [Function],
+        "setOptions": Object {
+          "enableSnippets": false,
+          "showLineNumbers": true,
+        },
+        "value": "code",
+      }
+    }
+  />
+  <div
+    mockName="SideDrawer"
+    mockProps={
+      Object {
+        "side": "left",
+        "theme": undefined,
+      }
+    }
+  >
+    <div
+      mockName="List"
+      mockProps={Object {}}
+    >
+      <div
+        mockName="ListItem"
+        mockProps={
+          Object {
+            "autoGenerateNestedIndicator": false,
+            "disabled": true,
+            "nestedItems": Array [
+              <Unknown
+                onTouchTap={[Function]}
+                primaryText={undefined}
+                rightIconButton={
+                      <div
+                            mockName="IconMenu"
+                            mockProps={
+                                  Object {
+                                        "items": Array [
+                                          Object {
+                                            "icon": [Function],
+                                            "name": "Rename",
+                                            "onTouch": [Function],
+                                          },
+                                          Object {
+                                            "icon": [Function],
+                                            "name": "Delete",
+                                            "onTouch": [Function],
+                                          },
+                                        ],
+                                        "theme": undefined,
+                                      }
+                            }
+                      />
+                }
+          />,
+            ],
+            "open": true,
+            "primaryText": "Saved Codes",
+            "primaryTogglesNestedList": true,
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    mockName="SideDrawer"
+    mockProps={
+      Object {
+        "contentStyle": Object {
+          "width": "moduleMaxWidth",
+        },
+        "side": "right",
+        "theme": undefined,
+        "visualCache": [Function],
+      }
+    }
+  >
+    <div
+      mockName="TextField"
+      mockProps={
+        Object {
+          "floatingLabelText": "Algorithm/Code Name",
+          "onChange": [Function],
+          "value": Object {},
+          "width": "moduleMaxWidth",
+        }
+      }
+    />
+    <div
+      mockName="SelectField"
+      mockProps={
+        Object {
+          "floatingLabelText": "Algorithm Type",
+          "onChange": [Function],
+          "value": undefined,
+          "width": "moduleMaxWidth",
+        }
+      }
+    />
+    <div
+      mockName="Ace"
+      mockProps={
+        Object {
+          "editorProps": Object {
+            "$blockScrolling": Infinity,
+            "wrap": true,
+          },
+          "highlightActiveLine": false,
+          "mode": "markdown",
+          "name": "text-editor-description",
+          "onChange": [Function],
+          "showGutter": false,
+          "style": Object {
+            "background": "undefined backgroundColor",
+            "fontFamily": "monospace",
+            "fontSize": "11pt",
+            "height": "NaNpx",
+            "minHeight": "NaNpx",
+            "width": "moduleMaxWidth",
+          },
+          "value": Object {},
+          "wrapEnabled": true,
+        }
+      }
+    />
+    <div
+      mockName="Ace"
+      mockProps={
+        Object {
+          "name": "text-editor-pseudo-code",
+          "onChange": [Function],
+          "style": Object {
+            "height": "NaNpx",
+            "minHeight": "NaNpx",
+            "width": "moduleMaxWidth",
+          },
+          "value": Object {},
+        }
+      }
+    />
+    <div
+      mockName="Tables"
+      mockProps={
+        Object {
+          "prompt": undefined,
+          "theme": undefined,
+          "visualCache": [Function],
+          "vsTables": Object {
+            "set": [Function],
+            "value": Object {},
+          },
+        }
+      }
+    />
+    <div
+      mockName="Promise"
+      mockProps={
+        Object {
+          "pendingRender": <div
+            style={
+                Object {
+                    "width": "100%",
+                  }
+            }
+        >
+            <div
+                className="error undefined"
+            >
+                Processing
+            </div>
+        </div>,
+          "promise": Promise {},
+          "then": [Function],
+        }
+      }
+    />
+    <div
+      style={
+        Object {
+          "width": "100%",
+        }
+      }
+    >
+      <div
+        className="button-container undefined"
+      >
+        <div
+          mockName="Promise"
+          mockProps={
+            Object {
+              "pendingRender": <Unknown
+                disabled={true}
+                label="Run"
+                labelColor="undefined alternativeTextColor"
+            />,
+              "promise": Promise {},
+              "then": [Function],
+            }
+          }
+        />
+        <div
+          mockName="Promise"
+          mockProps={
+            Object {
+              "pendingRender": <Unknown
+                disabled={true}
+                label="Visualize"
+                labelColor="undefined alternativeTextColor"
+            />,
+              "promise": Promise {},
+              "then": [Function],
+            }
+          }
+        />
+        <div
+          mockName="RaisedButton"
+          mockProps={
+            Object {
+              "backgroundColor": "undefined primary2Color",
+              "disabled": false,
+              "label": "Save",
+              "labelColor": "undefined alternativeTextColor",
+              "onTouchTap": [Function],
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

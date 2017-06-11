@@ -5,6 +5,10 @@ import { InitInput } from 'app/features/input-types';
 import { graphologyImportFix as gimport, flatten } from 'app/utils';
 
 export const Algorithm = (algorithmName, algorithmType) => {
+	if (!algorithmName) {
+		throw new Error('An algorithm name must be specidied');
+	}
+
 	const getHelperSnaps = () => helpers.reduce((obj, helper, i) => {
 		obj[i] = helper._internals.getSnap();
 		return obj;
@@ -19,7 +23,8 @@ export const Algorithm = (algorithmName, algorithmType) => {
 			view: AlgorithmFactory(prot)
 		}),
 		algorithm: {},
-		dryRun: (logic = prot.logic) => framer(logic, () => getHelperSnaps())(prot.input)
+		dryRun: (logic = prot.logic) => framer(logic, () => getHelperSnaps())(prot.input),
+		purePrototype: () => prot
 	};
 
 	const prot = {
@@ -47,7 +52,7 @@ export const Algorithm = (algorithmName, algorithmType) => {
 		return addInput;
 	};
 
-	const addModule = instance.addModule = helper => {
+	const addModule = helper => {
 		helpers.push(helper);
 		helper._internals.getInputType(helpers.length - 1).forEach(({ id: inputId, inputType }) => {
 			prot.inputType[inputId] = prot.inputType[inputId] || [];

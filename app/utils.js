@@ -83,11 +83,14 @@ export const themedStyle = (style) => {
 		throw new ReferenceError(`themedStyle: unknown style ${style}`);
 	}
 	return (className, theme) => {
-		const retVal = `${style[`${className}${theme ? `-${theme}` : ''}`]}${style[className] ? ` ${style[className]}` : ''}`;
-		if (!retVal) {
+		const retVal = [
+			style[className],
+			style[`${className}-${theme}`]
+		].filter(v => v);
+		if (retVal.length === 0) {
 			throw new ReferenceError(`themedStyle: could'nt find: ${className} in [${Object.keys(style).join(' ,')}]`);
 		}
-		return retVal;
+		return retVal.join(' ');
 	};
 };
 
@@ -140,17 +143,10 @@ export class ColorList {
 	}
 
 	static push = (list, items) => list.push(items.filter(isNotNil))
-	static set = (list, i, items) => (list[i] = items.filter(isNotNil))
+	// static set = (list, i, items) => (list[i] = items.filter(isNotNil))
 
-	pushNode = node => ColorList.push(this.nodesList, [node])
 	pushNodes = nodes => ColorList.push(this.nodesList, nodes)
-	pushEdge = edge => ColorList.push(this.edgesList, [edge])
 	pushEdges = edges => ColorList.push(this.edgesList, edges)
-
-	setNode = (node, i) => ColorList.set(this.nodesList, i, [node])
-	setNodes = (nodes, i) => ColorList.set(this.nodesList, i, nodes)
-	setEdge = (edge, i) => ColorList.set(this.edgesList, i, [edge])
-	setEdges = (edges, i) => ColorList.set(this.edgesList, i, edges)
 
 	static forEach = (list, callback) => {
 		list.forEach((things, idx) => {

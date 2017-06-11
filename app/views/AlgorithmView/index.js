@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { themedStyle } from 'app/utils';
 
 import AlgorithmInner from 'app/components/AlgorithmInner';
 import AnimationControls from 'app/components/AnimationControls';
 import Stretch from 'app/components/Stretch';
 
-import { section, footer } from './style.scss';
+import style from './style.scss';
+
+const css = themedStyle(style);
 
 const filter = [
 	'algorithmInput',
@@ -21,7 +24,7 @@ const filter = [
 
 const AlgorithmView = props => (
 	<Stretch>
-		<section className={section}>
+		<section className={css('section')}>
 			<AlgorithmInner
 				{...(Object.keys(props).filter(v => !filter.includes(v)).reduce((acc, v) => {
 					acc[v] = props[v];
@@ -32,7 +35,7 @@ const AlgorithmView = props => (
 				visualCache={() => props.app.settings('visual-cache')('algorithmView')}
 			/>
 		</section>
-		<footer className={footer}>
+		<footer className={css('footer')}>
 			<AnimationControls
 				{...props}
 				input={props.algorithmInput.filter(v => v.type === 'init')}

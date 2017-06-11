@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 
 import { AlgorithmsList } from 'app/data/algorithms';
 import BigButton from 'app/components/BigButton';
-import { pageView, container } from './style.scss';
+import { themedStyle } from 'app/utils';
+import style from './style.scss';
+
+const css = themedStyle(style);
 
 const AlgorithmPageView = props => (
-	<div className={pageView}>
+	<div className={css('page-view')}>
 		{AlgorithmsList.map(group => (
 			<nav key={group.title} >
 				<h1>{group.title}</h1>
 				<div
-					className={container}
+					className={css('container')}
 				>
 					{group.algorithms.map(alg => ( // changing prop FIXME
 						<BigButton
