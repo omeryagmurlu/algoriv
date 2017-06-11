@@ -105,6 +105,7 @@ class Examples extends Component {
 }
 
 Examples.propTypes = {
+	app: PropTypes.any.isRequired,
 	theme: PropTypes.string.isRequired,
 	examples: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
@@ -113,6 +114,13 @@ Examples.propTypes = {
 	customs: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		data: PropTypes.any.isRequired
+	})).isRequired,
+	addCustom: PropTypes.func.isRequired,
+	renameCustom: PropTypes.func.isRequired,
+	deleteCustom: PropTypes.func.isRequired,
+	input: PropTypes.objectOf(PropTypes.shape({
+		update: PropTypes.func,
+		value: PropTypes.any
 	})).isRequired,
 	// exampleGroup: PropTypes.string.isRequired
 };

@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+/* eslint import/no-webpack-loader-syntax: off */
 import UtilsInjector from 'inject-loader!app/utils';
 
 const {

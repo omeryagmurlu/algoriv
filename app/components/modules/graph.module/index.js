@@ -252,6 +252,7 @@ Graph.defaultProps = {
 
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
+	app: PropTypes.any.isRequired,
 
 	optGraph: PropTypes.object,
 	customLabels: PropTypes.object,

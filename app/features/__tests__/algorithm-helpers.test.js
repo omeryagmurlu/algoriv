@@ -1,9 +1,10 @@
 /* eslint-env mocha */
+/* eslint import/no-webpack-loader-syntax: off */
 import React from 'react';
 import { injectExport, infiniteObj as infObj } from 'app/__tests__/test-utils.js';
 import Injector from 'inject-loader!../algorithm-helpers';
 
-const { Algorithm } = Injector({
+const { default: Algorithm } = Injector({
 	'app/features/modules': infObj({
 		input: () => ({})
 	}),

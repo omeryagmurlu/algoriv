@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AlgorithmTypes, Algorithm, DefaultAlgorithmProps as DefAlgProps } from 'app/features/algorithm-helpers';
+import Algorithm, { AlgorithmTypes, DefaultAlgorithmProps as DefAlgProps } from 'app/features/algorithm-helpers';
 import CustomCodeView from 'app/views/CustomCodeView';
 import Babel from 'ALIAS-babel';
 import _mapValues from 'lodash.mapvalues';

@@ -2,16 +2,36 @@
 # Full project: https://gitlab.com/pages/plain-html
 image: node:7.10.0
 
+cache:
+  paths:
+  - node_modules/
+
 build:
   stage: build
   script:
-  - yarn
+  - yarn install --production=false
   - yarn run build:prod
+  artifacts:
+    paths:
+    - node_modules/
+    - dist
 
 test:
   stage: test
   script:
   - yarn run test
+  allow_failure: true
+
+lint:
+  stage: test
+  script:
+  - yarn run lint
+  allow_failure: true
+
+duplicates:
+  stage: test
+  script:
+  - yarn run duplicates
   allow_failure: true
 
 pages:
@@ -21,8 +41,26 @@ pages:
   - cp -r dist .public
   - cp -r index.html .public
   - mv .public public
+  only:
+  - master
   artifacts:
     paths:
     - public
   only:
   - master
+
+win-binary:
+  stage: deploy
+  script:
+  - yarn run package-win
+  artifacts:
+    paths:
+    - release
+
+linux-binary:
+  stage: deploy
+  script:
+  - yarn run package-linux
+  artifacts:
+    paths:
+    - release

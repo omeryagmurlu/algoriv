@@ -6,7 +6,7 @@ import { graphs, randomGraph, suitingGraphs } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
 import { graphologyImportFix as gimport } from 'app/utils';
 
-export const Algorithm = (algorithmName, algorithmType) => {
+const Algorithm = (algorithmName, algorithmType) => {
 	if (!algorithmName) {
 		throw new Error('An algorithm name must be specidied');
 	}

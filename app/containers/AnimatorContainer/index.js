@@ -68,6 +68,7 @@ class AnimatorContainer extends Component {
 }
 
 AnimatorContainer.propTypes = {
+	app: PropTypes.any.isRequired,
 	frames: PropTypes.array.isRequired
 };
 
