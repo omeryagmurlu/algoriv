@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnimationControls renders correctly speed: 50, progress: 50, paused: true 1`] = `
+<div
+  className="container sdffsd"
+>
+  <div
+    className="upper undefined"
+  >
+    <div
+      mockName="MuiThemeProvider"
+      mockProps={
+        Object {
+          "muiTheme": Object {
+            "slider": Object {
+              "handleFillColor": "sdffsd accent1Color",
+              "rippleColor": "sdffsd accent1Color",
+              "selectionColor": "sdffsd alternativeTextColor",
+            },
+          },
+        }
+      }
+    >
+      <div
+        mockName="Slider"
+        mockProps={
+          Object {
+            "defaultValue": 50,
+            "max": 100,
+            "min": 1,
+            "onChange": [Function],
+            "onDragStop": [Function],
+            "sliderStyle": Object {
+              "margin": 0,
+            },
+            "step": 1,
+            "style": Object {
+              "flexGrow": 1,
+              "maxWidth": "100px",
+            },
+            "value": 50,
+          }
+        }
+      />
+    </div>
+    <div
+      className="buttons undefined"
+    >
+      <div
+        mockName="FlatButton"
+        mockProps={
+          Object {
+            "icon": <AvSkipPrevious
+              color="sdffsd alternativeTextColor"
+              hoverColor="sdffsd accent1Color"
+          />,
+            "onTouchTap": [Function],
+          }
+        }
+      />
+      <div
+        mockName="FlatButton"
+        mockProps={
+          Object {
+            "icon": <AvFastRewind
+              color="sdffsd alternativeTextColor"
+              hoverColor="sdffsd accent1Color"
+          />,
+            "onTouchTap": [Function],
+          }
+        }
+      />
+      <div
+        mockName="InformationDemandingButton"
+        mockProps={
+          Object {
+            "activeIcon": <ContentSend
+              color="sdffsd alternativeTextColor"
+              hoverColor="sdffsd accent1Color"
+          />,
+            "demandCondition": false,
+            "demandings": Array [],
+            "elevation": "footerHeight",
+            "passiveIcon": <AvPlayArrow
+              color="sdffsd alternativeTextColor"
+              hoverColor="sdffsd accent1Color"
+          />,
+            "resolve": [Function],
+            "theme": "sdffsd",
+          }
+        }
+      />
+      <div
+        mockName="FlatButton"
+        mockProps={
+          Object {
+            "icon": <AvFastForward
+              color="sdffsd alternativeTextColor"
+              hoverColor="sdffsd accent1Color"
+          />,
+            "onTouchTap": [Function],
+          }
+        }
+      />
+      <div
+        mockName="FlatButton"
+        mockProps={
+          Object {
+            "icon": <AvSkipNext
+              color="sdffsd alternativeTextColor"
+              hoverColor="sdffsd accent1Color"
+          />,
+            "onTouchTap": [Function],
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    mockName="LinearProgress"
+    mockProps={
+      Object {
+        "color": "sdffsd accent1Color",
+        "mode": "determinate",
+        "style": Object {
+          "backgroundColor": "sdffsd primary1Color",
+          "bottom": 0,
+          "height": "footerHeight",
+          "position": "absolute",
+          "zIndex": -1,
+        },
+        "value": 50,
+      }
+    }
+  />
+</div>
+`;

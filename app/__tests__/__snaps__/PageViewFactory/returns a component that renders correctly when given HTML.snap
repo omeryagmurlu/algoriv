@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageViewFactory returns a component that renders correctly when given HTML 1`] = `
+<div
+  className="container custom theme"
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "<h1> AMAN </h1> <script>window.close();</script>",
+    }
+  }
+/>
+`;

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly with current prop 1`] = `
+<header
+  className="container sdfggfdgsdfl"
+>
+  <nav
+    className="nav undefined"
+  />
+  <h1
+    className="header undefined"
+  >
+    ASFDFS
+  </h1>
+</header>
+`;

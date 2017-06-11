@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DialogComponent renders correctly 1`] = `
+<div
+  mockName="Dialog"
+  mockProps={
+    Object {
+      "actionsContainerClassName": "actions-container sdfggfdgsdfl",
+      "contentClassName": "content sdfggfdgsdfl",
+      "overlayClassName": "overlay sdfggfdgsdfl",
+      "theme": "sdfggfdgsdfl",
+      "titleClassName": "title sdfggfdgsdfl",
+    }
+  }
+/>
+`;

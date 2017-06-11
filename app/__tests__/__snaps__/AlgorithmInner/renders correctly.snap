@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AlgorithmInner renders correctly 1`] = `
+<section
+  className="top undefined"
+>
+  <section
+    className="main undefined"
+  />
+  <div
+    mockName="SideDrawer"
+    mockProps={
+      Object {
+        "side": "left",
+        "theme": "assdsad",
+        "visualCache": [Function],
+      }
+    }
+  />
+  <div
+    mockName="SideDrawer"
+    mockProps={
+      Object {
+        "side": "right",
+        "theme": "assdsad",
+        "visualCache": [Function],
+      }
+    }
+  />
+</section>
+`;

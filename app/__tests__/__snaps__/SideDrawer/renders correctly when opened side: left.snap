@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SideDrawer renders correctly when opened side: left 1`] = `
+<aside
+  className="par anfnnffghnfgnhf left undefined active undefined"
+  style={Object {}}
+>
+  <section
+    className="container undefined"
+    style={Object {}}
+  >
+    <span>
+      MAYAMAZINGCONTENT
+    </span>
+  </section>
+  <div
+    className="handle undefined"
+  >
+    <div
+      mockName="FlatButton"
+      mockProps={
+        Object {
+          "label": "just to remove that warning",
+          "onClick": [Function],
+        }
+      }
+    />
+    <div
+      mockName="HardwareKeyboardArrowRight"
+      mockProps={
+        Object {
+          "className": "handleIcon undefined",
+          "color": "anfnnffghnfgnhf alternativeTextColor",
+        }
+      }
+    />
+  </div>
+</aside>
+`;

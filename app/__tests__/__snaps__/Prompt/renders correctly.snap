@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Prompt renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "justifyContent": "flex-end",
+    }
+  }
+>
+  <div
+    mockName="TextField"
+    mockProps={
+      Object {
+        "hintText": undefined,
+        "id": "prompt-text",
+        "onChange": [Function],
+        "underlineFocusStyle": undefined,
+        "underlineShow": undefined,
+        "underlineStyle": undefined,
+        "value": "",
+      }
+    }
+  />
+  <div
+    mockName="FlatButton"
+    mockProps={
+      Object {
+        "icon": <ContentSend />,
+        "onTouchTap": [Function],
+      }
+    }
+  />
+</div>
+`;

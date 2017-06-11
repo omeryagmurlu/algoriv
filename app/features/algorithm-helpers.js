@@ -1,8 +1,10 @@
+import flatten from 'lodash.flattendeep';
+
 import Modules from 'app/features/modules';
 import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
 import { graphs, randomGraph, suitingGraphs } from 'app/data/graphs';
 import { InitInput } from 'app/features/input-types';
-import { graphologyImportFix as gimport, flatten } from 'app/utils';
+import { graphologyImportFix as gimport } from 'app/utils';
 
 export const Algorithm = (algorithmName, algorithmType) => {
 	if (!algorithmName) {

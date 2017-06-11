@@ -26,7 +26,7 @@ import style from './style.scss';
 
 const css = themedStyle(style);
 
-const icon = (ico, obj) => React.createElement(ico, {
+const icon = obj => ({
 	color: themeVars(obj.theme)('alternativeTextColor'),
 	hoverColor: themeVars(obj.theme)('accent1Color')
 });
@@ -62,16 +62,27 @@ const AnimationControls = props => (
 				/>
 			</MuiThemeProvider>
 			<div className={css('buttons')}>
-				<FlatButton icon={icon(AvSkipPrevious, props)} onTouchTap={props.onAnimationToBegin} />
-				<FlatButton icon={icon(AvFastRewind, props)} onTouchTap={props.onAnimationStepBackward} />
+				<FlatButton
+					icon={<AvSkipPrevious {...icon(props)} />}
+					onTouchTap={props.onAnimationToBegin}
+				/>
+				<FlatButton
+					icon={<AvFastRewind {...icon(props)} />}
+					onTouchTap={props.onAnimationStepBackward}
+				/>
 				<InformationDemandingButton
-					activeIcon={icon(ContentSend, props)}
-					passiveIcon={icon((props.animationProgress === 100
-						? NavigationRefresh
-						: props.animationIsPaused
-							? AvPlayArrow
-							: AvPause
-					), props)}
+					activeIcon={<ContentSend {...icon(props)} />}
+					passiveIcon={((() => {
+						if (props.animationProgress === 100) {
+							return (<NavigationRefresh {...icon(props)} />);
+						}
+
+						if (props.animationIsPaused) {
+							return (<AvPlayArrow {...icon(props)} />);
+						}
+
+						return (<AvPause {...icon(props)} />);
+					})())}
 					elevation={globVars.footerHeight}
 					theme={props.theme}
 					demandCondition={props.animationProgress === 0}
@@ -86,8 +97,14 @@ const AnimationControls = props => (
 					}))}
 					resolve={props.onAnimationPauseRestart}
 				/>
-				<FlatButton icon={icon(AvFastForward, props)} onTouchTap={props.onAnimationStepForward} />
-				<FlatButton icon={icon(AvSkipNext, props)} onTouchTap={props.onAnimationToEnd} />
+				<FlatButton
+					icon={<AvFastForward {...icon(props)} />}
+					onTouchTap={props.onAnimationStepForward}
+				/>
+				<FlatButton
+					icon={<AvSkipNext {...icon(props)} />}
+					onTouchTap={props.onAnimationToEnd}
+				/>
 			</div>
 		</div>
 		<LinearProgress

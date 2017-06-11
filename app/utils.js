@@ -132,8 +132,6 @@ export const map = (thing, cb) =>
 		? thing.map((v, i) => cb(v, i))
 		: [cb(thing, 0)]);
 
-export const flatten = (ary) => ary.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []); // http://stackoverflow.com/a/27267762/3873452
-
 export class ColorList {
 	static revive = cl => new ColorList(cl.nodesList, cl.edgesList) // we snapshot D:
 

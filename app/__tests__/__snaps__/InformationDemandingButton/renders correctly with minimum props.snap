@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InformationDemandingButton renders correctly with minimum props 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "inline-flex",
+    }
+  }
+>
+  <div
+    className="
+  						fields-container sdfggfdgsdfl
+  						false
+  					"
+    style={
+      Object {
+        "bottom": "0px",
+      }
+    }
+  />
+  <div
+    mockName="FlatButton"
+    mockProps={
+      Object {
+        "disabled": false,
+        "icon": <span>
+          Passive
+      </span>,
+        "onTouchTap": [Function],
+      }
+    }
+  />
+</div>
+`;

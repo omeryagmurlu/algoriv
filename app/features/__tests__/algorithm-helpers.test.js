@@ -1,5 +1,28 @@
 /* eslint-env mocha */
-import { Algorithm } from '../algorithm-helpers';
+import React from 'react';
+import { injectExport, infiniteObj as infObj } from 'app/__tests__/test-utils.js';
+import Injector from 'inject-loader!../algorithm-helpers';
+
+const { Algorithm } = Injector({
+	'app/features/modules': infObj({
+		input: () => ({})
+	}),
+	'app/containers/AlgorithmContainer': injectExport({
+		default: (prot) => <div name="AlgprithmFactory" Prototype={prot} />,
+		framer: (logic, snaps) => (input) => ({ logic, snaps, input })
+	}),
+	'app/data/graphs': injectExport({
+		graphs: [],
+		randomGraph: () => infObj(),
+		suitingGraphs: () => []
+	}),
+	'app/features/input-types': injectExport({
+		InitInput: () => ({ type: 'mockedInit' })
+	}),
+	'app/utils': injectExport({
+		graphologyImportFix: x => x
+	})
+});
 
 describe('algorithm-helpers', () => {
 	describe('Algorithm', () => {
@@ -21,14 +44,11 @@ describe('algorithm-helpers', () => {
 			expect(asV).to.have.property('view');
 		});
 
-		it('runs dry, when dry run is invoked', () =>
-			Alg.dryRun((input, frame) => {
-				frame();
-				frame();
-			}).then(frames => {
-				expect(frames).to.have.lengthOf(2);
-			})
-		);
+		it('runs dry, when dry run is invoked', () => { // tweak a little
+			const fn = () => {};
+			const { logic } = Alg.dryRun(fn);
+			expect(logic).to.be.equal(fn);
+		});
 
 		it('add normal input', () => {
 			Alg.addInput('myid', 12, false);
@@ -39,7 +59,7 @@ describe('algorithm-helpers', () => {
 		it('add init input', () => {
 			Alg.addInput('myid', 1, true);
 			expect(prot.input.myid).to.be.equal(1);
-			expect(prot.inputType.myid[0].type).to.be.equal('init');
+			expect(prot.inputType.myid[0].type).to.be.equal('mockedInit');
 		});
 
 		it('instance.addCode', () => {

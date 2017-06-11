@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BigButton renders correctly cols: 3 1`] = `
+<div
+  className="container sdfggfdgsdfl"
+  style={
+    Object {
+      "width": "calc((100% - ((10px * 2) * 2)) / 3)",
+    }
+  }
+>
+  <div
+    mockName="FlatButton"
+    mockProps={
+      Object {
+        "label": "just to remove that warning",
+      }
+    }
+  />
+  <div
+    className="innerContainer undefined"
+  >
+    <div
+      className="primary sdfggfdgsdfl"
+    >
+      anan
+    </div>
+    <div
+      className="secondary sdfggfdgsdfl"
+    />
+  </div>
+</div>
+`;

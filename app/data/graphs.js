@@ -1,6 +1,7 @@
 import _sample from 'lodash.sample';
-import { flatten, graphologyOptions as gO } from 'app/utils';
+import flatten from 'lodash.flattendeep';
 import graphology from 'graphology';
+import { graphologyOptions as gO } from 'app/utils';
 
 const create = (className, fn) => {
 	const graph = new graphology[className](gO);

@@ -1,0 +1,346 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OptionsView renders correctly 1`] = `
+<div
+  className="container undefined"
+>
+  <div
+    className="control-group undefined"
+  >
+    <header>
+      <h1>
+        Core Options
+      </h1>
+      <span>
+        These options are 
+        application's
+         core settings which affect behaviour unrelated to modules and algorithms.
+      </span>
+    </header>
+    <div
+      className="control undefined"
+    >
+      <div
+        mockName="SelectField"
+        mockProps={
+          Object {
+            "floatingLabelText": "Theme",
+            "fullWidth": true,
+            "onChange": [Function],
+            "value": undefined,
+          }
+        }
+      >
+        <div
+          mockName="MenuItem"
+          mockProps={
+            Object {
+              "primaryText": "giant-goldfish",
+              "value": "giant-goldfish",
+            }
+          }
+        />
+        <div
+          mockName="MenuItem"
+          mockProps={
+            Object {
+              "primaryText": "sugar",
+              "value": "sugar",
+            }
+          }
+        />
+        <div
+          mockName="MenuItem"
+          mockProps={
+            Object {
+              "primaryText": "cheer-up",
+              "value": "cheer-up",
+            }
+          }
+        />
+        <div
+          mockName="MenuItem"
+          mockProps={
+            Object {
+              "primaryText": "fresh-cut",
+              "value": "fresh-cut",
+            }
+          }
+        />
+        <div
+          mockName="MenuItem"
+          mockProps={
+            Object {
+              "primaryText": "thought-provoking",
+              "value": "thought-provoking",
+            }
+          }
+        />
+        <div
+          mockName="MenuItem"
+          mockProps={
+            Object {
+              "primaryText": "dark",
+              "value": "dark",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="control undefined"
+    >
+      <div
+        mockName="Checkbox"
+        mockProps={
+          Object {
+            "checked": undefined,
+            "label": "Minimal Colored Visualizations",
+            "onCheck": [Function],
+          }
+        }
+      />
+    </div>
+    <div
+      className="control undefined"
+    >
+      <div
+        mockName="Checkbox"
+        mockProps={
+          Object {
+            "checked": undefined,
+            "label": "Animations",
+            "onCheck": [Function],
+          }
+        }
+      />
+    </div>
+    <div
+      className="control undefined"
+    >
+      <div
+        mockName="Subheader"
+        mockProps={Object {}}
+      >
+        Animation Speed
+      </div>
+      <div
+        mockName="Slider"
+        mockProps={
+          Object {
+            "max": 100,
+            "min": 1,
+            "onChange": [Function],
+            "sliderStyle": Object {
+              "margin": 0,
+            },
+            "value": undefined,
+          }
+        }
+      />
+    </div>
+    <div
+      className="control undefined"
+    >
+      <div
+        mockName="TextField"
+        mockProps={
+          Object {
+            "floatingLabelText": "Timeout for Custom Code",
+            "fullWidth": true,
+            "onChange": [Function],
+            "value": undefined,
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="control-group undefined"
+  >
+    <header>
+      <h1>
+        Module Options
+      </h1>
+      <span>
+        These options are specific to modules which only affect their behaviour.
+      </span>
+    </header>
+    <div
+      className="control-group undefined"
+    >
+      <header>
+        <h2>
+          Code Module
+        </h2>
+        <span>
+          Options for the Code module.
+        </span>
+      </header>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="Checkbox"
+          mockProps={
+            Object {
+              "checked": undefined,
+              "label": "Enabled",
+              "onCheck": [Function],
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="control-group undefined"
+    >
+      <header>
+        <h2>
+          Description Module
+        </h2>
+        <span>
+          Options for the Description module.
+        </span>
+      </header>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="Checkbox"
+          mockProps={
+            Object {
+              "checked": undefined,
+              "label": "Enabled",
+              "onCheck": [Function],
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="control-group undefined"
+    >
+      <header>
+        <h2>
+          Graph Module
+        </h2>
+        <span>
+          Options for the Graph module.
+        </span>
+      </header>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="Checkbox"
+          mockProps={
+            Object {
+              "checked": undefined,
+              "label": "Enabled",
+              "onCheck": [Function],
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="control-group undefined"
+    >
+      <header>
+        <h2>
+          Table Module
+        </h2>
+        <span>
+          Options for the Table module.
+        </span>
+      </header>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="Checkbox"
+          mockProps={
+            Object {
+              "checked": undefined,
+              "label": "Enabled",
+              "onCheck": [Function],
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="control-group undefined"
+    >
+      <header>
+        <h2>
+          Text Module
+        </h2>
+        <span>
+          Options for the Text module.
+        </span>
+      </header>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="Checkbox"
+          mockProps={
+            Object {
+              "checked": undefined,
+              "label": "Enabled",
+              "onCheck": [Function],
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="control-group undefined"
+    >
+      <header>
+        <h2>
+          Examples Module
+        </h2>
+        <span>
+          Options for the Examples module.
+        </span>
+      </header>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="Checkbox"
+          mockProps={
+            Object {
+              "checked": undefined,
+              "label": "Enabled",
+              "onCheck": [Function],
+            }
+          }
+        />
+      </div>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="FlatButton"
+          mockProps={
+            Object {
+              "backgroundColor": "custom theme primary1Color",
+              "fullWidth": true,
+              "hoverColor": "custom theme accent1Color",
+              "label": "Purge Custom Inputs",
+              "onTouchTap": [Function],
+              "style": Object {
+                "color": "custom theme alternativeTextColor",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -30,6 +30,7 @@
     "appId": "com.algoriv.app",
     "files": [
       "dist/electron.js",
+      "dist/styles.css",
       "node_modules/",
       "main.js",
       "index.electron.html",
@@ -85,6 +86,7 @@
     "graphology": "^0.10.0",
     "js-interpreter": "^1.4.3",
     "loaders.css": "^0.1.2",
+    "lodash.flattendeep": "^4.4.0",
     "lodash.isequal": "^4.5.0",
     "lodash.isnil": "^4.0.0",
     "lodash.isplainobject": "^4.0.6",

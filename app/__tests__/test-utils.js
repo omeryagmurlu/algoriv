@@ -4,23 +4,42 @@ import idObj from 'identity-obj-proxy';
 import _mapValues from 'lodash.mapvalues';
 import * as utils from 'app/utils';
 
-export const MockComponent = (name) => props => {
-	const { children, ...rProps } = props;
-	return (<div mockName={name} mockProps={rProps}>{children}</div>);
+export const MockComponent = (name) => {
+	const fn = props => {
+		const { children, ...rProps } = props;
+		return (<div
+			mockName={name}
+			mockProps={rProps}
+		>
+			{children}
+		</div>);
+	};
+
+	Object.defineProperty(fn, 'name', { value: name });
+
+	return fn;
 };
 
+export const injectExport = (injectedOnes, whole = {}) => {
+	const toRet = _mapValues(whole, v => v); // Not using fp for performance
+	Object.defineProperty(toRet, '__esModule', { // this is ugly but the only way
+		value: true // to be able to set default
+	});
+	Object.keys(injectedOnes).forEach(key => { // one can override default here
+		toRet[key] = injectedOnes[key];
+	});
+	return toRet;
+};
+
+export const infiniteObj = (endpoints = {}) => new Proxy({}, {
+	get: (_, prop) => endpoints[prop] || infiniteObj(endpoints)
+});
+
 export const StyleMocks = {
-	'app/utils': _mapValues(utils, (v, k) => {
-		if (k === 'themedStyle') {
-			return () => (className, theme) => `${className} ${theme}`;
-		}
-
-		if (k === 'themeVars') {
-			return (theme) => (key) => `${theme} ${key}`;
-		}
-
-		return v;
-	})
+	'app/utils': injectExport({
+		themedStyle: () => (className, theme) => `${className} ${theme}`,
+		themeVars: (theme) => (key) => `${theme} ${key}`
+	}, utils)
 };
 
 export const StyleVariablesMocks = {

@@ -1,7 +1,6 @@
 /* eslint-env mocha, chai */
 import { ModuleInput, InitInput } from '../input-types';
 
-
 describe('input-types', () => {
 	describe('ModuleInput', () => {
 		it('has type `module`', () => {

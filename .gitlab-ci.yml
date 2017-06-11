@@ -2,11 +2,21 @@
 # Full project: https://gitlab.com/pages/plain-html
 image: node:7.10.0
 
+build:
+  stage: build
+  script:
+  - yarn
+  - yarn run build:prod
+
+test:
+  stage: test
+  script:
+  - yarn run test
+  allow_failure: true
+
 pages:
   stage: deploy
   script:
-  - yarn
-  - yarn run build:prod:browser
   - mkdir .public
   - cp -r dist .public
   - cp -r index.html .public

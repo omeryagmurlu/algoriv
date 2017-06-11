@@ -123,6 +123,7 @@ InformationDemandingButton.propTypes = {
 	demandings: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,
 		validate: PropTypes.func.isRequired,
+		invalid: PropTypes.func.isRequired,
 		handler: PropTypes.func.isRequired,
 		value: PropTypes.string.isRequired
 	})),

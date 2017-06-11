@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainView renders correctly 1`] = `
+<div
+  className="mainView undefined"
+>
+  <div
+    className="container undefined"
+  >
+    <div
+      mockName="BigButton"
+      mockProps={
+        Object {
+          "desc": "Choose from numerous algorithms to visualize",
+          "name": "Algorithms",
+          "onTouchTap": [Function],
+          "theme": "custom theme",
+        }
+      }
+    />
+    <div
+      mockName="BigButton"
+      mockProps={
+        Object {
+          "desc": "Visualize your own code with algoriv",
+          "name": "Custom Code",
+          "onTouchTap": [Function],
+          "theme": "custom theme",
+        }
+      }
+    />
+    <div
+      mockName="BigButton"
+      mockProps={
+        Object {
+          "desc": undefined,
+          "name": "Options",
+          "onTouchTap": [Function],
+          "theme": "custom theme",
+        }
+      }
+    />
+    <div
+      mockName="BigButton"
+      mockProps={
+        Object {
+          "desc": undefined,
+          "name": "Usage",
+          "onTouchTap": [Function],
+          "theme": "custom theme",
+        }
+      }
+    />
+  </div>
+</div>
+`;

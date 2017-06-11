@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly with minimum props 1`] = `
+<header
+  className="container sdfggfdgsdfl"
+>
+  <nav
+    className="nav undefined"
+  />
+  <h1
+    className="header undefined"
+  >
+    
+  </h1>
+</header>
+`;

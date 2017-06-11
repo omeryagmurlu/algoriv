@@ -42,7 +42,7 @@ exports[`CustomCodeView renders correctly 1`] = `
             "autoGenerateNestedIndicator": false,
             "disabled": true,
             "nestedItems": Array [
-              <Unknown
+              <ListItem
                 onTouchTap={[Function]}
                 primaryText={undefined}
                 rightIconButton={
@@ -203,7 +203,7 @@ exports[`CustomCodeView renders correctly 1`] = `
           mockName="Promise"
           mockProps={
             Object {
-              "pendingRender": <Unknown
+              "pendingRender": <RaisedButton
                 disabled={true}
                 label="Run"
                 labelColor="undefined alternativeTextColor"
@@ -217,7 +217,7 @@ exports[`CustomCodeView renders correctly 1`] = `
           mockName="Promise"
           mockProps={
             Object {
-              "pendingRender": <Unknown
+              "pendingRender": <RaisedButton
                 disabled={true}
                 label="Visualize"
                 labelColor="undefined alternativeTextColor"

@@ -10,16 +10,13 @@ const snapshot = (payload, object) => {
 };
 
 const snapProxy = (frames, fn) =>
-	(...params) => snapshot(frames, fn(...params));
+	(...params) => snapshot(frames, fn(...params)); // params passed to frame are passed to snap
 
 const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !== 'undefined'));
 
 export const framer = (logic, snap) => (input) => {
 	const frames = [];
 	return Promise.resolve(logic(input, snapProxy(frames, snap)))
-		.catch(err => {
-			throw err;
-		})
 		.then(() => {
 			if (frames.length === 0) {
 				throw AlgorithmError('Algorithm must frame at least once');

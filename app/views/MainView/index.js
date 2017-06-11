@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { themedStyle } from 'app/utils';
 
 import BigButton from 'app/components/BigButton';
 
@@ -10,12 +11,14 @@ import OptionsView from 'app/views/OptionsView';
 
 import usage from 'app/../docs/usage.md';
 
-import { mainView, container } from './style.scss';
+import style from './style.scss';
+
+const css = themedStyle(style);
 
 const MainView = props => (
-	<div className={mainView}>
+	<div className={css('mainView')}>
 		<div
-			className={container}
+			className={css('container')}
 		>
 			{views.map(v => (
 				<BigButton

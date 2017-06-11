@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InformationDemandingButton renders correctly when validate returns false 1`] = `
+<div
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "inline-flex",
+    }
+  }
+>
+  <div
+    className="
+  						fields-container sdfggfdgsdfl
+  						false
+  					"
+    style={
+      Object {
+        "bottom": "1884px",
+      }
+    }
+  >
+    <div
+      mockName="TextField"
+      mockProps={
+        Object {
+          "errorText": "now you are screwed",
+          "floatingLabelText": "this is text",
+          "onChange": [Function],
+          "style": Object {
+            "marginTop": "-14px",
+            "width": "125px",
+          },
+          "value": "ssdfd",
+        }
+      }
+    />
+  </div>
+  <div
+    mockName="FlatButton"
+    mockProps={
+      Object {
+        "disabled": true,
+        "icon": <span>
+          Passive
+      </span>,
+        "onTouchTap": [Function],
+      }
+    }
+  />
+</div>
+`;

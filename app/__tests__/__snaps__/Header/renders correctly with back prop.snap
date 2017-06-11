@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly with back prop 1`] = `
+<header
+  className="container sdfggfdgsdfl"
+>
+  <div
+    mockName="FlatButton"
+    mockProps={
+      Object {
+        "icon": <NavigationArrowBack
+          color="sdfggfdgsdfl alternativeTextColor"
+      />,
+        "label": "asfdfs",
+        "labelStyle": Object {
+          "color": "sdfggfdgsdfl alternativeTextColor",
+        },
+        "onTouchTap": [Function],
+      }
+    }
+  />
+  <nav
+    className="nav undefined"
+  />
+  <h1
+    className="header undefined"
+  >
+    
+  </h1>
+</header>
+`;
