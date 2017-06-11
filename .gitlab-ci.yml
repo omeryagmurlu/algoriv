@@ -1,6 +1,4 @@
-# This file is a template, and might need editing before it works on your project.
-# Full project: https://gitlab.com/pages/plain-html
-image: node:7.10.0
+image: electronuserland/electron-builder:wine
 
 cache:
   paths:
@@ -51,17 +49,6 @@ pages:
 
 win-binary:
   stage: deploy
-  before_script:
-  - dpkg --add-architecture i386
-  - wget -nc https://dl.winehq.org/wine-builds/Release.key
-  - apt-key add Release.key
-  - echo "deb http://dl.winehq.org/wine-builds/debian/ jessie main" | tee /etc/apt/sources.list.d/wine-buils.list
-  - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-  - echo "deb http://download.mono-project.com/repo/debian jessie main" | tee /etc/apt/sources.list.d/mono-official.list
-  - echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | tee /etc/apt/sources.list.d/unstable.list
-  - apt-get update
-  - apt-get install --no-install-recommends -y -t unstable gcc-5
-  - apt-get install --no-install-recommends -y winehq-stable mono-devel ca-certificates-mono
   script:
   - yarn run package-win
   artifacts:
