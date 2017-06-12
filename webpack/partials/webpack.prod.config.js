@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Config = webpackConfig.Config;
 
 module.exports = new Config().merge({
-	devtool: 'cheap-module-source-map',
+	devtool: false,
 	module: {
 		rules: [
 			{

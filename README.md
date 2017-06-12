@@ -4,7 +4,11 @@ A modular algorithm visualization software.
 
 ## Installation
 
-Grap a copy for your system from releases tab.
+* [Linux](https://gitlab.com/omeryagmurlu/algoriv/builds/artifacts/master/browse/release?job=linux-binary)
+* [Windows](https://gitlab.com/omeryagmurlu/algoriv/builds/artifacts/master/browse/release?job=win-binary)
+* For OSx you must build the project
+
+You can always use the web app [here]('https://omeryagmurlu.gitlab.io/algoriv')
 
 ## Getting Started
 
