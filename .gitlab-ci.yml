@@ -1,4 +1,4 @@
-image: electronuserland/electron-builder:wine
+image: node:7.10.0
 
 cache:
   paths:
@@ -48,6 +48,7 @@ pages:
   - master
 
 win-binary:
+  image: electronuserland/electron-builder:wine
   stage: deploy
   script:
   - yarn run package-win
@@ -56,6 +57,7 @@ win-binary:
     - release
 
 linux-binary:
+  image: electronuserland/electron-builder:wine
   stage: deploy
   script:
   - yarn run package-linux
