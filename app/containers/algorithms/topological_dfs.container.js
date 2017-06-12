@@ -99,21 +99,22 @@ TopologicalDFS.logic = ({ graph: gNonParse }, snipe) => {
 		}
 		if (!permVis[v] && !tempVis[v]) { // !tempVis[v] is always true here, for readability
 			tempVis[v] = true;
-			snap([0], `Mark vertex ${v} temporarily visited`, v);
-			graph.outNeighbors(v).forEach(u => {
-				snap([0], `Visit vertex ${u}`, u, graph.edge(v, u));
+			snap([6], `Mark vertex ${v} temporarily visited`, v);
+			const negs = graph.outNeighbors(v);
+			for (let i = 0, u = negs[i]; i < negs.length; u = negs[++i]) {
+				snap([7, 8], `Visit vertex ${u}`, u, graph.edge(v, u));
 				tempEd.push(graph.edge(v, u));
 				const res = visit(u);
 				permEd.push(graph.edge(v, u));
 				if (res === -1) {
 					return -1;
 				}
-			});
+			}
 			tempVis[v] = false;
 			permVis[v] = true;
-			snap([0], `Upgrade marked state of vertex ${v} from temporary to permanent`, v);
+			snap([9, 10], `Upgrade marked state of vertex ${v} from temporary to permanent`, v);
 			sorted.unshift(v);
-			snap([0], `Unshift ${v} to the list`, v);
+			snap([11], `Unshift ${v} to the list`, v);
 		}
 	};
 
@@ -133,7 +134,7 @@ TopologicalDFS.logic = ({ graph: gNonParse }, snipe) => {
 		sorted = [];
 		wrong = graph.nodes();
 		wrongEd = graph.edges();
-		snap([10, 11], 'The graph is not a DAG!');
+		snap([3, 4], 'The graph is not a DAG!');
 		return;
 	}
 	snap([], 'Topological sort finished');

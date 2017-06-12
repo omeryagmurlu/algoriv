@@ -29,25 +29,26 @@ const AlgorithmInner = props => {
 
 		part.sort((a, b) => statics[b].layout.order - statics[a].layout.order);
 
-		return part.map(moduleId =>
-			React.createElement(modules[statics[moduleId].type], {
+		return part.map(moduleId => {
+			const moduleInput = (
+				inputs.find(v => v.data.targetModule === moduleId)
+				|| inputs.filter(v => v.data.moduleName === statics[moduleId].type)
+			);
+			return React.createElement(modules[statics[moduleId].type], {
 				...passProps,
 
 				id: moduleId,
 				key: moduleId,
 
-				input: (
-					inputs.find(v => v.data.targetModule === moduleId)
-					|| inputs.filter(v => v.data.moduleName === statics[moduleId].type)
-				).reduce((acc, input) => {
+				input: moduleInput.reduce((acc, input) => {
 					acc[input.data.inputIdentifier] = _pick(input, ['value', 'update']);
 					return acc;
 				}, {}),
 
 				...statics[moduleId].data,
 				...directives[moduleId]
-			})
-		);
+			});
+		});
 	});
 
 	props.visualCache()('leftDrawer')('isOpened').default(false);
