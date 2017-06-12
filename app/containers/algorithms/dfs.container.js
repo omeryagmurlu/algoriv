@@ -5,10 +5,10 @@ const DFS = Algorithm('DFS', 'graph');
 DFS.addStartingNodeInput();
 
 DFS.addDescription(`
-Depth-first search (DFS) is an algorithm for traversing or searching tree or \
+**Depth-first search** (DFS) is an algorithm for traversing or searching tree or \
 graph data structures. One starts at the root (selecting some arbitrary node \
-as the root in the case of a graph) and explores as far as possible along each \
-branch before backtracking.
+as the root in the case of a graph) and **explores as far as possible** along each \
+branch **before backtracking**.
 
 A version of depth-first search was investigated in the 19th century by French \
 mathematician Charles Pierre Trémaux as a strategy for solving mazes.

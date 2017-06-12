@@ -5,10 +5,10 @@ const BFS = Algorithm('BFS', 'graph');
 BFS.addStartingNodeInput();
 
 BFS.addDescription(`
-Breadth-first search (BFS) is an algorithm for traversing or searching tree \
+**Breadth-first search** (BFS) is an algorithm for **traversing** or searching tree \
 or graph data structures. It starts at the tree root (or some arbitrary node \
 of a graph, sometimes referred to as a 'search key') and explores the \
-neighbor nodes first, before moving to the next level neighbors.
+**neighbor nodes first**, before moving to the next level neighbors.
 
 BFS was invented in the late 1950s by E. F. Moore, who used it to find the shortest \
 path out of a maze, and discovered independently by C. Y. Lee as a wire routing algorithm (published 1961).

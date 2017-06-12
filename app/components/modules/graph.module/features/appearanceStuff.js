@@ -2,6 +2,19 @@ import chroma from 'chroma-js';
 import _mapValues from 'lodash.mapvalues';
 import { ColorList, themeVars } from 'app/utils';
 
+const glyphPositionEnum = [
+	'top-left',
+	'top-right',
+	'bottom-right',
+	'bottom-left',
+];
+
+const defGlyph = {
+	strokeColor() { return this.color; },
+	content: undefined,
+	draw: false
+};
+
 const grayScale = chroma.scale();
 
 const appearanceStuff = (instance) => {
@@ -10,8 +23,9 @@ const appearanceStuff = (instance) => {
 		nodes: {}
 	};
 	const setTemp = (type, thing, key, value) => {
+		const valuer = typeof value === 'function' ? value : () => value;
 		temp[type][thing] = temp[type][thing] || {};
-		temp[type][thing][key] = value;
+		temp[type][thing][key] = valuer(temp[type][thing][key]);
 	};
 	const resetTemp = () => {
 		temp = {
@@ -28,6 +42,16 @@ const appearanceStuff = (instance) => {
 	};
 
 	let timeoutsToBeCleared = {};
+	const skippableTimeout = (fn, skipFn, time) => {
+		const timeoutId = setTimeout(() => {
+			timeoutsToBeCleared[timeoutId] = null;
+			fn();
+		}, time);
+		timeoutsToBeCleared[timeoutId] = {
+			clear: () => clearTimeout(timeoutId),
+			fastforward: skipFn
+		};
+	};
 
 	const postProcessColors = v => {
 		if (instance.props.app.settings('options')('grayscale-visualizations').get()) {
@@ -65,9 +89,15 @@ const appearanceStuff = (instance) => {
 		purgeStack.push(() => setTemp(type, thing, 'col', mainColors.default));
 	};
 
-	const labelizeThing = (thing, label, type) => {
-		setTemp(type, thing, 'lab', label);
-		purgeStack.push(() => setTemp(type, thing, 'lab', -1));
+	const labelizeThing = (thing, label, idx, type) => {
+		setTemp(type, thing, 'lab', (prev = []) => {
+			prev[idx] = label;
+			return prev;
+		});
+		purgeStack.push(() => setTemp(type, thing, 'lab', (prev = []) => {
+			prev[idx] = -1;
+			return prev;
+		}));
 	};
 
 	const processTemp = () => {
@@ -100,12 +130,24 @@ const appearanceStuff = (instance) => {
 
 				if (temp[type][id].lab) {
 					const thing = instance.sigma.graph[type](id);
-					thing.glyphs[0].content = temp[type][id].lab;
-					if (temp[type][id].lab === -1) {
-						thing.glyphs[0].draw = false;
-					} else {
-						thing.glyphs[0].draw = true;
-					}
+					temp[type][id].lab.forEach((label, idx) => {
+						let fn;
+						if (label === -1) {
+							fn = () => (thing.glyphs[idx] = {
+								...defGlyph,
+								position: glyphPositionEnum[idx],
+								draw: false
+							});
+						} else {
+							fn = () => (thing.glyphs[idx] = {
+								...defGlyph,
+								position: glyphPositionEnum[idx],
+								content: label,
+								draw: true
+							});
+						}
+						skippableTimeout(fn, fn, instance.props.animationNextFrameTime * (2/5));
+					});
 					instance.sigma.refresh({ skipIndexation: true });
 				}
 			})
@@ -138,14 +180,7 @@ const appearanceStuff = (instance) => {
 		]).mode('lch').domain([0, sps - 1]));
 
 		const timeout = fn => {
-			const timeoutId = setTimeout(() => {
-				timeoutsToBeCleared[timeoutId] = null;
-				fn();
-			}, eachTime(steps()));
-			timeoutsToBeCleared[timeoutId] = {
-				clear: () => clearTimeout(timeoutId),
-				fastforward: () => callback(secCol)
-			};
+			skippableTimeout(fn, () => callback(secCol), eachTime(steps()));
 		};
 		const fn = i => () => {
 			if (i >= steps()) {
@@ -163,9 +198,9 @@ const appearanceStuff = (instance) => {
 		const clist = ColorList.revive(deadClist);
 		flashStack();
 
-		Object.keys(customLabels).forEach(key => {
-			labelizeThing(key, customLabels[key], 'nodes');
-		});
+		customLabels.forEach((labelGroup, i) => labelGroup && Object.keys(labelGroup).forEach(key => {
+			labelizeThing(key, labelGroup[key], i, 'nodes');
+		}));
 
 		clist.forEachEdge((edge, idx) => {
 			colorizeThing(edge, sideColors(clist.neededColorVariety())[idx], 'edges');

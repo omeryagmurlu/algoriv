@@ -38,7 +38,7 @@ Used text editor is Ace Editor, you can find it's [default keyboard shotcuts her
 #### Visualization API
 
 | Name | Type | Description | Parameters |
-| --- |
+| --- | --- | --- | --- |
 | `frame` | function | used to 'snapshot' current state of `Algorithm` as a step | `none` |
 | `Algorithm` | object | Visualization API populated depending on configuration | - |
 | `Algorithm.code` | function | used to highlight lines in pseudo-code | `lines`: array of integers |
@@ -48,13 +48,13 @@ Used text editor is Ace Editor, you can find it's [default keyboard shotcuts her
 | `Algorithm[type]` where type is Algorithm's type | object | Collection of functions for Algorithm's type | - |
 | `Algorithm[type = graph]` | object | Collection of methods to operate on the graph | - |
 | `Algorithm[type = graph].setColor` | function | set color of nodes and edges based on indexes [0-360) | `colorIndex`: number, `nodes`: array of [node keys][4], `edges`: array of [edge keys][4] |
-| `Algorithm[type = graph].setGlyphs` | function | set glyphs of nodes to strings | `glyphs`: shape{[key: [node key][4]]: value: string} |
+| `Algorithm[type = graph].setGlyphs` | function | set glyphs of nodes to strings | `glyphs`: shape{[key: [node key][4]]: value: string}, `position`: number [0; 4) (default: 0) |
 | `Algorithm[type = graph].setOverrideGraph` | function | change viewed graph, doesn't affect the input (useful for reversing etc.) | `graph`: [serialized graph][4] |
 
 #### Inputs
 
 | Name | Type | Description |
-| --- |
+| --- | --- | --- |
 | `input[type]` where type is Algorithm's type | any | Algorithm's main input |
 | `input[typeFeature]` where typeFeature is specified type feature ids | any | Toggled additional input for type |
 | `input[type = graph]` | [serialized graph][4] | Graph |
@@ -63,13 +63,13 @@ Used text editor is Ace Editor, you can find it's [default keyboard shotcuts her
 #### Debug Bindings
 
 | Name | Type | Description | Parameters | Returns |
-| --- |
+| --- | --- | --- | --- | --- |
 | `log` | function | logs params to the console on the right sidebar | ...any | `none` |
 
 #### Others
 
-| Name | Type | Description
-| --- |
+| Name | Type | Description |
+| --- | --- | --- |
 | `Structures` | [Buckets-JS][5] | Buckets-JS Data Structures library |
 | `buckets` | [Buckets-JS][5] | alias of `Structures` |
 

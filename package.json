@@ -97,6 +97,7 @@
     "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
     "lodash.sample": "^4.2.1",
+    "lodash.shuffle": "^4.2.0",
     "lodash.union": "^4.6.0",
     "lodash.without": "^4.4.0",
     "material-ui": "^0.18.0",

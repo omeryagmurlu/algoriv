@@ -5,16 +5,16 @@ const Djikstra = Algorithm('Djikstra', 'graph');
 Djikstra.addStartingNodeInput();
 
 Djikstra.addDescription(`
-Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph, \
+**Dijkstra's algorithm** is an algorithm for finding the **shortest path**s between nodes in a graph, \
 which may represent, for example, road networks. It was conceived by computer scientist Edsger \
 W. Dijkstra in 1956 and published three years later.
 
 The algorithm exists in many variants; Dijkstra's original variant found the shortest path \
 between two nodes, but a more common variant fixes a single node as the "source" node \
-and finds shortest paths from the source to all other nodes in the graph, producing a \
+and finds **shortest paths from the source to all other nodes** in the graph, producing a \
 shortest-path tree.
 
-The algorithm only works as long as we do not have edges with negative weights. Otherwise, there is no\
+The algorithm **fails when edges have negative weights**. Otherwise, there is no\
 guarantee that when we pick u as the closest vertex, dist[v] for some other vertex v will not become\
 smaller than dist[u] at some time in the future.
 `);

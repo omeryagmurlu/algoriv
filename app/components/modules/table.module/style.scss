@@ -2,10 +2,6 @@
 
 @include themeable {
 	.container-#{$themeName} {
-		width: $moduleMaxWidth;
-		// height: 100%;
-		// overflow-x: hidden;
-
 		thead,
 		tr {
 			display: table;

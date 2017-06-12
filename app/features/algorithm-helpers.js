@@ -186,15 +186,18 @@ const _proxyHelper = (mod, {
 };
 
 const Graph = (input = []) => (...moduleArgs) => {
-	let snapDatas = [[], []];
+	let snapDatas = [[], [], []];
 
 	const instance = {
 		setColor: (index, nodes, edges) => {
 			snapDatas[0][index] = nodes;
 			snapDatas[1][index] = edges;
 		},
-		setGlyphs: (glp) => {
-			snapDatas[2] = glp;
+		setGlyphs: (glp, idx = 0) => {
+			if (idx < 0 || idx > 3) {
+				throw new RangeError('Glyph idx must be within range [0; 4)');
+			}
+			snapDatas[2][idx] = glp;
 		},
 		setOverrideGraph: graph => {
 			snapDatas[3] = graph;
@@ -204,7 +207,7 @@ const Graph = (input = []) => (...moduleArgs) => {
 			moduleArgs,
 			input,
 			getSnaps: () => snapDatas,
-			resetSnaps: () => (snapDatas = [[], []])
+			resetSnaps: () => (snapDatas = [[], [], []])
 		})
 	};
 

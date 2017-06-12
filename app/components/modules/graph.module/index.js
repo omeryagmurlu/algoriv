@@ -112,6 +112,8 @@ class Graph extends Component {
 		this.sigma.renderers[0].bind('render', () => this.sigma.renderers[0].glyphs());
 		this.attachEvents();
 		this.createGraph();
+
+		this.componentWillReceiveProps(this.props);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -151,12 +153,7 @@ class Graph extends Component {
 		color: this.defaultColor,
 		x,
 		y,
-		glyphs: [{
-			position: 'top-left',
-			strokeColor() { return this.color; },
-			content: undefined,
-			draw: false
-		}]
+		glyphs: []
 	})
 
 	edge = (id, graph, weight) => ({
@@ -247,7 +244,7 @@ class Graph extends Component {
 
 Graph.defaultProps = {
 	optGraph: null,
-	customLabels: {}
+	customLabels: []
 };
 
 Graph.propTypes = {
@@ -255,7 +252,7 @@ Graph.propTypes = {
 	app: PropTypes.any.isRequired,
 
 	optGraph: PropTypes.object,
-	customLabels: PropTypes.object,
+	customLabels: PropTypes.array,
 
 	input: PropTypes.objectOf(PropTypes.shape({
 		update: PropTypes.func,

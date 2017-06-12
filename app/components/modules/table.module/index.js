@@ -8,7 +8,8 @@ import {
 	TableRow,
 	TableRowColumn,
 } from 'material-ui/Table';
-import { themedStyle, ifModuleEnabled } from 'app/utils';
+import { themedStyle, ifModuleEnabled, trimPx } from 'app/utils';
+import vars from 'app/styles/variables.json';
 
 import style from './style.scss';
 
@@ -17,6 +18,9 @@ const css = themedStyle(style);
 const Table = props => ifModuleEnabled('table', props, (props.data.length > 0 && (
 	<div
 		className={css('container', props.theme)}
+		style={{
+			width: `${props.width}px`
+		}}
 	>
 		<TableView>
 			<TableHeader
@@ -50,8 +54,13 @@ const Table = props => ifModuleEnabled('table', props, (props.data.length > 0 &&
 	</div>
 )) || null);
 
+Table.defaultProps = {
+	width: trimPx(vars.moduleMaxWidth)
+};
+
 Table.propTypes = {
-	width: PropTypes.number.isRequired,
+	width: PropTypes.number,
+	height: PropTypes.number.isRequired,
 	columns: PropTypes.arrayOf(PropTypes.string).isRequired,
 	data: PropTypes.array.isRequired,
 	theme: PropTypes.string.isRequired,

@@ -4,8 +4,8 @@
 	width: $moduleMaxWidth;
 	// white-space: pre-line; //react markdown
 	font-family: $textFont;
-}
 
-.header {
-	font-weight: bold;
+	hr {
+		margin: 0 20px;
+	}
 }

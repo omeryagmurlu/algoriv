@@ -165,6 +165,9 @@ const CustomCodeView = props => {
 		name="text-editor-pseudo-code"
 		onChange={props.algPseudoCode.set}
 		value={props.algPseudoCode.value}
+		setOptions={{
+			firstLineNumber: 0,
+		}}
 		style={{
 			width: itemWidth,
 			height: `${0.5 * trimPx(itemWidth)}px`,

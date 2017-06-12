@@ -17,7 +17,7 @@ export const createFrom = (className, data) => create(className, graph => {
 		(Array.isArray(node) ? node[0] : node)
 	))))));
 	// console.log(order);
-	graph.addNodesFrom(Array(order + 1).fill(1).map((v, i) => i));
+	graph.addNodesFrom(Array(Math.max(order + 1, data.length)).fill(1).map((v, i) => i));
 	data.forEach((negs, v) => negs.forEach(rawU => {
 		const u = Array.isArray(rawU) ? rawU[0] : rawU;
 		const weight = Array.isArray(rawU) ? rawU[1] : null;
@@ -71,26 +71,13 @@ export const graphs = [
 					[18, 19, 20]
 				])
 			},
-			{
-				name: 'Dengesiz Binary Tree',
-				graph: createFrom('DirectedGraph', [
-					[1, 2],
-					[3, 4],
-					[],
-					[5, 6],
-					[],
-					[7, 8],
-					[],
-					[9, 10]
-				])
-			}
 		]
 	},
 	{
 		suits: ['Djikstra', 'BFS', 'DFS'],
 		graphs: [
 			{
-				name: 'Dengesiz Binary Tree Weighted',
+				name: 'Unbalanced Binary Tree Weighted',
 				graph: createFrom('DirectedGraph', [
 					[[1, 18], [2, 3]],
 					[[3, 10], [4, 6]],
@@ -186,6 +173,35 @@ export const graphs = [
 					[15],
 					[16],
 					[14, 5]
+				])
+			}
+		]
+	},
+	{
+		suits: ['TopologicalIndegree', 'TopologicalDFS', 'BFS', 'DFS'],
+		graphs: [
+			{
+				name: 'Unbalanced Binary Tree',
+				graph: createFrom('DirectedGraph', [
+					[1, 2],
+					[3, 4],
+					[],
+					[5, 6],
+					[],
+					[7, 8],
+					[],
+					[9, 10]
+				])
+			},
+			{
+				name: 'DAG 5 Vertexes',
+				graph: createFrom('DirectedGraph', [
+					[],
+					[],
+					[3],
+					[1],
+					[0, 1],
+					[0, 2]
 				])
 			}
 		]

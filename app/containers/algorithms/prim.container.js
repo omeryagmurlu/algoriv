@@ -1,18 +1,20 @@
 import Algorithm from 'app/features/algorithm-helpers';
+import _sample from 'lodash.sample';
 import { vis2array, DataStructures, graphologyImportFix as gimport, visCreator } from 'app/utils';
 
 const Prim = Algorithm('Prim', 'graph');
-Prim.addStartingNodeInput();
 
 Prim.addDescription(`
-A minimum spanning tree (MST) or minimum weight spanning tree is a subset of \
-the edges of a connected, edge-weighted undirected graph that connects all the \
-vertices together, without any cycles and with the minimum possible total edge \
-weight. That is, it is a spanning tree whose sum of edge weights is as small as \
-possible. Directed equivalent of a MST is a minimum spanning arborescence.
+A **minimum spanning tree** (MST) or minimum weight spanning tree is a subset of \
+the edges of a connected, edge-weighted undirected graph that **connects all the \
+vertices** together, without any cycles and **with the minimum possible total edge \
+weight**. That is, it is a spanning tree whose sum of edge weights is as small as \
+possible. Directed graph equivalent of a MST is a minimum spanning arborescence.
 
-Prim's algorithm operates by building this tree one vertex at a time, from an \
-arbitrary starting vertex, at each step adding the cheapest possible connection \
+---
+
+**Prim's algorithm** operates by building this tree **one vertex at a time**, from an \
+**arbitrary starting vertex**, at each step adding the cheapest possible connection \
 from the tree to another vertex.
 
 The algorithm was developed in 1930 by Czech mathematician Vojtěch Jarník and later \
@@ -21,8 +23,8 @@ Edsger W. Dijkstra in 1959.
 `);
 
 Prim.addCode([
-	'Prim(s):',
-	'    enqueue pair(s, 0) // Min-PriorityQueue',
+	'Prim():',
+	'    enqueue pair(s: arbitrary node, 0) // Min-PriorityQueue',
 	'    while pq is not empty',
 	'         retrieve node v and connection cost -> dequeue',
 	'         if v is visited continue',
@@ -34,8 +36,9 @@ Prim.addCode([
 Prim.addText('sum');
 Prim.addNodedTable('visited', 'Visited');
 
-Prim.logic = ({ startVertex: starting, graph: gNonParse }, snipe) => {
+Prim.logic = ({ graph: gNonParse }, snipe) => {
 	const graph = gimport(gNonParse);
+	const starting = _sample(graph.nodes());
 	const alg = Prim.algorithm;
 
 	const pair = (id, weight, parent) => ({ id, weight, parent });

@@ -144,6 +144,9 @@ exports[`CustomCodeView renders correctly 1`] = `
         Object {
           "name": "text-editor-pseudo-code",
           "onChange": [Function],
+          "setOptions": Object {
+            "firstLineNumber": 0,
+          },
           "style": Object {
             "height": "NaNpx",
             "minHeight": "NaNpx",

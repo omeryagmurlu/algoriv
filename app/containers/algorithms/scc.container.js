@@ -1,19 +1,21 @@
 import Algorithm from 'app/features/algorithm-helpers';
+import _shuffle from 'lodash.shuffle';
 import { vis2array, reverseGraph, graphologyImportFix as gimport, visCreator } from 'app/utils';
 
 const SCC = Algorithm('SCC', 'graph');
-SCC.addStartingNodeInput();
 
 SCC.addDescription(`
-In the mathematical theory of directed graphs, a graph is said to be strongly \
-connected or diconnected if every vertex is reachable from every other vertex. \
-The strongly connected components or disconnected components of an arbitrary \
+In the mathematical theory of directed graphs, a graph is said to be **strongly \
+connected** or diconnected if **every vertex is reachable from every other vertex**. \
+The **strongly connected components** or disconnected components of an arbitrary \
 directed graph form a partition into subgraphs that are themselves strongly connected.
 
-Kosaraju's algorithm uses two passes of depth first search. The first, in the original \
+---
+
+**Kosaraju's algorithm** uses **two passes of depth first search**. The first, in the original \
 graph, is used to choose the order in which the outer loop of the second depth first \
 search tests vertices for having been visited already and recursively explores them \
-if not. The second depth first search is on the transpose graph of the original graph, \
+if not. The second depth first search is on the **transpose graph** of the original graph, \
 and each recursive exploration finds a single new strongly connected component. It is \
 named after S. Rao Kosaraju, who described it (but did not publish his results) in 1978; \
 Micha Sharir later published it in 1981.`);
@@ -28,7 +30,7 @@ SCC.addCode([
 	'            else computeFinishOrders(u)',
 	'        save finish time of v',
 	' ',
-	'    for every node v',
+	'    for every node v //in arbitrary order',
 	'        if v visited continue',
 	'        else computeFinishOrders(v)',
 	'    reset visited map',
@@ -54,7 +56,7 @@ SCC.addCode([
 SCC.addTable('f1', ['Nodes', 'Finish Times']);
 SCC.addTable('scc', ['SCCs']);
 
-SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
+SCC.logic = ({ graph: gNonParse }, snipe) => {
 	const graph = gimport(gNonParse);
 	const alg = SCC.algorithm;
 
@@ -106,7 +108,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 	};
 
 	snap([], undefined);
-	snap([], `Starting SCC from node ${st}`, st);
+	snap([], 'Starting SCC');
 
 	let tim = 0;
 	const dfs1 = (v) => {
@@ -128,7 +130,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 		f1.push(mp(++tim, v));
 		snap([7], `Finish time of node ${v} is ${tim}`, v);
 	};
-	graph.nodes().forEach(v => {
+	_shuffle(graph.nodes()).forEach(v => {
 		if (vis[v]) {
 			return;
 		}
@@ -196,7 +198,7 @@ SCC.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 		alg.graph.setOverrideGraph(graph.export());
 		semiSnap(...p);
 	};
-	snap([], `SCC from ${st} completed ${sccId}`);
+	snap([], 'SCC completed');
 };
 
 export default SCC.create();

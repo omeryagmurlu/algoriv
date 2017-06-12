@@ -7,13 +7,15 @@ import _union from 'lodash.union';
 const Kruskal = Algorithm('Kruskal', 'graph');
 
 Kruskal.addDescription(`
-A minimum spanning tree (MST) or minimum weight spanning tree is a subset of \
-the edges of a connected, edge-weighted undirected graph that connects all the \
-vertices together, without any cycles and with the minimum possible total edge \
-weight. That is, it is a spanning tree whose sum of edge weights is as small as \
+A **minimum spanning tree** (MST) or minimum weight spanning tree is a subset of \
+the edges of a connected, edge-weighted undirected graph that **connects all the \
+vertices** together, without any cycles and **with the minimum possible total edge \
+weight**. That is, it is a spanning tree whose sum of edge weights is as small as \
 possible. Directed graph equivalent of a MST is a minimum spanning arborescence.
 
-The algorithm initializes a forest consisting of trees with single nodes. The edges \
+---
+
+**Kruskal's algorithm** initializes a forest consisting of trees with single nodes. The edges \
 are sorted in a queue based on their weights. In each round an edge is removed from \
 the queue. If the edge's endpoints belong to different trees then the trees are merged \
 using the edge. The process continues until all the nodes are in the same tree or the \

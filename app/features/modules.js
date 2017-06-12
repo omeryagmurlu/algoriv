@@ -42,7 +42,8 @@ export const TableModule = Modules.Table = exporter(
 			}, [])
 		)
 	}),
-	(columns, width = 150) => typee('table', 'right', {
+	(columns, height = 150, width = undefined) => typee('table', 'right', {
+		height,
 		width,
 		columns
 	})
@@ -109,12 +110,12 @@ export const DescriptionModule = Modules.Description = exporter(
 );
 
 export const RefinedGraphModule = Modules.RefinedGraph = exporter(
-	(nodesList, edgesList, glyphs = {}, ...params) => {
+	(nodesList, edgesList, glyphs = [], ...params) => {
 		const clist = new ColorList();
 		nodesList.forEach(nodes => clist.pushNodes(Array.isArray(nodes) ? nodes : [nodes]));
 		edgesList.forEach(edges => clist.pushEdges(Array.isArray(edges) ? edges : [edges]));
 
-		return GraphModule.snap(clist, _mapValues(glyphs, labelizer), ...params);
+		return GraphModule.snap(clist, glyphs.map(v => _mapValues(v, labelizer)), ...params);
 	},
 	(...p) => GraphModule.module(...p),
 	(...p) => GraphModule.input(...p)
