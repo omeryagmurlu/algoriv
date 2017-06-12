@@ -8,7 +8,7 @@ A modular algorithm visualization software.
 * [Windows](https://gitlab.com/omeryagmurlu/algoriv/builds/artifacts/master/browse/release?job=win-binary)
 * For OSx you must build the project
 
-You can always use the web app [here]('https://omeryagmurlu.gitlab.io/algoriv')
+You can always use the web app [here](https://omeryagmurlu.gitlab.io/algoriv)
 
 ## Getting Started
 
