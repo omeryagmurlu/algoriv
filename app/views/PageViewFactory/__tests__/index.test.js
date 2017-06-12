@@ -2,7 +2,7 @@
 /* eslint import/no-webpack-loader-syntax: off */
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { MockComponent, StyleMocks, StyleModuleComponentProps, settingsMock } from 'app/__tests__/test-utils';
+import { StyleMocks } from 'app/__tests__/test-utils';
 import Injector from 'inject-loader!../';
 
 const { default: PageViewFactory } = Injector({

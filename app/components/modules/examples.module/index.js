@@ -8,7 +8,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 
-import { Examples as EXAMPLES } from 'app/data/inputsRegistry';
+import { ExamplesRegistry as EXAMPLES } from 'app/data/inputsRegistry';
 import { themedStyle, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
@@ -105,6 +105,7 @@ class Examples extends Component {
 }
 
 Examples.propTypes = {
+	app: PropTypes.any.isRequired,
 	theme: PropTypes.string.isRequired,
 	examples: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
@@ -113,6 +114,13 @@ Examples.propTypes = {
 	customs: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		data: PropTypes.any.isRequired
+	})).isRequired,
+	addCustom: PropTypes.func.isRequired,
+	renameCustom: PropTypes.func.isRequired,
+	deleteCustom: PropTypes.func.isRequired,
+	input: PropTypes.objectOf(PropTypes.shape({
+		update: PropTypes.func,
+		value: PropTypes.any
 	})).isRequired,
 	// exampleGroup: PropTypes.string.isRequired
 };

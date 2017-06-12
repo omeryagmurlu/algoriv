@@ -1,4 +1,4 @@
-import { Graph as GRAPH } from 'app/data/inputsRegistry';
+import { GraphRegistry as GRAPH } from 'app/data/inputsRegistry';
 import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
 const eventStuff = (instance) => {

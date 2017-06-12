@@ -45,22 +45,23 @@ const Settings = (storage, changeHandler = () => {}) => {
 	};
 
 	const getH = (initialKey = false, ctx = _get(), deadFlag = false) => { // FIXME: time, impl aga.
+		let deadFlagLocal = deadFlag;
 		let context = ctx;
 		if (initialKey) {
 			if (!_isNil(ctx[initialKey])) {
 				context = ctx[initialKey];
 			} else {
-				deadFlag = true;
+				deadFlagLocal = true;
 			}
 		}
 		const fn = key => {
-			if (!deadFlag && !_isNil(fn.ctx[key])) {
+			if (!deadFlagLocal && !_isNil(fn.ctx[key])) {
 				return getH(false, fn.ctx[key]);
 			}
 			return getH(false, {}, true);
 		};
-		fn.get = (defVal = undefined) => (deadFlag ? defVal : context);
-		if (!deadFlag) {
+		fn.get = (defVal = undefined) => (deadFlagLocal ? defVal : context);
+		if (!deadFlagLocal) {
 			fn.ctx = context;
 		}
 		return fn;
@@ -71,24 +72,16 @@ const Settings = (storage, changeHandler = () => {}) => {
 			list.push(key);
 		}
 
+		const ferry = (gSH, met) => (...p) => {
+			let curr = gSH(list[0]);
+			list.slice(1).forEach(k => (curr = curr(k)));
+			return curr[met](...p);
+		};
+
 		const fn = k => selector(k, list);
-		fn.get = (...p) => {
-			let curr = getH(list[0]);
-			list.slice(1).forEach(k => (curr = curr(k)));
-			return curr.get(...p);
-		};
-
-		fn.set = (...p) => {
-			let curr = setH(list[0]);
-			list.slice(1).forEach(k => (curr = curr(k)));
-			return curr.set(...p);
-		};
-
-		fn.default = (...p) => {
-			let curr = setH(list[0]);
-			list.slice(1).forEach(k => (curr = curr(k)));
-			return curr.default(...p);
-		};
+		fn.get = ferry(getH, 'get');
+		fn.set = ferry(setH, 'set');
+		fn.default = ferry(setH, 'default');
 
 		return fn;
 	};

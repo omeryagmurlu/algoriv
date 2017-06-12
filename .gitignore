@@ -1,5 +1,4 @@
 node_modules
 release/*
-!release/AlgoriV - Algorithm Visualization 1.0.0.exe
-!release/AlgoriV - Algorithm Visualization Setup 1.0.0.exe
+dist
 .tmp

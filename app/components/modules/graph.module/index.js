@@ -55,7 +55,7 @@ import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
 import _isNil from 'lodash.isnil';
 
-import { Graph as GRAPH } from 'app/data/inputsRegistry';
+import { GraphRegistry as GRAPH } from 'app/data/inputsRegistry';
 import { graphologyImportFix as gimport, ifModuleEnabled, themedStyle } from 'app/utils';
 
 import { uiFont } from 'app/styles/variables';
@@ -252,6 +252,7 @@ Graph.defaultProps = {
 
 Graph.propTypes = {
 	id: PropTypes.string.isRequired,
+	app: PropTypes.any.isRequired,
 
 	optGraph: PropTypes.object,
 	customLabels: PropTypes.object,

@@ -8,7 +8,7 @@ import {
 	TableRow,
 	TableRowColumn,
 } from 'material-ui/Table';
-import { themedStyle, themeVars, ifModuleEnabled } from 'app/utils';
+import { themedStyle, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
 
@@ -18,9 +18,7 @@ const Table = props => ifModuleEnabled('table', props, (props.data.length > 0 &&
 	<div
 		className={css('container', props.theme)}
 	>
-		<TableView
-			// height={`${props.width}px`}
-		>
+		<TableView>
 			<TableHeader
 				adjustForCheckbox={false}
 				displaySelectAll={false}
@@ -39,7 +37,7 @@ const Table = props => ifModuleEnabled('table', props, (props.data.length > 0 &&
 			>
 				{props.data.map((row, i) => (
 					<TableRow
-						key={`row${i}${JSON.stringify(row)}`}
+						key={`row${i}${JSON.stringify(row)}${props.columns}`} // eslint-disable-line react/no-array-index-key
 						hoverable
 					>
 						{row.map((v, idx) => (

@@ -1,5 +1,5 @@
 import Algorithm from 'app/features/algorithm-helpers';
-import { vis2array, DataStructures, graphologyImportFix as gimport } from 'app/utils';
+import { vis2array, DataStructures, graphologyImportFix as gimport, visCreator } from 'app/utils';
 
 const Djikstra = Algorithm('Djikstra', 'graph');
 Djikstra.addStartingNodeInput();
@@ -43,10 +43,7 @@ Djikstra.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 		acc[v] = Infinity;
 		return acc;
 	}, {});
-	const vis = graph.nodes().reduce((acc, v) => {
-		acc[v] = false;
-		return acc;
-	}, {});
+	const vis = visCreator(graph);
 
 	const snap = (a, b, c, d) => {
 		alg.visited(vis);
@@ -79,7 +76,7 @@ Djikstra.logic = ({ startVertex: st, graph: gNonParse }, snipe) => {
 		snap([2, 3], `Dequeued node ${v} with distance ${dis}`, v);
 		if (vis[v]) {
 			snap([4], `Node ${v} is visited, continue`, v);
-			continue;
+			continue; // eslint-disable-line no-continue
 		}
 		distance[v] = dis;
 		vis[v] = true;

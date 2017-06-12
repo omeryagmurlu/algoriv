@@ -9,13 +9,7 @@ class AnimatorContainer extends Component {
 		super(props);
 
 		this.animator = new Animator(props.frames, () => props.app.settings('options')('animation'), this.handleAnimatorChange);
-		this.state = {
-			animationDirectives: this.animator.getDirectives(),
-			speed: this.animator.getSpeed(),
-			progress: this.animator.getProgress(),
-			isPaused: this.animator.getIsPaused(),
-			nextFrameTime: this.animator.getNextFrameTime()
-		};
+		this.state = this.changes();
 	}
 
 	componentDidMount() {
@@ -35,14 +29,16 @@ class AnimatorContainer extends Component {
 	}
 
 	handleAnimatorChange = () => {
-		this.setState({
-			animationDirectives: this.animator.getDirectives(),
-			speed: this.animator.getSpeed(),
-			progress: this.animator.getProgress(),
-			isPaused: this.animator.getIsPaused(),
-			nextFrameTime: this.animator.getNextFrameTime()
-		});
+		this.setState(this.changes());
 	}
+
+	changes = () => ({
+		animationDirectives: this.animator.getDirectives(),
+		speed: this.animator.getSpeed(),
+		progress: this.animator.getProgress(),
+		isPaused: this.animator.getIsPaused(),
+		nextFrameTime: this.animator.getNextFrameTime()
+	})
 
 	render() {
 		const { frames, ...propsToPass } = this.props;
@@ -68,6 +64,7 @@ class AnimatorContainer extends Component {
 }
 
 AnimatorContainer.propTypes = {
+	app: PropTypes.any.isRequired,
 	frames: PropTypes.array.isRequired
 };
 

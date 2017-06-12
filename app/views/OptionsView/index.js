@@ -18,6 +18,16 @@ const themeNames = Object.keys(themes);
 
 const css = themedStyle(style);
 
+const controlGroup = (header, desc, more, H = 'h1') => (
+	<div className={css('control-group')} >
+		<header>
+			<H>{header}</H>
+			<span>{desc}</span>
+		</header>
+		{more}
+	</div>
+);
+
 const selectHOF = theme => ({
 	name,
 	option,
@@ -117,106 +127,74 @@ const OptionsView = props => {
 	const text = textHOF(props.app.theme);
 	return (
 		<div className={css('container')}>
-			<div className={css('control-group')} >
-				<header>
-					<h1>Core Options</h1>
-					<span>These options are {'application\'s'} core settings which affect behaviour unrelated to modules and algorithms.</span>
-				</header>
-				{select({
+			{controlGroup('Core Options', 'These options are application\'s core settings which affect behaviour unrelated to modules and algorithms.', [
+				select({
 					name: 'Theme',
 					option: () => options()('theme'),
 					possib: themeNames
-				})}
-				{checkbox({
+				}),
+				checkbox({
 					name: 'Minimal Colored Visualizations',
 					option: () => options()('grayscale-visualizations')
-				})}
-				{checkbox({
+				}),
+				checkbox({
 					name: 'Animations',
 					option: () => options()('animations-enabled')
-				})}
-				{slider({
+				}),
+				slider({
 					name: 'Animation Speed',
 					option: () => options()('animation')('speed'),
 					min: 1,
 					max: 100
-				})}
-				{text({
+				}),
+				text({
 					name: 'Timeout for Custom Code',
 					option: () => options()('custom-code')('timeout'),
 					parser: parseInt
-				})}
-			</div>
-			<div className={css('control-group')} >
-				<header>
-					<h1>Module Options</h1>
-					<span>These options are specific to modules which only affect their behaviour.</span>
-				</header>
-				<div className={css('control-group')} >
-					<header>
-						<h2>Code Module</h2>
-						<span>Options for the Code module.</span>
-					</header>
-					{checkbox({
+				})
+			])}
+			{controlGroup('Module Options', 'These options are specific to modules which only affect their behaviour.', [
+				controlGroup('Code Module', 'Options for the Code module.', [
+					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('code')
-					})}
-				</div>
-				<div className={css('control-group')} >
-					<header>
-						<h2>Description Module</h2>
-						<span>Options for the Description module.</span>
-					</header>
-					{checkbox({
+					})
+				], 'h2'),
+				controlGroup('Description Module', 'Options for the Description module.', [
+					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('description')
-					})}
-				</div>
-				<div className={css('control-group')} >
-					<header>
-						<h2>Graph Module</h2>
-						<span>Options for the Graph module.</span>
-					</header>
-					{checkbox({
+					})
+				], 'h2'),
+				controlGroup('Graph Module', 'Options for the Graph module.', [
+					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('graph')
-					})}
-				</div>
-				<div className={css('control-group')} >
-					<header>
-						<h2>Table Module</h2>
-						<span>Options for the Table module.</span>
-					</header>
-					{checkbox({
+					})
+				], 'h2'),
+				controlGroup('Table Module', 'Options for the Table module.', [
+					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('table')
-					})}
-				</div>
-				<div className={css('control-group')} >
-					<header>
-						<h2>Text Module</h2>
-						<span>Options for the Text module.</span>
-					</header>
-					{checkbox({
+					})
+				], 'h2'),
+				controlGroup('Text Module', 'Options for the Text module.', [
+					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('text')
-					})}
-				</div>
-				<div className={css('control-group')} >
-					<header>
-						<h2>Examples Module</h2>
-						<span>Options for the Examples module.</span>
-					</header>
-					{checkbox({
+					})
+				], 'h2'),
+				controlGroup('Examples Module', 'Options for the Examples module.', [
+					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('examples')
-					})}
-					{button({
+					}),
+					button({
 						name: 'Purge Custom Inputs',
 						action: () => props.app.settings('examples').set({})
-					})}
-				</div>
-			</div>
+					})
+				], 'h2'),
+			])}
 		</div>
 	);
 };

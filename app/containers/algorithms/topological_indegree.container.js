@@ -1,5 +1,5 @@
 import React from 'react';
 
-const TopologicalIndegree = props => <div className="TopologicalIndegree" > </div>;
+const TopologicalIndegree = () => <div className="TopologicalIndegree" />;
 
 export default TopologicalIndegree;
