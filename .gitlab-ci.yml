@@ -41,10 +41,9 @@ pages:
   script:
   - mkdir .public
   - cp -r dist .public
-  - cp -r index.html .public
   - mv .public public
   only:
-  - master
+  - production
   artifacts:
     paths:
     - public
