@@ -11,7 +11,7 @@ import style from './style.scss';
 const css = themedStyle(style);
 
 const filter = [
-	'algorithmInput',
+	'algorithmInitInput',
 	'animationSpeed',
 	'animationIsPaused',
 	'onAnimationChangeSpeed',
@@ -30,7 +30,6 @@ const AlgorithmView = props => (
 					acc[v] = props[v];
 					return acc;
 				}, {}))}
-				input={props.algorithmInput.filter(v => v.type === 'module')}
 				theme={props.app.theme}
 				visualCache={() => props.app.settings('visual-cache')('algorithmView')}
 			/>
@@ -38,7 +37,7 @@ const AlgorithmView = props => (
 		<footer className={css('footer')}>
 			<AnimationControls
 				{...props}
-				input={props.algorithmInput.filter(v => v.type === 'init')}
+				input={props.algorithmInitInput}
 				theme={props.app.theme}
 			/>
 		</footer>
@@ -47,9 +46,7 @@ const AlgorithmView = props => (
 
 AlgorithmView.propTypes = {
 	app: PropTypes.any.isRequired,
-	algorithmInput: PropTypes.arrayOf(PropTypes.shape({
-		type: PropTypes.string.isRequired
-	})).isRequired
+	algorithmInitInput: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default AlgorithmView;

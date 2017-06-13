@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _pickBy from 'lodash.pickby';
+import _mapValues from 'lodash.mapvalues';
 import { makeCancelable, cancelCatch, AlgorithmError } from 'app/utils';
 
 import AnimatorContainer from 'app/containers/AnimatorContainer';
@@ -27,19 +28,14 @@ export const framer = (logic, snap) => (input) => {
 
 const AlgorithmFactory = ({
 	logic: algLogic,
-	snap: algSnap,
 	input: algInput,
-	inputType: algInputType,
+	initInputs: algInitInput,
+	snap: algSnap,
+	modules: algModules,
+	modulesInputProps: algModulesInputProps,
 	info: algInfo,
-	modules: algModules
-}) => ((({
-	revampedAlgInputType
-}) => class AlgorithmPrototype extends Component {
+}) => ((() => class AlgorithmPrototype extends Component {
 	static logic = framer(algLogic, algSnap)
-
-	static selectInput = inType => revampedAlgInputType.filter(
-		({ inputType: { type } }) => type === inType
-	)
 
 	constructor(props) {
 		super(props);
@@ -55,7 +51,8 @@ const AlgorithmFactory = ({
 		this.cancellable(AlgorithmPrototype.logic(algInput))
 		.then(frames => {
 			this.setState({ frames, updating: false });
-		}).catch(cancelCatch).catch(err => {
+		}).catch(cancelCatch)
+		.catch(err => {
 			throw new Error(`Algorithm can't init, ${err}`);
 		});
 	}
@@ -88,27 +85,15 @@ const AlgorithmFactory = ({
 		});
 	}
 
-	getInput = () => filterObjectByKeys(this.state, algInput)
-
-	inputs = () => revampedAlgInputType.map(({ inputName, inputType: { type, invalid, data } }) => ({
-		type,
-		data,
-		value: this.getInput()[inputName],
-		validate: newInput => !invalid(newInput, this.getInput()),
-		invalid: newInput => invalid(newInput, this.getInput()),
-		update: (newInput, cb = () => {}) => {
-			const error = invalid(newInput, this.getInput());
-			if (error) {
-				return cb(error);
-			}
-
-			return this.inputHandler({
-				[inputName]: newInput
-			}, cb);
-		}
+	getInput = () => _mapValues(filterObjectByKeys(this.state, algInput), (v, k) => ({
+		value: v,
+		update: (newInput, cb = () => {}) => this.inputHandler({
+			[k]: newInput
+		}, cb)
 	}))
 
 	render() {
+		const inputProps = algModulesInputProps(this.getInput());
 		return (
 			<LoadingView
 				{...this.props}
@@ -118,8 +103,11 @@ const AlgorithmFactory = ({
 					frames={this.state.frames}
 
 					algorithmInfo={algInfo}
-					algorithmStatic={typeof algModules === 'function' ? algModules(this.props.app.settings) : algModules}
-					algorithmInput={this.inputs()}
+					algorithmStatic={_mapValues((typeof algModules === 'function' ? algModules(this.props.app.settings) : algModules), (v, k) => ({
+						...v,
+						input: inputProps[k]
+					}))}
+					algorithmInitInput={algInitInput(this.getInput())}
 				/>) : null}
 				disabled={!this.state.updating}
 				message={!this.state.frames ? 'Loading Algorithm' : 'Evaluating'}
@@ -136,16 +124,6 @@ const AlgorithmFactory = ({
 			/>
 		);
 	}
-})({
-	revampedAlgInputType: Object.keys(algInputType).reduce((acc, key) =>
-		acc.concat((Array.isArray(algInputType[key])
-			? algInputType[key]
-			: [algInputType[key]]
-		).map(v => ({
-			inputName: key,
-			inputType: v
-		})))
-	, [])
-}));
+})({}));
 
 export default AlgorithmFactory;

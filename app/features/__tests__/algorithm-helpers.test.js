@@ -17,8 +17,8 @@ const { default: Algorithm } = Injector({
 		randomGraph: () => infObj(),
 		suitingGraphs: () => []
 	}),
-	'app/features/input-types': injectExport({
-		InitInput: () => ({ type: 'mockedInit' })
+	'app/features/init-input': injectExport({
+		default: () => ({ isMocked: true })
 	}),
 	'app/utils': injectExport({
 		graphologyImportFix: x => x
@@ -54,13 +54,13 @@ describe('algorithm-helpers', () => {
 		it('add normal input', () => {
 			Alg.addInput('myid', 12, false);
 			expect(prot.input.myid).to.be.equal(12);
-			expect(prot.inputType.myid).to.be.equal(undefined);
+			expect(prot.initInputs({ myid: {} })).to.be.an('array').that.does.not.have.key(0);
 		});
 
 		it('add init input', () => {
 			Alg.addInput('myid', 1, true);
 			expect(prot.input.myid).to.be.equal(1);
-			expect(prot.inputType.myid[0].type).to.be.equal('mockedInit');
+			expect(prot.initInputs({ myid: {} })).to.be.an('array').that.has.property(0).which.is.an('object').with.property('isMocked', true);
 		});
 
 		it('instance.addCode', () => {

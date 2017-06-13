@@ -55,7 +55,6 @@ import PropTypes from 'prop-types';
 import _isEqual from 'lodash.isequal';
 import _isNil from 'lodash.isnil';
 
-import { GraphRegistry as GRAPH } from 'app/data/inputsRegistry';
 import { graphologyImportFix as gimport, ifModuleEnabled, themedStyle } from 'app/utils';
 
 import { uiFont } from 'app/styles/variables';
@@ -75,7 +74,7 @@ const css = themedStyle(style);
 
 class Graph extends Component {
 	static parseGraph = (props) => gimport(JSON.parse(JSON.stringify(
-		props.optGraph || props.input[GRAPH.graph].value
+		props.graph
 	)))
 
 	static typeOptions = {
@@ -243,7 +242,6 @@ class Graph extends Component {
 }
 
 Graph.defaultProps = {
-	optGraph: null,
 	customLabels: []
 };
 
@@ -251,13 +249,12 @@ Graph.propTypes = {
 	id: PropTypes.string.isRequired,
 	app: PropTypes.any.isRequired,
 
-	optGraph: PropTypes.object,
-	customLabels: PropTypes.array,
+	graph: PropTypes.object.isRequired,
+	updateGraph: PropTypes.func.isRequired,
+	canRemoveThisNode: PropTypes.func.isRequired,
 
-	input: PropTypes.objectOf(PropTypes.shape({
-		update: PropTypes.func,
-		value: PropTypes.any
-	})).isRequired,
+	customLabels: PropTypes.array,
+	colors: PropTypes.any.isRequired,
 
 	theme: PropTypes.string.isRequired,
 

@@ -15,7 +15,6 @@ exports[`AlgorithmView renders correctly 1`] = `
           "app": Object {
             "theme": "asdfd",
           },
-          "input": Array [],
           "theme": "asdfd",
           "visualCache": [Function],
         }
@@ -29,11 +28,10 @@ exports[`AlgorithmView renders correctly 1`] = `
       mockName="AnimationControls"
       mockProps={
         Object {
-          "algorithmInput": Array [],
           "app": Object {
             "theme": "asdfd",
           },
-          "input": Array [],
+          "input": undefined,
           "theme": "asdfd",
         }
       }

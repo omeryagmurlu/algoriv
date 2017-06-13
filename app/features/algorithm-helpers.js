@@ -1,9 +1,10 @@
 import flatten from 'lodash.flattendeep';
+import _mapValues from 'lodash.mapvalues';
 
 import Modules from 'app/features/modules';
 import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
 import { graphs, randomGraph, suitingGraphs } from 'app/data/graphs';
-import { InitInput } from 'app/features/input-types';
+import InitInput from 'app/features/init-input';
 import { graphologyImportFix as gimport } from 'app/utils';
 
 const Algorithm = (algorithmName, algorithmType) => {
@@ -34,32 +35,41 @@ const Algorithm = (algorithmName, algorithmType) => {
 			name: algorithmName
 		},
 		input: {},
-		inputType: {},
-		snap: (/* yes, we are not passing any shit to snap */) => getHelperSnaps(),
+		snap: () => getHelperSnaps(),
 		modules: settings =>
 			helpers.reduce((obj, helper, i) => {
 				obj[i] = helper._internals.getModule(settings);
 				return obj;
 			}, {}),
+		modulesInputProps: inputs => helpers.reduce((obj, helper, i) => {
+			obj[i] = helper._internals.getModuleInputProps(inputs);
+			return obj;
+		}, {}),
+		initInputs: inputs => initInputsList.map(({ name, description, invalid }) => {
+			const { update, value } = inputs[name];
+			return InitInput(
+				description,
+				(newInput) => invalid(newInput, _mapValues(inputs, v => v.value)),
+				update,
+				value
+			);
+		})
 	};
 
 	const helpers = [];
+	const initInputsList = [];
 
 	const addInput = instance.addInput = (name, value, init) => {
 		prot.input[name] = value;
 		if (init) {
-			prot.inputType[name] = prot.inputType[name] || [];
-			prot.inputType[name].push(InitInput(init.description, init.invalid));
+			const { description, invalid } = init;
+			initInputsList.push({ name, description, invalid });
 		}
 		return addInput;
 	};
 
 	const addModule = helper => {
 		helpers.push(helper);
-		helper._internals.getInputType(helpers.length - 1).forEach(({ id: inputId, inputType }) => {
-			prot.inputType[inputId] = prot.inputType[inputId] || [];
-			prot.inputType[inputId].push(inputType);
-		});
 		return addModule;
 	};
 
@@ -97,13 +107,7 @@ const Algorithm = (algorithmName, algorithmType) => {
 		 *  - graph
 		 *  - ?startVertex
 		 */
-		instance.algorithm.graph = Graph([{
-			id: 'graph',
-			input: 'graph'
-		}, {
-			id: 'startVertex',
-			input: 'startNode'
-		}])();
+		instance.algorithm.graph = Graph(['graph', 'startVertex'])();
 		instance.addStartingNodeInput = () => {
 			addInput('startVertex', '0', {
 				description: 'Starting Vertex',
@@ -115,13 +119,7 @@ const Algorithm = (algorithmName, algorithmType) => {
 
 		addModule(instance.algorithm.graph);
 		const suiting = suitingGraphs(algorithmName);
-		addModule(ExampleGraphs([{
-			id: 'graph',
-			input: 'graph'
-		}, {
-			id: 'startVertex',
-			input: 'startNode'
-		}])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
+		addModule(ExampleGraphs(['graph', 'startVertex'])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
 	}
 
 	return instance;
@@ -146,28 +144,26 @@ const _internals = ({
 	mod,
 	moduleArgs,
 	shouldPassSettings = false,
-	input,
-	getSnaps,
-	resetSnaps
-}) => ({
-	getSnap: () => {
-		const valToRet = Modules[mod].snap(...getSnaps());
-		resetSnaps();
-		return valToRet;
-	},
-	getModule: (settings) => Modules[mod].module(...moduleArgs,
-		shouldPassSettings ? settings : undefined),
-	getInputType: (moduleId) => input.map(({ id, input: inputWhich }) => ({
-		id,
-		inputType: inputWhich
-			? Modules[mod].input(moduleId)[inputWhich]
-			: Modules[mod].input(moduleId)
-	}))
-});
+	inputNames,
+	getSnapParameters,
+	resetSnapParameters
+}) => {
+	const module = Modules[mod];
+	return {
+		getSnap: () => {
+			const valToRet = module.snap(...getSnapParameters());
+			resetSnapParameters();
+			return valToRet;
+		},
+		getModule: (settings) =>
+			module.module(...moduleArgs, shouldPassSettings ? settings : undefined),
+		getModuleInputProps: (inputs) => module.input(...inputNames)(inputs)
+	};
+};
 
 const _proxyHelper = (mod, {
 	shouldPassSettings
-} = {}) => (input = []) => (...moduleArgs) => {
+} = {}) => (inputNames = []) => (...moduleArgs) => {
 	let snapDatas = [];
 	const snapFn = (...datas) => {
 		snapDatas = datas;
@@ -177,15 +173,15 @@ const _proxyHelper = (mod, {
 		mod,
 		moduleArgs,
 		shouldPassSettings,
-		input,
-		getSnaps: () => snapDatas,
-		resetSnaps: () => (snapDatas = [])
+		inputNames,
+		getSnapParameters: () => snapDatas,
+		resetSnapParameters: () => (snapDatas = [])
 	});
 
 	return snapFn;
 };
 
-const Graph = (input = []) => (...moduleArgs) => {
+const Graph = (inputNames = []) => (...moduleArgs) => {
 	let snapDatas = [[], [], []];
 
 	const instance = {
@@ -205,9 +201,9 @@ const Graph = (input = []) => (...moduleArgs) => {
 		_internals: _internals({
 			mod: 'RefinedGraph',
 			moduleArgs,
-			input,
-			getSnaps: () => snapDatas,
-			resetSnaps: () => (snapDatas = [[], [], []])
+			inputNames,
+			getSnapParameters: () => snapDatas,
+			resetSnapParameters: () => (snapDatas = [[], [], []])
 		})
 	};
 

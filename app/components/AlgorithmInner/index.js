@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import _mapValues from 'lodash.mapvalues';
 import { themedStyle } from 'app/utils';
 import SideDrawer from 'app/components/SideDrawer';
-import _pick from 'lodash.pick';
 
 import modules from 'app/components/modules';
 
@@ -15,7 +14,6 @@ const AlgorithmInner = props => {
 	const {
 		animationDirectives: directives,
 		algorithmStatic: statics,
-		input: inputs,
 		...passProps
 	} = props;
 
@@ -29,26 +27,16 @@ const AlgorithmInner = props => {
 
 		part.sort((a, b) => statics[b].layout.order - statics[a].layout.order);
 
-		return part.map(moduleId => {
-			const moduleInput = (
-				inputs.find(v => v.data.targetModule === moduleId)
-				|| inputs.filter(v => v.data.moduleName === statics[moduleId].type)
-			);
-			return React.createElement(modules[statics[moduleId].type], {
-				...passProps,
+		return part.map(moduleId => React.createElement(modules[statics[moduleId].type], {
+			...passProps,
 
-				id: moduleId,
-				key: moduleId,
+			id: moduleId,
+			key: moduleId,
 
-				input: moduleInput.reduce((acc, input) => {
-					acc[input.data.inputIdentifier] = _pick(input, ['value', 'update']);
-					return acc;
-				}, {}),
-
-				...statics[moduleId].data,
-				...directives[moduleId]
-			});
-		});
+			...statics[moduleId].data,
+			...statics[moduleId].input,
+			...directives[moduleId]
+		}));
 	});
 
 	props.visualCache()('leftDrawer')('isOpened').default(false);
@@ -72,7 +60,6 @@ const AlgorithmInner = props => {
 AlgorithmInner.propTypes = {
 	animationDirectives: PropTypes.object.isRequired,
 	algorithmStatic: PropTypes.object.isRequired,
-	input: PropTypes.arrayOf(PropTypes.object).isRequired,
 	theme: PropTypes.string.isRequired,
 	visualCache: PropTypes.func.isRequired,
 };

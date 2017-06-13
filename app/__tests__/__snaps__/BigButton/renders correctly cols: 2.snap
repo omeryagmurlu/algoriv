@@ -5,6 +5,7 @@ exports[`BigButton renders correctly cols: 2 1`] = `
   className="container sdfggfdgsdfl"
   style={
     Object {
+      "opacity": 1,
       "width": "calc((100% - ((10px * 2) * 1)) / 2)",
     }
   }
@@ -13,6 +14,7 @@ exports[`BigButton renders correctly cols: 2 1`] = `
     mockName="FlatButton"
     mockProps={
       Object {
+        "disabled": false,
         "label": "just to remove that warning",
       }
     }

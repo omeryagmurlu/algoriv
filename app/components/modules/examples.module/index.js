@@ -8,7 +8,6 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 
-import { ExamplesRegistry as EXAMPLES } from 'app/data/inputsRegistry';
 import { themedStyle, ifModuleEnabled } from 'app/utils';
 
 import style from './style.scss';
@@ -32,13 +31,7 @@ const list = (items, prefixName, that, mainAttr = {}, optAttr = () => ({}), suff
 				<ListItem
 					key={example.name}
 					primaryText={example.name}
-					onTouchTap={() => {
-						const cont = () => that.props.input[EXAMPLES.graph].update(example.data);
-						if (that.props.input[EXAMPLES.startNode]) {
-							return that.props.input[EXAMPLES.startNode].update('0', cont);
-						}
-						cont();
-					}}
+					onTouchTap={() => that.props.updateInput(example.data)}
 					{...optAttr(example)}
 				/>
 			))).concat(suffixElem)
@@ -72,7 +65,7 @@ class Examples extends Component {
 								touch
 								onTouchTap={() => {
 									this.props.app.prompt('Enter Name', name =>
-										this.props.addCustom(uniqName(name), this.props.input[EXAMPLES.graph].value)
+										this.props.addCustom(uniqName(name), this.props.getCurrentInput())
 									);
 								}}
 							>
@@ -118,10 +111,8 @@ Examples.propTypes = {
 	addCustom: PropTypes.func.isRequired,
 	renameCustom: PropTypes.func.isRequired,
 	deleteCustom: PropTypes.func.isRequired,
-	input: PropTypes.objectOf(PropTypes.shape({
-		update: PropTypes.func,
-		value: PropTypes.any
-	})).isRequired,
+	getCurrentInput: PropTypes.func.isRequired,
+	updateInput: PropTypes.func.isRequired,
 	// exampleGroup: PropTypes.string.isRequired
 };
 

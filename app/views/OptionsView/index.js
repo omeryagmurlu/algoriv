@@ -19,13 +19,19 @@ const themeNames = Object.keys(themes);
 const css = themedStyle(style);
 
 const controlGroup = (header, desc, more, H = 'h1') => (
-	<div className={css('control-group')} >
-		<header>
-			<H>{header}</H>
-			<span>{desc}</span>
-		</header>
-		{more}
-	</div>
+	// <div className={css('control-group')} >
+	// 	<header>
+	// 		<H>{header}</H>
+	// 		<span>{desc}</span>
+	// 	</header>
+	// 	{more} // React doesn't like this
+	// </div>
+	React.createElement('div', {
+		className: css('control-group')
+	}, (<header>
+		<H>{header}</H>
+		<span>{desc}</span>
+	</header>), ...more)
 );
 
 const selectHOF = theme => ({

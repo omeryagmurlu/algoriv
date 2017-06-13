@@ -19,7 +19,6 @@ describe('AlgorithmView', () => {
 				app={{
 					theme: 'asdfd'
 				}}
-				algorithmInput={[]}
 			/>
 		).toJSON();
 		expect(tree).to.matchSnapshot();
