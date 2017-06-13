@@ -14,7 +14,7 @@ module.exports = new Config().merge({
 	},
 	output: {
 		path: path.resolve(main, 'dist'),
-		publicPath: 'dist/'
+		publicPath: '/dist/'
 	},
 	resolve: {
 		alias: {

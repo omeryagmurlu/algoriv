@@ -55,7 +55,7 @@ describe('modules', () => {
 			returns: {
 				colors: 'a',
 				customLabels: 'b',
-				optGraph: 'c'
+				graph: 'c'
 			}
 		},
 		module: {

@@ -8,10 +8,10 @@
   "scripts": {
     "start": "yarn run start:prod",
     "start:electron": "electron main.js",
-    "start:browser": "http-server",
+    "start:browser": "http-server dist",
     "watch:electron": "yarn run prebuild && TARGET=electron NODE_ENV=dev webpack --watch",
-    "watch:browser": "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack-dev-server --hot --history-api-fallback --open",
-    "prebuild": "sed -e '0,/src=\"dist\\//s/src=\"dist\\//&browser.js/' -e 's/ing in/& browser/' index.base.html > index.html && sed -e '0,/src=\"dist\\//s/src=\"dist\\//&electron.js/' -e 's/ing in/& electron/' index.base.html > index.electron.html",
+    "watch:browser": "yarn run prebuild && TARGET=browser NODE_ENV=dev webpack-dev-server --hot --content-base dist --open",
+    "prebuild": "sed -e '0,/src=\"/s/src=\"/&browser.js/' -e 's/ing in/& browser/' index.base.html > dist/index.html && sed -e '0,/src=\"/s/src=\"/&electron.js/' -e 's/ing in/& electron/' index.base.html > dist/index.electron.html",
     "build:dev": "yarn run build:dev:electron && yarn run build:dev:browser",
     "build:prod": "yarn run build:prod:electron && yarn run build:prod:browser",
     "build:dev:electron": "yarn run prebuild && TARGET=electron NODE_ENV=dev webpack",
@@ -34,7 +34,6 @@
       "dist",
       "node_modules/",
       "main.js",
-      "index.electron.html",
       "package.json"
     ],
     "dmg": {

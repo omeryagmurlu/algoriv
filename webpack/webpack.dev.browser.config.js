@@ -8,7 +8,7 @@ module.exports = new Config().extend({
 		conf.module.rules.find(v => v.test.toString() === /\.js$/.toString()).use.find(v => v.loader === 'babel-loader').options.plugins.push('react-hot-loader/babel');
 		conf.entry.app = [
 			'react-hot-loader/patch',
-			'webpack-dev-server/client?http://localhost:8080',
+			'webpack-dev-server/client',
 			'webpack/hot/only-dev-server',
 		].concat(conf.entry.app);
 
@@ -19,7 +19,7 @@ module.exports = new Config().extend({
 }).merge({
 	devServer: {
 		hot: true,
-		publicPath: 'http://localhost:8080/dist/'
+		publicPath: '/dist/'
 	},
 	plugins: [
 		new webpack.NamedModulesPlugin()

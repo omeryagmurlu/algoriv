@@ -36,7 +36,7 @@ const createMain = () => {
 		}
 	});
 
-	mainWindow.loadURL(`file://${path.join(__dirname, '/index.electron.html')}`);
+	mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.electron.html')}`);
 
 	// mainWindow.webContents.openDevTools();
 
