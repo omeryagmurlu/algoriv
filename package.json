@@ -22,6 +22,7 @@
     "postinstall": "install-app-deps",
     "pack": "build --dir",
     "package-win": "build --win --x64",
+    "package-mac": "build --mac",
     "package-linux": "build --linux",
     "package-all": "build -mwl",
     "test": "mocha-webpack --include app/__tests__/test.js --webpack-config webpack/webpack.test.config.js \"app/**/*.test.js\"",
