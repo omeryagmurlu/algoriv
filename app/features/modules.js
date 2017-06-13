@@ -22,7 +22,7 @@ export const GraphModule = Modules.Graph = exporter(
 		customLabels,
 
 		// This is only viable for snap, as it is used in logic, in a module, it wouldn't get updated
-		optGraph: optMutatingGraph
+		graph: optMutatingGraph
 	}),
 	(options) => typee('graph', 'main', { options }),
 	(GRAPH, STARTVERTEX) => input => ({
