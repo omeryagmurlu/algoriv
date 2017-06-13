@@ -40,15 +40,13 @@ pages:
     url: https:/omeryagmurlu.gitlab.io/algoriv/
   script:
   - mkdir .public
-  - cp -r dist .public
+  - cp -r dist/. .public
   - mv .public public
   only:
   - production
   artifacts:
     paths:
     - public
-  only:
-  - master
 
 win-binary:
   image: electronuserland/electron-builder:wine

@@ -40,13 +40,9 @@ install:
 script:
 - mkdir dist
 - yarn install --production=false
-- yarn run build:prod:electron
-- 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      yarn run package-mac
-  fi'
-- 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      yarn run package-linux
-  fi'
+- yarn run build:prod
+- yarn run package-mac
+- yarn run package-linux
 
 branches:
   except:
