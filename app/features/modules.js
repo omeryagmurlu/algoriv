@@ -1,7 +1,5 @@
 import _mapValues from 'lodash.mapvalues';
 import { ColorList, labelizer } from 'app/utils';
-import { ModuleInput } from 'app/features/input-types';
-import InputsRegistry from 'app/data/inputsRegistry';
 
 const typee = (type, layout, data = {}) => ({
 	type,
@@ -14,7 +12,7 @@ const typee = (type, layout, data = {}) => ({
 	data
 });
 
-const exporter = (snap, module, input) => ({ snap, module, input });
+const exporter = (snap, module, input = () => () => ({})) => ({ snap, module, input });
 
 const Modules = {};
 
@@ -27,9 +25,11 @@ export const GraphModule = Modules.Graph = exporter(
 		optGraph: optMutatingGraph
 	}),
 	(options) => typee('graph', 'main', { options }),
-	(ifMultiModuleId) => _mapValues(InputsRegistry.Graph, hash =>
-		ModuleInput('graph', ifMultiModuleId, hash)
-	)
+	(GRAPH, STARTVERTEX) => input => ({
+		graph: input[GRAPH].value,
+		updateGraph: input[GRAPH].update,
+		canRemoveThisNode: v => !input[STARTVERTEX] && v !== input[STARTVERTEX].value
+	})
 );
 
 export const TableModule = Modules.Table = exporter(
@@ -81,10 +81,7 @@ export const ExamplesModule = Modules.Examples = exporter(
 			prev[prev.map(v => v.name).indexOf(name)].name = newName;
 			return prev;
 		})
-	}),
-	(ifMultiModuleId) => _mapValues(InputsRegistry.Examples, hash =>
-		ModuleInput('examples', ifMultiModuleId, hash)
-	)
+	})
 );
 
 export const CodeModule = Modules.Code = exporter(
@@ -101,7 +98,16 @@ export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 		name,
 		data: graph
 	})), undefined, ...rest),
-	ExamplesModule.input
+	(GRAPH, STARTVERTEX) => input => ({
+		getCurrentInput: () => input[GRAPH].value,
+		updateInput: (newGraph) => {
+			const cont = () => input[GRAPH].update(newGraph);
+			if (input[STARTVERTEX]) {
+				return input[STARTVERTEX].update('0', cont);
+			}
+			cont();
+		}
+	})
 );
 
 export const DescriptionModule = Modules.Description = exporter(

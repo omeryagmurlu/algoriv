@@ -11,10 +11,12 @@ const BigButton = props => (
 	<div
 		className={css('container', props.theme)}
 		style={{
-			width: `calc((100% - ((${margin} * 2) * ${props.cols - 1})) / ${props.cols})`
+			width: `calc((100% - ((${margin} * 2) * ${props.cols - 1})) / ${props.cols})`,
+			opacity: props.disabled ? 0.6 : 1
 		}}
 	>
 		<FlatButton
+			disabled={props.disabled}
 			label="just to remove that warning"
 			{...getEvents(props)}
 		/>
@@ -27,14 +29,16 @@ const BigButton = props => (
 
 BigButton.defaultProps = {
 	cols: 1,
-	desc: null
+	desc: null,
+	disabled: false,
 };
 
 BigButton.propTypes = {
 	theme: PropTypes.string.isRequired,
 	cols: PropTypes.number,
 	name: PropTypes.string.isRequired,
-	desc: PropTypes.string
+	desc: PropTypes.string,
+	disabled: PropTypes.bool,
 };
 
 export default BigButton;

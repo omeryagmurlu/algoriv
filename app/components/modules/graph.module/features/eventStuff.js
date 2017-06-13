@@ -1,8 +1,7 @@
-import { GraphRegistry as GRAPH } from 'app/data/inputsRegistry';
 import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
 const eventStuff = (instance) => {
-	const notify = graph => instance.props.input[GRAPH.graph].update(
+	const notify = graph => instance.props.updateGraph(
 		graph.export()
 	);
 
@@ -18,9 +17,8 @@ const eventStuff = (instance) => {
 				return;
 			}
 
-			if (instance.props.input[GRAPH.startNode]
-				&& e.data.node.id === instance.props.input[GRAPH.startNode].value) {
-				instance.props.app.alert(1, 'Cannot remove starting node');
+			if (!instance.props.canRemoveThisNode(e.data.node.id)) {
+				instance.props.app.alert(1, 'Cannot remove this node');
 				return;
 			}
 

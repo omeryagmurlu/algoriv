@@ -146,7 +146,7 @@ const appearanceStuff = (instance) => {
 								draw: true
 							});
 						}
-						skippableTimeout(fn, fn, instance.props.animationNextFrameTime * (2/5));
+						skippableTimeout(fn, fn, instance.props.animationNextFrameTime * (2 / 5));
 					});
 					instance.sigma.refresh({ skipIndexation: true });
 				}

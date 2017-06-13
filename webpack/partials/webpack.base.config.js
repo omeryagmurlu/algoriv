@@ -36,7 +36,7 @@ module.exports = new Config().merge({
 						loader: 'babel-loader',
 						options: {
 							presets: [['es2015', { modules: false }], 'react'],
-							plugins: ['transform-class-properties', 'transform-object-rest-spread']
+							plugins: ['transform-class-properties', 'transform-object-rest-spread', 'syntax-dynamic-import']
 						}
 					}
 					// 'eslint-loader'

@@ -87,7 +87,7 @@ const AnimationControls = props => (
 					theme={props.theme}
 					demandCondition={props.animationProgress === 0}
 					demandings={props.input.map(({
-						data: { description: text },
+						description: text,
 						update: handler,
 						...remaining
 					}) => ({
@@ -138,9 +138,7 @@ AnimationControls.propTypes = {
 	onAnimationToEnd: PropTypes.func.isRequired,
 
 	input: PropTypes.arrayOf(PropTypes.shape({
-		data: PropTypes.shape({
-			description: PropTypes.string.isRequired,
-		}).isRequired,
+		description: PropTypes.string.isRequired,
 		update: PropTypes.func.isRequired
 	})),
 
