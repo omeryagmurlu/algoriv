@@ -25,7 +25,7 @@ export const AlgorithmsMap = {
 		view: DFS
 	},
 	SCC: {
-		name: 'Strongly Connected Components',
+		name: 'Kosaraju\'s SCC',
 		desc: 'Visualise Kosaraju\'s Algorithm to find Strongly Connected Components',
 		view: SCC
 	},
@@ -53,16 +53,33 @@ export const AlgorithmsMap = {
 
 export const AlgorithmsList = [
 	{
-		title: 'Graph Algorithms',
+		title: 'Graph Traversal',
 		algorithms: [
-			AlgorithmsMap.Djikstra,
 			AlgorithmsMap.BFS,
 			AlgorithmsMap.DFS,
-			AlgorithmsMap.SCC,
-			AlgorithmsMap.Prim,
+		]
+	}, {
+		title: 'Shortest Path',
+		algorithms: [
+			AlgorithmsMap.Djikstra,
+		]
+	},
+	{
+		title: 'Minimum Spanning Tree',
+		algorithms: [
 			AlgorithmsMap.Kruskal,
+			AlgorithmsMap.Prim,
+		]
+	}, {
+		title: 'Topological Sort',
+		algorithms: [
+			AlgorithmsMap.TopologicalIndegree,
 			AlgorithmsMap.TopologicalDFS,
-			AlgorithmsMap.TopologicalIndegree
+		]
+	}, {
+		title: 'Strongly Connected Components',
+		algorithms: [
+			AlgorithmsMap.SCC,
 		]
 	}
 ];
