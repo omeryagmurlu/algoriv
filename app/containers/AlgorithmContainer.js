@@ -51,10 +51,10 @@ const AlgorithmFactory = ({
 		this.cancellable(AlgorithmPrototype.logic(algInput))
 		.then(frames => {
 			this.setState({ frames, updating: false });
-		}).catch(cancelCatch)
-		.catch(err => {
-			throw new Error(`Algorithm can't init, ${err}`);
-		});
+		}).catch(cancelCatch);
+		// .catch(err => {
+		// 	throw new Error(`Algorithm can't init, ${err}`);
+		// });
 	}
 
 	componentWillUnmount() {

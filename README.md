@@ -13,25 +13,25 @@ You can always use the web app [here](https://omeryagmurlu.gitlab.io/algoriv)
 ## Getting Started
 
 ```bash
-	$ yarn add algoriv
-	$ yarn run start:electron
+$ yarn add algoriv
+$ yarn run start:electron
 ```
 
 ## Build
 
 ```bash
-	$ git clone git@gitlab.com:omeryagmurlu/TSA-Software.git algoriv
-	$ cd algoriv
-	$ yarn
-	$ yarn run watch:browser
+$ git clone git@gitlab.com:omeryagmurlu/TSA-Software.git algoriv
+$ cd algoriv
+$ yarn
+$ yarn run watch:browser
 ```
 
 ## Packaging
 
 ```bash
-	$ yarn run package-linux
-	$ yarn run package-win
-	$ yarn run package-all
+$ yarn run package-linux
+$ yarn run package-win
+$ yarn run package-all
 ```
 
 ## Usage

@@ -194,7 +194,7 @@ export const graphs = [
 				])
 			},
 			{
-				name: 'DAG 5 Vertexes',
+				name: 'DAG 6 Vertexes',
 				graph: createFrom('DirectedGraph', [
 					[],
 					[],
@@ -202,6 +202,21 @@ export const graphs = [
 					[1],
 					[0, 1],
 					[0, 2]
+				])
+			},
+			{
+				name: 'DAG 10 Vertexes',
+				graph: createFrom('DirectedGraph', [
+					[1],
+					[],
+					[3, 5],
+					[1, 4],
+					[],
+					[1, 4],
+					[],
+					[0, 2, 6, 8],
+					[1],
+					[7]
 				])
 			}
 		]
