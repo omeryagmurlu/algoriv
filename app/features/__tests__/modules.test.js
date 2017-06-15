@@ -63,7 +63,7 @@ describe('modules', () => {
 			type: 'graph',
 			location: 'main',
 			dataFn: data => {
-				data.is.an('object').that.has.property('options', 'x');
+				data.is.an('object').that.has.property('layout', 'x');
 			}
 		}
 	});

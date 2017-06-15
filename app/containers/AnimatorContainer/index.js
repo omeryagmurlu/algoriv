@@ -28,8 +28,11 @@ class AnimatorContainer extends Component {
 		this.animator.unmount();
 	}
 
-	handleAnimatorChange = () => {
+	handleAnimatorChange = (reason) => {
 		this.setState(this.changes());
+		if (reason === 'end') {
+			this.props.callback();
+		}
 	}
 
 	changes = () => ({
@@ -63,9 +66,14 @@ class AnimatorContainer extends Component {
 	}
 }
 
+AnimatorContainer.defaultProps = {
+	callback: () => {}
+};
+
 AnimatorContainer.propTypes = {
 	app: PropTypes.any.isRequired,
-	frames: PropTypes.array.isRequired
+	frames: PropTypes.array.isRequired,
+	callback: PropTypes.func
 };
 
 export default AnimatorContainer;

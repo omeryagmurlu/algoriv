@@ -84,8 +84,7 @@ const AnimationControls = props => (
 						return (<AvPause {...icon(props)} />);
 					})())}
 					elevation={globVars.footerHeight}
-					theme={props.theme}
-					demandCondition={props.animationProgress === 0}
+					demandCondition={[0].includes(props.animationProgress)}
 					demandings={props.input.map(({
 						description: text,
 						update: handler,
@@ -96,6 +95,9 @@ const AnimationControls = props => (
 						...remaining
 					}))}
 					resolve={props.onAnimationPauseRestart}
+
+					theme={props.theme}
+					secondary={props.animationProgress === 100}
 				/>
 				<FlatButton
 					icon={<AvFastForward {...icon(props)} />}

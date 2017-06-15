@@ -33,6 +33,11 @@ module.exports = new Config().merge({
 				use: ['script-loader']
 			},
 			{
+				test: /babel-standalone.*\.js?$/,
+				exclude: ['app'],
+				use: ['script-loader']
+			},
+			{
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				use: [

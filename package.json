@@ -98,6 +98,7 @@
     "lodash.sample": "^4.2.1",
     "lodash.shuffle": "^4.2.0",
     "lodash.union": "^4.6.0",
+    "lodash.uniq": "^4.5.0",
     "lodash.without": "^4.4.0",
     "material-ui": "^0.18.0",
     "mocha": "^3.4.2",

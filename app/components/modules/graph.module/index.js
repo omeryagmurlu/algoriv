@@ -195,17 +195,19 @@ class Graph extends Component {
 				sigma.layouts.dagre.start(this.sigma);
 			}
 		},
-		fruchtermanReingold: () => {
+		fruchtermanReingold: () => { // why no use worker dumbs
 			if (!sigma.layouts.fruchtermanReingold.isRunning(this.sigma)) {
 				sigma.layouts.fruchtermanReingold.configure(this.sigma, {
 					easing: 'cubicInOut',
+					iterations: 2000
 				});
-				sigma.layouts.fruchtermanReingold.start(this.sigma);
+				setImmediate(() => sigma.layouts.fruchtermanReingold.start(this.sigma));
 			}
 		}
 	}
 
 	layout() {
+		this.sigma.refresh();
 		sigma.canvas.edges.autoCurve(this.sigma);
 		this.layoutsDB[this.props.layout]();
 	}

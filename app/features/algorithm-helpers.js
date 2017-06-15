@@ -34,7 +34,7 @@ const Algorithm = (algorithmName, algorithmType) => {
 		algorithm: {},
 		dryRun: (logic = prot.logic) => {
 			processSchedule();
-			return framer(logic, () => getHelperSnaps())(prot.input);
+			return framer(logic, () => getHelperSnaps())(prot.input).then(([frames]) => frames);
 		},
 		purePrototype: () => prot
 	};
@@ -54,13 +54,14 @@ const Algorithm = (algorithmName, algorithmType) => {
 			obj[i] = helper._internals.getModuleInputProps(inputs);
 			return obj;
 		}, {}),
-		initInputs: inputs => initInputsList.map(({ name, description, invalid }) => {
+		initInputs: inputs => initInputsList.map(({ group, name, description, invalid }) => {
 			const { update, value } = inputs[name];
 			return InitInput(
 				description,
 				(newInput) => invalid(newInput, _mapValues(inputs, v => v.value)),
 				update,
-				value
+				value,
+				group,
 			);
 		})
 	};
@@ -77,8 +78,8 @@ const Algorithm = (algorithmName, algorithmType) => {
 	const addInput = instance.addInput = (name, value, init) => {
 		prot.input[name] = value;
 		if (init) {
-			const { description, invalid } = init;
-			initInputsList.push({ name, description, invalid });
+			const { description, invalid, group } = init;
+			initInputsList.push({ name, description, invalid, group });
 		}
 		return addInput;
 	};

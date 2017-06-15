@@ -57,7 +57,7 @@ See `docs/usage.md`
 - Views can **only** import **components** and **styles**.
 	- For routing, containers, or another views must supply the needed data.
 
-### `props.app` props, and `props.app.settings`
+#### `props.app` props, and `props.app.settings`
 
 `app` is a common prop that every container and view has access to. It is used to trigger or retrive app specific actions. Components are prohibited to have access to it.
 

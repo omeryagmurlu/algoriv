@@ -17,6 +17,9 @@ module.exports = new Config().extend({
 	'webpack/partials/webpack.dev.config.js': c => c,
 	'webpack/partials/webpack.browser.config.js': c => c
 }).merge({
+	output: {
+		publicPath: '/'
+	},
 	devServer: {
 		hot: true,
 		publicPath: 'http://localhost:8080'
