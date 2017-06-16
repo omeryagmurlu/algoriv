@@ -8,6 +8,8 @@ import Slider from 'material-ui/Slider';
 import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
 
+import { GraphModuleData } from 'app/features/modules';
+
 import { themedStyle, themeVars } from 'app/utils';
 import { themes } from 'app/styles/themes.json';
 import { selectProps, subheaderProps, textFieldProps } from 'app/styles/module-component-props';
@@ -176,7 +178,12 @@ const OptionsView = props => {
 					checkbox({
 						name: 'Enabled',
 						option: () => options()('enabled-modules')('graph')
-					})
+					}),
+					select({
+						name: 'Default Rendering Algorithm',
+						option: () => options()('graph')('layout'),
+						possib: GraphModuleData.layouts
+					}),
 				], 'h2'),
 				controlGroup('Table Module', 'Options for the Table module.', [
 					checkbox({

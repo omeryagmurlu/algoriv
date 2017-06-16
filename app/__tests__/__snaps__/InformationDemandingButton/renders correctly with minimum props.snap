@@ -10,16 +10,17 @@ exports[`InformationDemandingButton renders correctly with minimum props 1`] = `
   }
 >
   <div
-    className="
-  						fields-container sdfggfdgsdfl
-  						false
-  					"
+    className="group-container undefined"
     style={
       Object {
         "bottom": "0px",
       }
     }
-  />
+  >
+    <div
+      className="wrapper undefined"
+    />
+  </div>
   <div
     mockName="FlatButton"
     mockProps={
@@ -29,6 +30,7 @@ exports[`InformationDemandingButton renders correctly with minimum props 1`] = `
           Passive
       </span>,
         "onTouchTap": [Function],
+        "secondary": false,
       }
     }
   />

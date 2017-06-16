@@ -18,12 +18,13 @@ const filterObjectByKeys = (obj, arr) => _pickBy(obj, (v, k) => (typeof arr[k] !
 export const framer = (logic, snap) => (input) => {
 	const frames = [];
 	return Promise.resolve(logic(input, snapProxy(frames, snap)))
-		.then(() => {
+		.then((optEndInput) => {
 			if (frames.length === 0) {
 				throw AlgorithmError('Algorithm must frame at least once');
 			}
-		})
-		.then(() => frames);
+
+			return [frames, optEndInput];
+		});
 };
 
 const AlgorithmFactory = ({
@@ -35,29 +36,39 @@ const AlgorithmFactory = ({
 	modulesInputProps: algModulesInputProps,
 	info: algInfo,
 }) => ((() => class AlgorithmPrototype extends Component {
-	static logic = framer(algLogic, algSnap)
+	logic = (input) => framer(algLogic, algSnap)(input).then(([frames, optEndInput]) => {
+		this.setState({ callback: () => {
+			this.lastLogicEndInput = typeof optEndInput === 'object' ? optEndInput : {};
+		} });
+		return frames;
+	})
 
 	constructor(props) {
 		super(props);
 
-		this.state = { ...algInput }; // BUGFIX: multiple instances, deepCopy needed
-		this.state.frames = null; // TODO make a loading screen
-		this.state.updating = true;
+		this.state = {
+			input: { ...algInput }, // BUGFIX: multiple instances, deepCopy needed
+			frames: null,
+			callback: null,
+			updating: true
+		};
 
 		this.cancellables = [];
+		this.lastLogicEndInput = {};
 	}
 
 	componentDidMount() {
-		this.cancellable(AlgorithmPrototype.logic(algInput))
+		this.cancellable(this.logic(algInput))
 		.then(frames => {
 			this.setState({ frames, updating: false });
-		}).catch(cancelCatch)
-		.catch(err => {
-			throw new Error(`Algorithm can't init, ${err}`);
-		});
+		}).catch(cancelCatch);
+		// .catch(err => {
+		// 	throw new Error(`Algorithm can't init, ${err}`);
+		// });
 	}
 
 	componentWillUnmount() {
+		this.lastLogicEndInput = {};
 		this.cancelRunning();
 	}
 
@@ -74,18 +85,29 @@ const AlgorithmFactory = ({
 	}
 
 	inputHandler(inputObj, cb) {
+		const overridedNewInput = { ...inputObj, ...this.lastLogicEndInput };
+		this.lastLogicEndInput = {};
+
 		this.setState({ updating: true });
-		const fakeStateForLogic = { ...this.state, ...inputObj };
-		this.cancellable(AlgorithmPrototype.logic(
-			filterObjectByKeys(fakeStateForLogic, algInput)
+		const currentNewInput = { ...this.state.input, ...overridedNewInput };
+		this.cancellable(this.logic(
+			filterObjectByKeys(currentNewInput, algInput)
 		)).then(frames => {
-			this.setState({ ...inputObj, frames, updating: false }, cb);
+			this.setState(prev => {
+				prev.input = {
+					...prev.input,
+					...overridedNewInput,
+				};
+				prev.frames = frames;
+				prev.updating = false;
+				return prev;
+			}, cb);
 		}).catch(cancelCatch).catch(err => {
 			throw new Error(`Input is faulty, ${err}`);
 		});
 	}
 
-	getInput = () => _mapValues(filterObjectByKeys(this.state, algInput), (v, k) => ({
+	getInput = () => _mapValues(filterObjectByKeys(this.state.input, algInput), (v, k) => ({
 		value: v,
 		update: (newInput, cb = () => {}) => this.inputHandler({
 			[k]: newInput
@@ -101,6 +123,7 @@ const AlgorithmFactory = ({
 					{...this.props}
 
 					frames={this.state.frames}
+					callback={this.state.callback}
 
 					algorithmInfo={algInfo}
 					algorithmStatic={_mapValues((typeof algModules === 'function' ? algModules(this.props.app.settings) : algModules), (v, k) => ({

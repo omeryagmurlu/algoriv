@@ -6,23 +6,11 @@ exports[`AlgorithmPageView renders correctly 1`] = `
 >
   <nav>
     <h1>
-      Graph Algorithms
+      Graph Traversal
     </h1>
     <div
       className="container undefined"
     >
-      <div
-        mockName="BigButton"
-        mockProps={
-          Object {
-            "cols": 2,
-            "desc": "Visualise Djikstra's Single Source Shortest Path Algorithm",
-            "name": "Djikstra",
-            "onTouchTap": [Function],
-            "theme": "asdfd",
-          }
-        }
-      />
       <div
         mockName="BigButton"
         mockProps={
@@ -47,30 +35,36 @@ exports[`AlgorithmPageView renders correctly 1`] = `
           }
         }
       />
+    </div>
+  </nav>
+  <nav>
+    <h1>
+      Shortest Path
+    </h1>
+    <div
+      className="container undefined"
+    >
       <div
         mockName="BigButton"
         mockProps={
           Object {
-            "cols": 2,
-            "desc": "Visualise Kosaraju's Algorithm to find Strongly Connected Components",
-            "name": "Strongly Connected Components",
+            "cols": 1,
+            "desc": "Visualise Djikstra's Single Source Shortest Path Algorithm",
+            "name": "Djikstra",
             "onTouchTap": [Function],
             "theme": "asdfd",
           }
         }
       />
-      <div
-        mockName="BigButton"
-        mockProps={
-          Object {
-            "cols": 2,
-            "desc": "Find a Minimum Spanning Tree using Prim's MST Algorithm",
-            "name": "Prim's MST",
-            "onTouchTap": [Function],
-            "theme": "asdfd",
-          }
-        }
-      />
+    </div>
+  </nav>
+  <nav>
+    <h1>
+      Minimum Spanning Tree
+    </h1>
+    <div
+      className="container undefined"
+    >
       <div
         mockName="BigButton"
         mockProps={
@@ -88,8 +82,29 @@ exports[`AlgorithmPageView renders correctly 1`] = `
         mockProps={
           Object {
             "cols": 2,
-            "desc": "Sort topologically using DFS",
-            "name": "Topological Sort (DFS)",
+            "desc": "Find a Minimum Spanning Tree using Prim's MST Algorithm",
+            "name": "Prim's MST",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+    </div>
+  </nav>
+  <nav>
+    <h1>
+      Topological Sort
+    </h1>
+    <div
+      className="container undefined"
+    >
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Sort topologically using Indegree Array",
+            "name": "Topological Sort (Indegree Array)",
             "onTouchTap": [Function],
             "theme": "asdfd",
           }
@@ -100,8 +115,29 @@ exports[`AlgorithmPageView renders correctly 1`] = `
         mockProps={
           Object {
             "cols": 2,
-            "desc": "Sort topologically using Indegree Array",
-            "name": "Topological Sort (Indegree Array)",
+            "desc": "Sort topologically using DFS",
+            "name": "Topological Sort (DFS)",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+    </div>
+  </nav>
+  <nav>
+    <h1>
+      Strongly Connected Components
+    </h1>
+    <div
+      className="container undefined"
+    >
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 1,
+            "desc": "Visualise Kosaraju's Algorithm to find Strongly Connected Components",
+            "name": "Kosaraju's SCC",
             "onTouchTap": [Function],
             "theme": "asdfd",
           }

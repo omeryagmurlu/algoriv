@@ -3,6 +3,7 @@ import _pickBy from 'lodash.pickby';
 import { graphologyImportFix as gimport } from 'app/utils';
 
 const TopologicalIndegree = Algorithm('TopologicalIndegree', 'graph');
+TopologicalIndegree.selectRenderLayout('dagre');
 
 TopologicalIndegree.addDescription(`
 A **topological sort** of a directed graph is a linear ordering of its vertices \

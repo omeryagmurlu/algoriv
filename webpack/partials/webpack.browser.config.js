@@ -14,15 +14,6 @@ module.exports = new Config().merge({
 			'ALIAS-babel': path.resolve('webpack/fake_modules/browser-babel')
 		}
 	},
-	module: {
-		rules: [
-			{
-				test: /babel-standalone.*\.js?$/,
-				exclude: ['app'],
-				use: ['script-loader']
-			}
-		]
-	},
 	plugins: [
 		new webpack.DefinePlugin({
 			__BROWSER__: JSON.stringify(true),

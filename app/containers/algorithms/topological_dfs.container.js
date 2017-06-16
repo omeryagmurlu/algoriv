@@ -3,6 +3,7 @@ import _shuffle from 'lodash.shuffle';
 import { graphologyImportFix as gimport, visCreator, vis2array } from 'app/utils';
 
 const TopologicalDFS = Algorithm('TopologicalDFS', 'graph');
+TopologicalDFS.selectRenderLayout('dagre');
 
 TopologicalDFS.addDescription(`
 A **topological sort** of a directed graph is a linear ordering of its vertices \

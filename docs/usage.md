@@ -15,7 +15,7 @@ Most modules are static, meaning that they don't support interactions, they are 
 
 ### Graph module
 
-Graph used in the visualization can be changed by ctrl-clicking on the graph. To add an edge ctrl-click on two nodes consequently. To add a node ctrl-click on the stage, to remove one ctrl-alt-click. If the graph is weighted, then a modal asks for weight when you add an edge. If a node/edge cannot be removed/added because of reasons, an info message pops up, informing the user of these reasons. Graph module, by default, features colors and animations to visualize graphs better.
+Graph used in the visualization can be changed by ctrl-clicking on the graph. To add an edge ctrl-click on two nodes consequently. To add a node ctrl-click on the stage, to remove one ctrl-alt-click. If the graph is weighted, then a modal asks for weight when you add an edge. If a node/edge cannot be removed/added because of reasons, an info message pops up, informing the user of these reasons. Graph module, by default, features colors and animations to visualize graphs better. There are multiple layouting systems to choose from located in options. Algorithms but can override this layout setting if one layout fits perfectly to the algorithm.
 
 ### Examples module
 
@@ -27,7 +27,7 @@ Options for this module:
 
 ## Custom Code View
 
-Users have the ability to write their own algorithms and have them visualized. Algorithm's logic must be entered in the text editor that greets the user as they enter the view. On the left sidebar users can save their Algorithm and later open it again. On the right sidebar there is a form for Algorithm info and 2 buttons, Run and Visualize. As users write their logic, app evaluates it and checks for errors. Found errors are displayed in a red box on the right sidebar. Via Run button users can run their code, without visualizing it. Debug Bindings are also enabled in run mode. If the logic takes too long or ends up in an infinite loop, it is terminated after a configurable duration of time.
+Users have the ability to write their own algorithms and have them visualized. Algorithm's logic must be entered in the text editor that greets the user as they enter the view. On the left sidebar users can save their Algorithm and later open it again. On the right sidebar there is a form for Algorithm info and 3 buttons, Run, Visualize and Save. With the help of the form, visual elements of the algorithm can be defined. As users write their logic, app evaluates it and checks for errors. Found errors are displayed in a red box on the right sidebar. Via Run button users can run their code, without visualizing it. Debug Bindings are also enabled in run mode. If the logic takes too long or ends up in an infinite loop, it is terminated after a configurable duration of time.
 
 ECMAScript 5 is fully and ECMAScript 6 is partially supported. ECMAScript 6 syntax is [fully available][1]. Code is [interpreted in a sandbox][2] and there are some injected variables to it.
 

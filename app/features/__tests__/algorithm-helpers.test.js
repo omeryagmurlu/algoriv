@@ -10,7 +10,7 @@ const { default: Algorithm } = Injector({
 	}),
 	'app/containers/AlgorithmContainer': injectExport({
 		default: (prot) => <div name="AlgprithmFactory" Prototype={prot} />,
-		framer: (logic, snaps) => (input) => ({ logic, snaps, input })
+		framer: (logic, snaps) => (input) => ({ then: (cb) => cb([{ logic, snaps, input }]) })
 	}),
 	'app/data/graphs': injectExport({
 		graphs: [],

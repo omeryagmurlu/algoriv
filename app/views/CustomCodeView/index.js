@@ -127,14 +127,33 @@ const CustomCodeView = props => {
 				<Subheader
 					{...subheaderProps()}
 				>Type Specific Features</Subheader>
-				{props.algTypeFeatures.value.map(({ name, enabled }) => (
-					<Checkbox
-						key={name}
-						label={name}
-						checked={enabled}
-						onCheck={(e, v) => props.algTypeFeatures.set(name, v)}
-					/>
-				))}
+				{props.algTypeFeatures.value.map(({ name, value, type }) => {
+					switch (type.name) {
+						case 'select':
+							return (
+								<SelectField
+									key={name}
+									floatingLabelText={name}
+									value={value}
+									fullWidth
+									onChange={(e, i, v) => props.algTypeFeatures.set(name, v)}
+									{...selectProps(props.app.theme)}
+								>
+									{type.selections.map(pos => (
+										<MenuItem key={pos} value={pos} primaryText={pos} />
+									))}
+								</SelectField>
+							);
+						case 'toggle':
+						default:
+							return (<Checkbox
+								key={name}
+								label={name}
+								checked={value}
+								onCheck={(e, v) => props.algTypeFeatures.set(name, v)}
+							/>);
+					}
+				})}
 			</div>
 		) : null
 	);

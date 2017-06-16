@@ -241,6 +241,49 @@ exports[`OptionsView renders correctly 1`] = `
           }
         />
       </div>
+      <div
+        className="control undefined"
+      >
+        <div
+          mockName="SelectField"
+          mockProps={
+            Object {
+              "floatingLabelText": "Default Rendering Algorithm",
+              "fullWidth": true,
+              "onChange": [Function],
+              "value": undefined,
+            }
+          }
+        >
+          <div
+            mockName="MenuItem"
+            mockProps={
+              Object {
+                "primaryText": "forceLink",
+                "value": "forceLink",
+              }
+            }
+          />
+          <div
+            mockName="MenuItem"
+            mockProps={
+              Object {
+                "primaryText": "dagre",
+                "value": "dagre",
+              }
+            }
+          />
+          <div
+            mockName="MenuItem"
+            mockProps={
+              Object {
+                "primaryText": "fruchtermanReingold",
+                "value": "fruchtermanReingold",
+              }
+            }
+          />
+        </div>
+      </div>
     </div>
     <div
       className="control-group undefined"

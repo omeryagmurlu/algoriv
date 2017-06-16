@@ -36,9 +36,8 @@ class LoadingView extends Component {
 	}
 
 	componentWillReceiveProps(next) {
+		clearTimeout(this.timeout); // BUGFIX: Regression fixed when rendering this mulyiple times
 		if (getOverlayClass(next) === 'transparent') {
-			clearTimeout(this.timeout);
-			this.timeout = undefined;
 			this.setState({ showCancel: false });
 		} else {
 			this.timeout = setTimeout(() => {

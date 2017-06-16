@@ -86,6 +86,7 @@ exports[`AnimationControls renders correctly speed: 0, progress: 0, paused: true
               hoverColor="sdffsd accent1Color"
           />,
             "resolve": [Function],
+            "secondary": false,
             "theme": "sdffsd",
           }
         }

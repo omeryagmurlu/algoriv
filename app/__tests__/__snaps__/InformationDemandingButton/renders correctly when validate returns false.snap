@@ -10,10 +10,7 @@ exports[`InformationDemandingButton renders correctly when validate returns fals
   }
 >
   <div
-    className="
-  						fields-container sdfggfdgsdfl
-  						false
-  					"
+    className="group-container undefined"
     style={
       Object {
         "bottom": "1884px",
@@ -21,20 +18,37 @@ exports[`InformationDemandingButton renders correctly when validate returns fals
     }
   >
     <div
-      mockName="TextField"
-      mockProps={
-        Object {
-          "errorText": "now you are screwed",
-          "floatingLabelText": "this is text",
-          "onChange": [Function],
-          "style": Object {
-            "marginTop": "-14px",
-            "width": "125px",
-          },
-          "value": "ssdfd",
+      className="wrapper undefined"
+    >
+      <div
+        className="
+      									fields-container sdfggfdgsdfl
+      									false
+      									false
+      								"
+        style={
+          Object {
+            "paddingBottom": "12px",
+          }
         }
-      }
-    />
+      >
+        <div
+          mockName="TextField"
+          mockProps={
+            Object {
+              "errorText": "now you are screwed",
+              "floatingLabelText": "this is text",
+              "onChange": [Function],
+              "style": Object {
+                "marginTop": "-14px",
+                "width": "125px",
+              },
+              "value": "ssdfd",
+            }
+          }
+        />
+      </div>
+    </div>
   </div>
   <div
     mockName="FlatButton"
@@ -45,6 +59,7 @@ exports[`InformationDemandingButton renders correctly when validate returns fals
           Passive
       </span>,
         "onTouchTap": [Function],
+        "secondary": false,
       }
     }
   />

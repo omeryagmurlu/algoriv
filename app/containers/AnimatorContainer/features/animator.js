@@ -38,7 +38,7 @@ export default class Animator {
 		this.frames = frames;
 
 		this._init();
-		this.changeHandler();
+		this.changeHandler('speed');
 	}
 
 	getSpeed = () => this.speed
@@ -57,7 +57,7 @@ export default class Animator {
 			this.didEnd = false;
 			return this.toBegin();
 		}
-		return this.changeHandler();
+		return this.changeHandler('pauseRestart');
 	}
 
 	changeSpeed = (sp = 50, setEvent) => {
@@ -71,7 +71,7 @@ export default class Animator {
 
 		this.speed = speed;
 		this.internalSpeed = Animator.calcInternalSpeed(speed);
-		this.changeHandler();
+		this.changeHandler('speed');
 	}
 
 	mount = () => {
@@ -103,18 +103,19 @@ export default class Animator {
 	advanceTo(frame) {
 		this.didEnd = false;
 		if (frame > this.frames.length - 1) {
-			this.didEnd = true;
-			this.isPaused = true;
-			if (frame === this.frames.length) { // we must inform dumbs that animation is paused.
-				this.changeHandler();
-			}
 			return;
 		}
 
 		this.directives = (frame > 0) ? this.frames[frame] : this.frames[0];
 		this.frameIndex = (frame > 0) ? frame : 0;
 		this.calculateProgress();
-		this.changeHandler();
+		if (this.progress === 100) {
+			this.didEnd = true;
+			this.isPaused = true;
+			this.changeHandler('end');
+			return;
+		}
+		this.changeHandler('advance');
 	}
 
 	calculateProgress() {
