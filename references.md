@@ -1,0 +1,16 @@
+https://news.ycombinator.com/item?id=9078590
+https://lodash.com/docs/4.17.4
+http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero
+https://github.com/Linkurious/linkurious.js
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
+http://electron.rocks/electron-builder-explained/
+https://github.com/verekia/js-stack-from-scratch
+https://visualgo.net/en
+https://medium.com/@deeepakampolu/using-loaders-with-webpack-f724e8d6469b
+https://arstechnica.com/information-technology/2013/08/os-x-apps-run-on-linux-with-wine-like-emulator-for-mac-software/
+https://courses.cs.washington.edu/courses/cse326/03wi/lectures/RaoLect20.pdf
+http://benjiweber.co.uk/blog/2014/04/27/delete-your-tests/
+http://istqbexamcertification.com/what-is-a-failure-in-software-testing/
+https://bryce.fisher-fleig.org/blog/faster-ci-debugging-with-gitlabci/index.html
+http://www.tysoncadenhead.com/blog/where-should-i-put-javascript-unit-tests
+http://natpryce.com/articles/000812.html
