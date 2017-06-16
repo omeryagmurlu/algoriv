@@ -1,7 +1,7 @@
 {
   "name": "algoriva",
   "productName": "AlgoriVA - Algorithm Visualization",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Visualization of Computing Algorithms",
   "homepage": "omeryagmurlu.github.io",
   "main": "main.js",
