@@ -1,7 +1,7 @@
 import flatten from 'lodash.flattendeep';
 import _mapValues from 'lodash.mapvalues';
 
-import Modules from 'app/features/modules';
+import Modules, { GraphModuleData } from 'app/features/modules';
 import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
 import { graphs, randomGraph, suitingGraphs } from 'app/data/graphs';
 import InitInput from 'app/features/init-input';
@@ -17,16 +17,25 @@ const Algorithm = (algorithmName, algorithmType) => {
 		return obj;
 	}, {});
 	const instance = {
-		create: () => AlgorithmFactory(prot),
+		create: () => {
+			processSchedule();
+			return AlgorithmFactory(prot);
+		},
 		set logic(fn) {
 			prot.logic = fn;
 		},
-		asView: () => ({
-			name: algorithmName,
-			view: AlgorithmFactory(prot)
-		}),
+		asView: () => {
+			processSchedule();
+			return ({
+				name: algorithmName,
+				view: AlgorithmFactory(prot)
+			});
+		},
 		algorithm: {},
-		dryRun: (logic = prot.logic) => framer(logic, () => getHelperSnaps())(prot.input),
+		dryRun: (logic = prot.logic) => {
+			processSchedule();
+			return framer(logic, () => getHelperSnaps())(prot.input).then(([frames]) => frames);
+		},
 		purePrototype: () => prot
 	};
 
@@ -45,15 +54,22 @@ const Algorithm = (algorithmName, algorithmType) => {
 			obj[i] = helper._internals.getModuleInputProps(inputs);
 			return obj;
 		}, {}),
-		initInputs: inputs => initInputsList.map(({ name, description, invalid }) => {
+		initInputs: inputs => initInputsList.map(({ group, name, description, invalid }) => {
 			const { update, value } = inputs[name];
 			return InitInput(
 				description,
 				(newInput) => invalid(newInput, _mapValues(inputs, v => v.value)),
 				update,
-				value
+				value,
+				group,
 			);
 		})
+	};
+
+	const schedule = [];
+	const scheduleStart = (fn) => schedule.push(fn);
+	const processSchedule = () => {
+		while (schedule.length > 0) schedule.pop()();
 	};
 
 	const helpers = [];
@@ -62,8 +78,8 @@ const Algorithm = (algorithmName, algorithmType) => {
 	const addInput = instance.addInput = (name, value, init) => {
 		prot.input[name] = value;
 		if (init) {
-			const { description, invalid } = init;
-			initInputsList.push({ name, description, invalid });
+			const { description, invalid, group } = init;
+			initInputsList.push({ name, description, invalid, group });
 		}
 		return addInput;
 	};
@@ -97,9 +113,10 @@ const Algorithm = (algorithmName, algorithmType) => {
 		addModule(instance.algorithm[name]);
 	};
 
-	instance.algorithm.explanation = Text();
-	addModule(instance.algorithm.explanation);
-
+	scheduleStart(() => {
+		instance.algorithm.explanation = Text();
+		addModule(instance.algorithm.explanation);
+	});
 
 	if (algorithmType === 'graph') {
 		/**
@@ -107,7 +124,7 @@ const Algorithm = (algorithmName, algorithmType) => {
 		 *  - graph
 		 *  - ?startVertex
 		 */
-		instance.algorithm.graph = Graph(['graph', 'startVertex'])();
+
 		instance.addStartingNodeInput = () => {
 			addInput('startVertex', '0', {
 				description: 'Starting Vertex',
@@ -117,9 +134,20 @@ const Algorithm = (algorithmName, algorithmType) => {
 
 		addInput('graph', randomGraph(algorithmName).graph);
 
-		addModule(instance.algorithm.graph);
-		const suiting = suitingGraphs(algorithmName);
-		addModule(ExampleGraphs(['graph', 'startVertex'])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
+		let layout;
+		instance.selectRenderLayout = (supLay) => {
+			layout = supLay;
+		};
+
+		scheduleStart(() => {
+			instance.algorithm.graph = Graph(['graph', 'startVertex'])(layout);
+			addModule(instance.algorithm.graph);
+		});
+
+		scheduleStart(() => {
+			const suiting = suitingGraphs(algorithmName);
+			addModule(ExampleGraphs(['graph', 'startVertex'])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
+		});
 	}
 
 	return instance;
@@ -130,7 +158,19 @@ export const AlgorithmTypes = {
 		{
 			name: 'Starting Vertex',
 			method: 'addStartingNodeInput',
-			propName: 'startVertex'
+			propName: 'startVertex',
+			type: {
+				name: 'toggle',
+			}
+		},
+		{
+			name: 'Rendering Layout',
+			method: 'selectRenderLayout',
+			propName: null,
+			type: {
+				name: 'select',
+				selections: GraphModuleData.layouts
+			}
 		}
 	]
 };
@@ -202,6 +242,7 @@ const Graph = (inputNames = []) => (...moduleArgs) => {
 			mod: 'RefinedGraph',
 			moduleArgs,
 			inputNames,
+			shouldPassSettings: true,
 			getSnapParameters: () => snapDatas,
 			resetSnapParameters: () => (snapDatas = [[], [], []])
 		})

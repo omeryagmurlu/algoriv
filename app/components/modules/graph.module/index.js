@@ -1,54 +1,11 @@
 /* global sigma */
 
-import 'sigma/src/sigma.core';
-import 'sigma/src/conrad';
-import 'sigma/src/utils/sigma.utils';
-// import 'sigma/src/utils/sigma.polyfills';
-import 'sigma/src/sigma.settings';
-import 'sigma/src/classes/sigma.classes.dispatcher';
-import 'sigma/src/classes/sigma.classes.configurable';
-import 'sigma/src/classes/sigma.classes.graph';
-import 'sigma/src/classes/sigma.classes.camera';
-import 'sigma/src/classes/sigma.classes.quad';
-import 'sigma/src/classes/sigma.classes.edgequad';
-import 'sigma/src/captors/sigma.captors.mouse';
-import 'sigma/src/captors/sigma.captors.touch';
-import 'sigma/src/renderers/sigma.renderers.canvas';
-import 'sigma/src/renderers/sigma.renderers.webgl';
-import 'sigma/src/renderers/sigma.renderers.svg';
-import 'sigma/src/renderers/sigma.renderers.def';
-import 'sigma/src/renderers/webgl/sigma.webgl.nodes.def';
-import 'sigma/src/renderers/webgl/sigma.webgl.nodes.fast';
-import 'sigma/src/renderers/webgl/sigma.webgl.edges.def';
-import 'sigma/src/renderers/webgl/sigma.webgl.edges.fast';
-import 'sigma/src/renderers/webgl/sigma.webgl.edges.arrow';
-import 'sigma/src/renderers/canvas/sigma.canvas.labels.def';
-import 'sigma/src/renderers/canvas/sigma.canvas.hovers.def';
-import 'sigma/src/renderers/canvas/sigma.canvas.nodes.def';
-import 'sigma/src/renderers/canvas/sigma.canvas.edges.def';
-import 'sigma/src/renderers/canvas/sigma.canvas.edges.curve';
-import 'sigma/src/renderers/canvas/sigma.canvas.edges.arrow';
-import 'sigma/src/renderers/canvas/sigma.canvas.edges.curvedArrow';
-import 'sigma/src/renderers/canvas/sigma.canvas.edgehovers.def';
-import 'sigma/src/renderers/canvas/sigma.canvas.edgehovers.curve';
-import 'sigma/src/renderers/canvas/sigma.canvas.edgehovers.arrow';
-import 'sigma/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow';
-import 'sigma/src/renderers/canvas/sigma.canvas.extremities.def';
-import 'sigma/src/renderers/svg/sigma.svg.utils';
-import 'sigma/src/renderers/svg/sigma.svg.nodes.def';
-import 'sigma/src/renderers/svg/sigma.svg.edges.def';
-import 'sigma/src/renderers/svg/sigma.svg.edges.curve';
-import 'sigma/src/renderers/svg/sigma.svg.labels.def';
-import 'sigma/src/renderers/svg/sigma.svg.hovers.def';
-import 'sigma/src/middlewares/sigma.middlewares.rescale';
-import 'sigma/src/middlewares/sigma.middlewares.copy';
-import 'sigma/src/misc/sigma.misc.animation';
-import 'sigma/src/misc/sigma.misc.bindEvents';
-import 'sigma/src/misc/sigma.misc.bindDOMEvents';
-import 'sigma/src/misc/sigma.misc.drawHovers';
+import 'sigma/build/sigma.min';
 
 import 'sigma/build/plugins/sigma.plugins.animate.min';
 import 'sigma/build/plugins/sigma.renderers.edgeLabels.min';
+
+import 'dagre/dist/dagre.min';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -61,7 +18,9 @@ import { uiFont } from 'app/styles/variables';
 
 import './features/custom-plugins/sigma.renderers.glyphs.min';
 import './features/custom-plugins/autoCurve.min';
+import './features/custom-plugins/sigma.layouts.dagre.min';
 import './features/custom-plugins/sigma.layouts.forceLink.min';
+import './features/custom-plugins/sigma.layouts.fructurman.min';
 
 import appearanceStuff from './features/appearanceStuff';
 import eventStuff from './features/eventStuff';
@@ -213,19 +172,44 @@ class Graph extends Component {
 		this.layout();
 	}
 
+	layoutsDB = {
+		forceLink: () => {
+			sigma.layouts.killForceLink(this.sigma);
+			sigma.layouts.startForceLink(this.sigma, {
+				worker: true,
+				gravity: 1.5,
+				scalingRatio: 10,
+				autoStop: true,
+				background: true,
+				easing: 'cubicInOut',
+				alignNodeSiblings: true
+			});
+			// setTimeout(() => sigma.layouts.killForceLink(this.sigma), 1000);
+		},
+		dagre: () => {
+			if (!sigma.layouts.dagre.isRunning(this.sigma)) {
+				sigma.layouts.dagre.configure(this.sigma, {
+					easing: 'cubicInOut',
+					directed: true // undirected is disgusting for undirected ones
+				});
+				sigma.layouts.dagre.start(this.sigma);
+			}
+		},
+		fruchtermanReingold: () => { // why no use worker dumbs
+			if (!sigma.layouts.fruchtermanReingold.isRunning(this.sigma)) {
+				sigma.layouts.fruchtermanReingold.configure(this.sigma, {
+					easing: 'cubicInOut',
+					iterations: 2000
+				});
+				setImmediate(() => sigma.layouts.fruchtermanReingold.start(this.sigma));
+			}
+		}
+	}
+
 	layout() {
+		this.sigma.refresh();
 		sigma.canvas.edges.autoCurve(this.sigma);
-		sigma.layouts.killForceLink(this.sigma);
-		sigma.layouts.startForceLink(this.sigma, {
-			worker: true,
-			gravity: 1.5,
-			scalingRatio: 10,
-			autoStop: true,
-			background: true,
-			easing: 'cubicInOut',
-			alignNodeSiblings: true
-		});
-		// setTimeout(() => sigma.layouts.killForceLink(this.sigma), 1000);
+		this.layoutsDB[this.props.layout]();
 	}
 
 	render() {
@@ -242,7 +226,8 @@ class Graph extends Component {
 }
 
 Graph.defaultProps = {
-	customLabels: []
+	customLabels: [],
+	layout: 'forceLink',
 };
 
 Graph.propTypes = {
@@ -256,9 +241,11 @@ Graph.propTypes = {
 	customLabels: PropTypes.array,
 	colors: PropTypes.any.isRequired,
 
+	layout: PropTypes.string,
+
 	theme: PropTypes.string.isRequired,
 
-	animationNextFrameTime: PropTypes.number.isRequired
+	animationNextFrameTime: PropTypes.number.isRequired,
 };
 
 export default Graph;

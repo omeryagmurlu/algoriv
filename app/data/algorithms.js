@@ -7,6 +7,7 @@ import Prim from 'app/containers/algorithms/prim.container';
 import Kruskal from 'app/containers/algorithms/kruskal.container';
 import TopologicalDFS from 'app/containers/algorithms/topological_dfs.container';
 import TopologicalIndegree from 'app/containers/algorithms/topological_indegree.container';
+// import BST from 'app/containers/algorithms/bst.container';
 
 export const AlgorithmsMap = {
 	Djikstra: {
@@ -25,7 +26,7 @@ export const AlgorithmsMap = {
 		view: DFS
 	},
 	SCC: {
-		name: 'Strongly Connected Components',
+		name: 'Kosaraju\'s SCC',
 		desc: 'Visualise Kosaraju\'s Algorithm to find Strongly Connected Components',
 		view: SCC
 	},
@@ -48,21 +49,49 @@ export const AlgorithmsMap = {
 		name: 'Topological Sort (Indegree Array)',
 		desc: 'Sort topologically using Indegree Array',
 		view: TopologicalIndegree
-	}
+	},
+	// BST: {
+	// 	name: 'Binary Search Tree',
+	// 	desc: 'Visualise how a Binary Search Tree works',
+	// 	view: BST
+	// },
 };
 
 export const AlgorithmsList = [
 	{
-		title: 'Graph Algorithms',
+		title: 'Graph Traversal',
 		algorithms: [
-			AlgorithmsMap.Djikstra,
 			AlgorithmsMap.BFS,
 			AlgorithmsMap.DFS,
-			AlgorithmsMap.SCC,
-			AlgorithmsMap.Prim,
-			AlgorithmsMap.Kruskal,
-			AlgorithmsMap.TopologicalDFS,
-			AlgorithmsMap.TopologicalIndegree
 		]
-	}
+	}, {
+		title: 'Shortest Path',
+		algorithms: [
+			AlgorithmsMap.Djikstra,
+		]
+	},
+	{
+		title: 'Minimum Spanning Tree',
+		algorithms: [
+			AlgorithmsMap.Kruskal,
+			AlgorithmsMap.Prim,
+		]
+	}, {
+		title: 'Topological Sort',
+		algorithms: [
+			AlgorithmsMap.TopologicalIndegree,
+			AlgorithmsMap.TopologicalDFS,
+		]
+	}, {
+		title: 'Strongly Connected Components',
+		algorithms: [
+			AlgorithmsMap.SCC,
+		]
+	},
+	// {
+	// 	title: 'Searching',
+	// 	algorithms: [
+	// 		AlgorithmsMap.BST,
+	// 	]
+	// }
 ];

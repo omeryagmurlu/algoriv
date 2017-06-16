@@ -2,14 +2,40 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import _uniq from 'lodash.uniq';
 
 import { textFieldProps } from 'app/styles/module-component-props';
 import { themedStyle } from 'app/utils';
 
-
 import style from './style.scss';
 
 const css = themedStyle(style);
+
+const getGroup = (demandings) => {
+	const groupNames = _uniq(demandings.map(({ group }) => group));
+	const groupHash = groupNames.reduce((acc, name) => {
+		acc[name] = demandings.filter(({ group }) => group === name);
+		return acc;
+	}, {});
+	groupNames.sort((a, b) => {
+		const elemCountDiff = groupHash[a].length - groupHash[b].length;
+		if (elemCountDiff !== 0) { // same number of elems, look at to title length
+			return elemCountDiff;
+		}
+
+		return a.length - b.length;
+	});
+	return {
+		groupNames,
+		groups: groupNames.map(name => groupHash[name]),
+	};
+};
+
+const getInputs = (props) => props.demandings.reduce((acc, { value, group, text }) => {
+	acc[group] = acc[group] || {};
+	acc[group][text] = value;
+	return acc;
+}, {});
 
 class InformationDemandingButton extends Component {
 	constructor(props) {
@@ -17,13 +43,13 @@ class InformationDemandingButton extends Component {
 
 		this.state = {
 			opened: false,
-			inputs: this.props.demandings.map(({ value }) => value)
+			inputs: getInputs(this.props)
 		};
 	}
 
 	componentWillReceiveProps(newProps) {
 		this.setState({
-			inputs: newProps.demandings.map(({ value }) => value)
+			inputs: getInputs(newProps)
 		});
 	}
 
@@ -40,8 +66,8 @@ class InformationDemandingButton extends Component {
 
 	activeHandler = () => {
 		let remains = this.props.demandings.length;
-		this.props.demandings.forEach((demand, i) => {
-			demand.handler(this.state.inputs[i], () => {
+		this.props.demandings.forEach((demand) => {
+			demand.handler(this.state.inputs[demand.group][demand.text], () => {
 				remains--;
 				if (remains === 0) {
 					this.setState({ opened: false }, () => this.props.resolve());
@@ -50,16 +76,19 @@ class InformationDemandingButton extends Component {
 		});
 	}
 
-	inputHandler = (demand, i) => ({ target: { value } }) => {
+	inputHandler = (demand) => ({ target: { value } }) => {
 		this.setState(pS => {
-			pS.inputs[i] = value;
+			pS.inputs[demand.group][demand.text] = value;
 			return pS;
 		});
 	}
 
-	isButtonDisabled = () => this.state.inputs.reduce(
-		(acc, v, i) => acc || !this.props.demandings[i].validate(v), false
-	);
+	didGroupErrored = (groupIdx) => {
+		const { groups, groupNames } = getGroup(this.props.demandings);
+		return groups[groupIdx].reduce(
+			(acc, val) => acc || !val.validate(this.state.inputs[groupNames[groupIdx]][val.text]), false
+		);
+	}
 
 	render() {
 		const {
@@ -74,14 +103,16 @@ class InformationDemandingButton extends Component {
 			...pTB
 		} = this.props;
 
-		const textFields = demandings.map((demand, i) => (
+		const { groups, groupNames } = getGroup(this.props.demandings);
+
+		const textFields = (demGrp, errors) => demGrp.map((demand, i) => (
 			<TextField
-				{...textFieldProps(this.props.theme)}
-				key={demand.text}
+				{...textFieldProps(this.props.theme, this.props.secondary)}
+				key={`${demand.group} ${demand.text}`}
 				floatingLabelText={demand.text}
-				value={this.state.inputs[i]}
+				value={this.state.inputs[demand.group][demand.text]}
 				onChange={this.inputHandler(demand, i)}
-				errorText={demand.invalid(this.state.inputs[i])}
+				errorText={errors[i]}
 				style={{
 					marginTop: '-14px',
 					width: '125px'
@@ -92,17 +123,33 @@ class InformationDemandingButton extends Component {
 		return (
 			<div style={{ display: 'inline-flex', alignItems: 'center' }}>
 				<div
-					className={`
-						${css('fields-container', theme)}
-						${this.isOpened() && css('open', theme)}
-					`}
+					className={css('group-container')}
 					style={{ bottom: elevation }}
-				>
-					{textFields}
-				</div>
+				><div className={css('wrapper')}>
+					{groups.map((group, gi) => {
+						const errors = group.map((demand) =>
+							demand.invalid(this.state.inputs[demand.group][demand.text]));
+						return (
+							<div
+								key={groupNames[gi]}
+								className={`
+									${css('fields-container', theme)}
+									${this.isOpened() && css('open')}
+									${this.props.secondary && css('secondary', theme)}
+								`}
+								style={errors.reduce((prev, curr) => curr || prev, false) ? { // HATE U MATERIAL
+									paddingBottom: '12px',
+								} : {}}
+							>
+								{groupNames[gi] && <div className={css('group-header', theme)}>{groupNames[gi]}</div>}
+								{textFields(group, errors)}
+							</div>
+						);
+					})}
+				</div></div>
 				<FlatButton
 					{...pTB}
-					disabled={this.isButtonDisabled()}
+					disabled={groupNames.reduce((prev, curr, i) => this.didGroupErrored(i) || prev, false)}
 					onTouchTap={this.isOpened() ? this.activeHandler : this.passiveHandler}
 					icon={this.isOpened() ? activeIcon : passiveIcon}
 				/>
@@ -116,6 +163,7 @@ InformationDemandingButton.defaultProps = {
 	demandings: [],
 	demandCondition: false,
 	elevation: '0px',
+	secondary: false,
 };
 
 InformationDemandingButton.propTypes = {
@@ -133,6 +181,7 @@ InformationDemandingButton.propTypes = {
 	resolve: PropTypes.func.isRequired,
 	elevation: PropTypes.string,
 	theme: PropTypes.string.isRequired,
+	secondary: PropTypes.bool,
 };
 
 export default InformationDemandingButton;

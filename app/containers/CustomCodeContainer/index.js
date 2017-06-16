@@ -102,9 +102,9 @@ ${initialCode}`,
 		const Alg = Algorithm(this.state.name, this.state.type);
 		Object.keys(this.state.typeFeatures)
 			.filter(v => this.state.typeFeatures[v])
-			.map(name => AlgorithmTypes[this.state.type].find(v => v.name === name).method)
+			.map(name => AlgorithmTypes[this.state.type].find(v => v.name === name))
 			.forEach(feature => {
-				Alg[feature]();
+				Alg[feature.method](this.state.typeFeatures[feature.name]);
 			});
 
 		this.state.tables.forEach(table => {
@@ -237,20 +237,18 @@ ${initialCode}`,
 ${this.state.name.includes(' ') ? '' : ` and \`${this.state.name}[${type}]\``}`);
 		this.addToState('type', type);
 		this.addToState('typeFeatures', {});
-		// Setting it to an empty one makes features undefined instead of false
-		// which I fix below by defaulting to false, this is kinda a hack (language feature)
-		// but I can't bother 'fixing' it now, it works, and will work
 	})
-	algTypeFeatures = () => valSet((AlgorithmTypes[this.state.type] || []).map(
-		v => ({
-			name: v.name,
-			enabled: this.state.typeFeatures[v.name] || false // here
-		})
-	), (name, isEnabled) => {
-		this.prependCode(`// Feature ${name} of type ${this.state.type} is \
-now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.type].find(v => v.name === name).propName}\`` : 'disabled'} `);
+	algTypeFeatures = () => valSet((AlgorithmTypes[this.state.type] || []).map(v => ({
+		name: v.name,
+		value: this.state.typeFeatures[v.name],
+		type: v.type // FIXME: We shouldn't blindly pass type, I think
+	})), (name, newValue) => {
+		const propName = AlgorithmTypes[this.state.type].find(v => v.name === name).propName;
+		if (propName) {
+			this.prependCode(`// Feature ${name} of type ${this.state.type} is now ${newValue ? `enabled, available as \`input.${propName}\`` : 'disabled'} `);
+		}
 		this.setState(prev => {
-			prev.typeFeatures[name] = isEnabled;
+			prev.typeFeatures[name] = newValue;
 			return prev;
 		});
 	})
@@ -258,6 +256,7 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 	algDescription = () => valSet(this.state.description, (description) => this.addToState('description', description))
 	algTables = () => valSet(this.state.tables, () => ({
 		add: (id, columns, optNewId, cb = () => {}) => {
+			this.prependCode(`// Table ${id} is available as \`input['${id}']\`, you need to supply it with data of ${columns.length} columns`);
 			this.setState(prev => {
 				const vorhanden = prev.tables.find(o => o.id === id);
 				if (vorhanden) {
@@ -270,6 +269,7 @@ now ${isEnabled ? `enabled, available as \`input.${AlgorithmTypes[this.state.typ
 			}, cb);
 		},
 		remove: (id, cb = () => {}) => {
+			this.prependCode(`// Removed table ${id}`);
 			this.setState(prev => {
 				const index = prev.tables.findIndex(o => o.id === id);
 				if (index !== -1) {

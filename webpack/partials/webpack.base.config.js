@@ -29,6 +29,15 @@ module.exports = new Config().merge({
 				use: ['script-loader'] // loading as script
 			},
 			{
+				test: /dagre\/dist\/dagre.*\.js?$/,
+				use: ['script-loader']
+			},
+			{
+				test: /babel-standalone.*\.js?$/,
+				exclude: ['app'],
+				use: ['script-loader']
+			},
+			{
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				use: [

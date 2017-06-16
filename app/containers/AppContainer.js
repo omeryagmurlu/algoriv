@@ -43,6 +43,7 @@ class AppContainer extends Component {
 		Object.keys(modules).forEach(mName => {
 			this.settings('options')('enabled-modules')(mName).default(true);
 		});
+		this.settings('options')('graph')('layout').default('forceLink');
 
 		this.history = [initialView];
 	}

@@ -16,12 +16,12 @@ const AlgorithmPageView = props => (
 				<div
 					className={css('container')}
 				>
-					{group.algorithms.map(alg => ( // changing prop FIXME
+					{group.algorithms.map((alg, i) => ( // changing prop FIXME
 						<BigButton
 							name={alg.name}
 							key={alg.name}
 							desc={alg.desc}
-							cols={2}
+							cols={(group.algorithms.length - 1 === i && i % 2 === 0) ? 1 : 2}
 							onTouchTap={() => props.app.changeView(alg)}
 							theme={props.app.theme}
 						/>

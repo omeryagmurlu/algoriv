@@ -3,20 +3,59 @@
 @include themeable {
 	.fields-container-#{$themeName} {
 		border-color: map-get($themeMap, 'primary1Color');
+
+		.group-header {
+			color: map-get($themeMap, 'accent1Color');
+		}
+
+		&.secondary {
+			border-color: map-get($themeMap, 'accent1Color');
+
+			.group-header {
+				color: map-get($themeMap, 'primary1Color');
+			}
+		}
 	}
 };
 
-.fields-container {
+.group-container {
+	display: flex;
 	position: absolute;
-	transition: border-width 0.1s 0.4s, max-height 0.5s;
+	right: 0;
+	left: 0;
+	flex-direction: column;
+	align-items: center;
+	overflow: hidden;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column; // justify content doesnt work see below
+}
+
+.fields-container {
+	display: flex;
+	justify-content: flex-end;
+	transition: border-width 0.1s 0.4s, border-color 0.5s, padding 0.5s, max-height 0.5s;
+	margin-left: auto; // so I use this
 	border-width: 0;
 	border-style: solid;
-	padding: 0 15px;
+	padding: 0 7.5px;
 	max-height: 0;
 	overflow: hidden;
+	box-sizing: border-box;
+
+	> * {
+		margin: 0 7.5px;
+	}
+
+	.group-header {
+		margin: auto 15px auto 0;
+		height: 100%;
+	}
 
 	&.open {
-		transition: border-width 0s 0s, max-height 0.5s;
+		transition: border-width 0s 0s, border-color 0.5s, padding 0.5s, max-height 0.5s;
 		border-width: 5px 0 0;
 		max-height: 80px;
 	}

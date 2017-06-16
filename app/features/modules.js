@@ -16,6 +16,9 @@ const exporter = (snap, module, input = () => () => ({})) => ({ snap, module, in
 
 const Modules = {};
 
+export const GraphModuleData = {
+	layouts: ['forceLink', 'dagre', 'fruchtermanReingold']
+};
 export const GraphModule = Modules.Graph = exporter(
 	(clist, customLabels, optMutatingGraph) => ({
 		colors: clist,
@@ -24,11 +27,13 @@ export const GraphModule = Modules.Graph = exporter(
 		// This is only viable for snap, as it is used in logic, in a module, it wouldn't get updated
 		graph: optMutatingGraph
 	}),
-	(options) => typee('graph', 'main', { options }),
+	(layout, settings) => typee('graph', 'main', {
+		layout: layout || settings('options')('graph')('layout').get()
+	}),
 	(GRAPH, STARTVERTEX) => input => ({
 		graph: input[GRAPH].value,
 		updateGraph: input[GRAPH].update,
-		canRemoveThisNode: v => !input[STARTVERTEX] && v !== input[STARTVERTEX].value
+		canRemoveThisNode: v => !(input[STARTVERTEX] && v === input[STARTVERTEX].value)
 	})
 );
 

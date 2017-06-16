@@ -13,25 +13,25 @@ You can always use the web app [here](https://omeryagmurlu.gitlab.io/algoriv)
 ## Getting Started
 
 ```bash
-	$ yarn add algoriv
-	$ yarn run start:electron
+$ yarn add algoriv
+$ yarn run start:electron
 ```
 
 ## Build
 
 ```bash
-	$ git clone git@gitlab.com:omeryagmurlu/TSA-Software.git algoriv
-	$ cd algoriv
-	$ yarn
-	$ yarn run watch:browser
+$ git clone git@gitlab.com:omeryagmurlu/TSA-Software.git algoriv
+$ cd algoriv
+$ yarn
+$ yarn run watch:browser
 ```
 
 ## Packaging
 
 ```bash
-	$ yarn run package-linux
-	$ yarn run package-win
-	$ yarn run package-all
+$ yarn run package-linux
+$ yarn run package-win
+$ yarn run package-all
 ```
 
 ## Usage
@@ -57,7 +57,7 @@ See `docs/usage.md`
 - Views can **only** import **components** and **styles**.
 	- For routing, containers, or another views must supply the needed data.
 
-### `props.app` props, and `props.app.settings`
+#### `props.app` props, and `props.app.settings`
 
 `app` is a common prop that every container and view has access to. It is used to trigger or retrive app specific actions. Components are prohibited to have access to it.
 
