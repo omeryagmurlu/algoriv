@@ -1,8 +1,8 @@
 {
-  "name": "algoriv",
-  "productName": "AlgoriV - Algorithm Visualization",
+  "name": "algoriva",
+  "productName": "AlgoriVA - Algorithm Visualization",
   "version": "1.0.0",
-  "description": "Visualization of Graph Algorithms",
+  "description": "Visualization of Computing Algorithms",
   "homepage": "omeryagmurlu.github.io",
   "main": "main.js",
   "scripts": {

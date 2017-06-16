@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import _uniq from 'lodash.uniq';
 
 import { textFieldProps } from 'app/styles/module-component-props';
-import { themedStyle, trace } from 'app/utils';
+import { themedStyle } from 'app/utils';
 
 import style from './style.scss';
 
@@ -105,7 +105,7 @@ class InformationDemandingButton extends Component {
 
 		const { groups, groupNames } = getGroup(this.props.demandings);
 
-		const textFields = (demGrp, errors) => trace(demGrp).map((demand, i) => (
+		const textFields = (demGrp, errors) => demGrp.map((demand, i) => (
 			<TextField
 				{...textFieldProps(this.props.theme, this.props.secondary)}
 				key={`${demand.group} ${demand.text}`}

@@ -7,6 +7,7 @@ import Prim from 'app/containers/algorithms/prim.container';
 import Kruskal from 'app/containers/algorithms/kruskal.container';
 import TopologicalDFS from 'app/containers/algorithms/topological_dfs.container';
 import TopologicalIndegree from 'app/containers/algorithms/topological_indegree.container';
+// import BST from 'app/containers/algorithms/bst.container';
 
 export const AlgorithmsMap = {
 	Djikstra: {
@@ -48,7 +49,12 @@ export const AlgorithmsMap = {
 		name: 'Topological Sort (Indegree Array)',
 		desc: 'Sort topologically using Indegree Array',
 		view: TopologicalIndegree
-	}
+	},
+	// BST: {
+	// 	name: 'Binary Search Tree',
+	// 	desc: 'Visualise how a Binary Search Tree works',
+	// 	view: BST
+	// },
 };
 
 export const AlgorithmsList = [
@@ -81,5 +87,11 @@ export const AlgorithmsList = [
 		algorithms: [
 			AlgorithmsMap.SCC,
 		]
-	}
+	},
+	// {
+	// 	title: 'Searching',
+	// 	algorithms: [
+	// 		AlgorithmsMap.BST,
+	// 	]
+	// }
 ];

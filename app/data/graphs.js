@@ -220,7 +220,30 @@ export const graphs = [
 				])
 			}
 		]
-	}
+	},
+	// {
+	// 	suits: ['BST'],
+	// 	graphs: [
+	// 		{
+	// 			name: 'Balanced Tree',
+	// 			graph: create('DirectedGraph', graph => {
+	// 				const edge = (v, u) => graph.addEdgeWithKey(
+	// 					gO.edgeKeyGenerator({ source: v, target: u }),
+	// 					v, u
+	// 				);
+	// 				graph.addNodesFrom([1, 3, 4, 6, 7, 8, 10, 13, 14]);
+	// 				edge(6, 3);
+	// 				edge(3, 1);
+	// 				edge(3, 4);
+	// 				edge(6, 8);
+	// 				edge(8, 7);
+	// 				edge(8, 13);
+	// 				edge(13, 10);
+	// 				edge(13, 14);
+	// 			}).export()
+	// 		}
+	// 	]
+	// }
 ];
 
 const predicate = (type, suits) => suits.includes(type);
