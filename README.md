@@ -1,4 +1,4 @@
-# AlgoriV
+# AlgoriVA
 
 A modular algorithm visualization software.
 
@@ -8,14 +8,9 @@ A modular algorithm visualization software.
 * [Windows](https://gitlab.com/omeryagmurlu/algoriv/builds/artifacts/master/browse/release?job=win-binary)
 * For OSx you must build the project
 
+[Github Links](https://github.com/omeryagmurlu/algoriv/releases)
+
 You can always use the web app [here](https://omeryagmurlu.gitlab.io/algoriv)
-
-## Getting Started
-
-```bash
-$ yarn add algoriv
-$ yarn run start:electron
-```
 
 ## Build
 
