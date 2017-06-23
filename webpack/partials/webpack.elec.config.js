@@ -16,7 +16,7 @@ const Config = webpackConfig.Config;
 module.exports = new Config().merge({
 	target: 'electron-renderer',
 	externals: [nodeExternals({
-		whitelist: [/sigma/, 'app', /loaders.css/]
+		whitelist: [/sigma/, 'app', /loaders.css/, /dagre/]
 	})],
 	output: {
 		filename: 'electron.js'
