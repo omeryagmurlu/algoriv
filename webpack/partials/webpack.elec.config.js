@@ -16,7 +16,7 @@ const Config = webpackConfig.Config;
 module.exports = new Config().merge({
 	target: 'electron-renderer',
 	externals: [nodeExternals({
-		whitelist: [/sigma/, 'app', /loaders.css/, /dagre/]
+		whitelist: [/sigma/, 'app', /loaders.css/, /dagre/, /babel-standalone/]
 	})],
 	output: {
 		filename: 'electron.js'
@@ -24,7 +24,7 @@ module.exports = new Config().merge({
 	resolve: {
 		alias: {
 			'ALIAS-localstorage': path.resolve('webpack/fake_modules/electron-localstorage'),
-			'ALIAS-babel': path.resolve('webpack/fake_modules/electron-babel')
+			'ALIAS-babel': path.resolve('webpack/fake_modules/browser-babel')
 		}
 	},
 	plugins: [
