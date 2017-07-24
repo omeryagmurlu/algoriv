@@ -45,6 +45,10 @@ TSP_GR.logic = ({ startVertex: st, geometry: gNonParse }, snipe) => {
 	const showGraph = gimport(gNonParse);
 	graph.dropEdges();
 	showGraph.dropEdges();
+	const grid = griddyTable(graph.nodes(), graph.nodes(), graph.nodes().map(re3 =>
+		graph.nodes().map(ksds => (
+			graph.edge(re3, ksds) ? graph.getEdgeAttribute(re3, ksds, 'weight') : '-'
+		))), '❧');
 	const alg = TSP_GR.algorithm;
 
 	connectAllNodes(graph);
@@ -56,10 +60,6 @@ TSP_GR.logic = ({ startVertex: st, geometry: gNonParse }, snipe) => {
 	let ans = 0;
 	const vis = visCreator(graph);
 
-	const grid = griddyTable(graph.nodes(), graph.nodes(), graph.nodes().map(n1 =>
-		graph.nodes().map(n2 => (
-			graph.edge(n1, n2) ? graph.getEdgeAttribute(n1, n2, 'weight') : '-'
-	))), '❧');
 	const snap = (a, b, c, d, e) => {
 		alg.visited(vis);
 		alg.geometry.setColor(0, setnodes, setedges);

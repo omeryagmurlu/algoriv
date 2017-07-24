@@ -50,12 +50,12 @@ TSP_PRIM.logic = ({ startVertex: st, geometry: gNonParse }, snipe) => {
 	const alg = TSP_PRIM.algorithm;
 
 	connectAllNodes(graph);
-	const grid = griddyTable(graph.nodes(), graph.nodes(), graph.nodes().map(n1 =>
-		graph.nodes().map(n2 => (
-			graph.edge(n1, n2) ? graph.getEdgeAttribute(n1, n2, 'weight') : '-'
-		))), '❧');
 
 	const pair = (id, weight, parent) => ({ id, weight, parent });
+	const grid = griddyTable(graph.nodes(), graph.nodes(), graph.nodes().map(kfd =>
+		graph.nodes().map(nn2 => (
+			graph.edge(kfd, nn2) ? graph.getEdgeAttribute(kfd, nn2, 'weight') : '-'
+		))), '❧');
 	let mstans = 0;
 
 	let nowmst = 1;

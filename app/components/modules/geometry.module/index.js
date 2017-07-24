@@ -8,7 +8,6 @@ import { ifModuleEnabled, themedStyle, graphologyImportFix as gimport } from 'ap
 import drawer from './features/draw';
 import events from './features/events';
 import style from './style.scss';
-import vars from './variables.json';
 
 const css = themedStyle(style);
 

@@ -72,26 +72,25 @@ TSP_DP.logic = ({ startVertex: st, geometry: gNonParse }, snipe) => {
 	const rodb = {};
 
 	connectAllNodes(graph);
+	const gr = griddyTable(graph.nodes(), graph.nodes(), graph.nodes().map(n1 =>
+		graph.nodes().map(n2 => (
+			graph.edge(n1, n2) ? graph.getEdgeAttribute(n1, n2, 'weight') : '-'
+		))), '❧');
 
 	let setnodes = [];
 	let setedges = [];
 	let currEnd = [];
 	let connect;
 
-	const grid = griddyTable(graph.nodes(), graph.nodes(), graph.nodes().map(n1 =>
-		graph.nodes().map(n2 => (
-			graph.edge(n1, n2) ? graph.getEdgeAttribute(n1, n2, 'weight') : '-'
-	))), '❧');
 	const snap = (a, b, c, d, e) => {
-		alg.geometry.setColor(0, setnodes, setedges);
-		alg.geometry.setColor(1, currEnd, [connect]);
-
 		alg.code(a);
 		alg.explanation(b);
+		alg.geometry.setColor(1, currEnd, [connect]);
 		alg.geometry.setOverrideGraph(graph);
 		alg.failure(e);
+		alg.geometry.setColor(0, setnodes, setedges);
 		if (setnodes.length > 0) alg.set(`Set: ${setnodes}`);
-		alg.distanceMatrix(...grid);
+		alg.distanceMatrix(...gr);
 		const dp = [
 			[],
 			[],
