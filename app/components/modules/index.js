@@ -4,7 +4,7 @@ import Graph from './graph.module';
 import Table from './table.module';
 import Description from './description.module';
 import ExampleGraphs from './examples.module';
-
+import Geometry from './geometry.module'
 
 const modules = {
 	code: Code,
@@ -12,7 +12,8 @@ const modules = {
 	graph: Graph,
 	table: Table,
 	description: Description,
-	examples: ExampleGraphs
+	examples: ExampleGraphs,
+	geometry: Geometry,
 };
 
 export default modules;

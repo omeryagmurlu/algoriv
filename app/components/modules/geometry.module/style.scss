@@ -1,0 +1,12 @@
+@import '~app/styles/common';
+
+@include themeable {
+	.style-#{$themeName} {
+		background: map-get($themeMap, 'backgroundColor');
+	}
+};
+
+.style {
+	width: 100%;
+	height: 100%;
+}

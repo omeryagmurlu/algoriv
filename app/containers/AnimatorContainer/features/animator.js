@@ -3,7 +3,7 @@ export default class Animator {
 		let speed = inComSpeed;
 		let internalSpeed;
 		speed -= 50;
-		speed /= 10;
+		speed /= 7;
 		if (speed === 0) {
 			internalSpeed = 1;
 		} else if (speed < 0) {

@@ -3,7 +3,7 @@ import _mapValues from 'lodash.mapvalues';
 
 import Modules, { GraphModuleData } from 'app/features/modules';
 import AlgorithmFactory, { framer } from 'app/containers/AlgorithmContainer';
-import { graphs, randomGraph, suitingGraphs } from 'app/data/graphs';
+import { graphs, randomGraph, suitingGraphs, geometrys as geometryInputs } from 'app/data/graphs';
 import InitInput from 'app/features/init-input';
 import { graphologyImportFix as gimport } from 'app/utils';
 
@@ -108,13 +108,16 @@ const Algorithm = (algorithmName, algorithmType) => {
 		addModule(instance.algorithm[name]);
 	};
 
-	instance.addText = (name) => {
-		instance.algorithm[name] = Text();
+	instance.addText = (name, text, opts = {}) => {
+		instance.algorithm[name] = Text(text, undefined, opts);
 		addModule(instance.algorithm[name]);
 	};
 
 	scheduleStart(() => {
-		instance.algorithm.explanation = Text();
+		instance.algorithm.explanation = Text(undefined, {
+			location: 'right',
+			order: 50
+		});
 		addModule(instance.algorithm.explanation);
 	});
 
@@ -124,7 +127,6 @@ const Algorithm = (algorithmName, algorithmType) => {
 		 *  - graph
 		 *  - ?startVertex
 		 */
-
 		instance.addStartingNodeInput = () => {
 			addInput('startVertex', '0', {
 				description: 'Starting Vertex',
@@ -146,7 +148,31 @@ const Algorithm = (algorithmName, algorithmType) => {
 
 		scheduleStart(() => {
 			const suiting = suitingGraphs(algorithmName);
-			addModule(ExampleGraphs(['graph', 'startVertex'])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.graphs))));
+			addModule(ExampleGraphs(['graph', 'startVertex'])(suiting.length > 0 ? suiting : flatten(graphs.map(o => o.data))));
+		});
+	} else if (algorithmType === 'geometry') {
+		/**
+		 * Input ids for type 'geometry':
+		 *  - geometry
+		 *  - ?startVertex
+		 */
+		instance.addStartingNodeInput = () => {
+			addInput('startVertex', '0', {
+				description: 'Starting Vertex',
+				invalid: (sV, { geometry }) => !geometry.nodes[sV] && `node doesn't exist (${sV})`
+			});
+		};
+
+		addInput('geometry', randomGraph(algorithmName, geometryInputs).canvas);
+
+		scheduleStart(() => {
+			instance.algorithm.geometry = Geometry(['geometry', 'startVertex'])();
+			addModule(instance.algorithm.geometry);
+		});
+
+		scheduleStart(() => {
+			const suiting = suitingGraphs(algorithmName, geometryInputs);
+			addModule(ExampleGeometrys(['geometry', 'startVertex'])(suiting.length > 0 ? suiting : flatten(geometryInputs.map(o => o.data))));
 		});
 	}
 
@@ -172,6 +198,16 @@ export const AlgorithmTypes = {
 				selections: GraphModuleData.layouts
 			}
 		}
+	],
+	geometry: [
+		{
+			name: 'Starting Vertex',
+			method: 'addStartingNodeInput',
+			propName: 'startVertex',
+			type: {
+				name: 'toggle',
+			}
+		},
 	]
 };
 
@@ -251,12 +287,39 @@ const Graph = (inputNames = []) => (...moduleArgs) => {
 	return instance;
 };
 
+const Geometry = (inputNames = []) => (...moduleArgs) => {
+	let snapDatas = [[], []];
+
+	const instance = {
+		setColor: (index, nodes, edges) => {
+			snapDatas[0][index] = nodes;
+			snapDatas[1][index] = edges;
+		},
+		setOverrideGraph: graph => {
+			snapDatas[2] = graph;
+		},
+		_internals: _internals({
+			mod: 'Geometry',
+			moduleArgs,
+			inputNames,
+			shouldPassSettings: true,
+			getSnapParameters: () => snapDatas,
+			resetSnapParameters: () => (snapDatas = [[], []])
+		})
+	};
+
+	return instance;
+};
+
 const Code = _proxyHelper('Code')();
 const Text = _proxyHelper('Text')();
 const Table = _proxyHelper('Table')();
 const NodedTable = _proxyHelper('NodedTable')();
 const Description = _proxyHelper('Description')();
 const ExampleGraphs = _proxyHelper('ExampleGraphs', {
+	shouldPassSettings: true
+});
+const ExampleGeometrys = _proxyHelper('ExampleGeometrys', {
 	shouldPassSettings: true
 });
 

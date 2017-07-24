@@ -145,5 +145,50 @@ exports[`AlgorithmPageView renders correctly 1`] = `
       />
     </div>
   </nav>
+  <nav>
+    <h1>
+      Travelling Salesman
+    </h1>
+    <div
+      className="container undefined"
+    >
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Dynamic Programming Approach for TSP",
+            "name": "Travelling Salesman (DP)",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 2,
+            "desc": "Greedy Approach for TSP",
+            "name": "Travelling Salesman (Greedy)",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+      <div
+        mockName="BigButton"
+        mockProps={
+          Object {
+            "cols": 1,
+            "desc": "Approximate TSP using MST Prim",
+            "name": "Travelling Salesman Approximation (MST Prim)",
+            "onTouchTap": [Function],
+            "theme": "asdfd",
+          }
+        }
+      />
+    </div>
+  </nav>
 </div>
 `;

@@ -16,7 +16,6 @@ export const createFrom = (className, data) => create(className, graph => {
 	const order = Math.max(...(data.map(rows => Math.max(...(rows.map(node =>
 		(Array.isArray(node) ? node[0] : node)
 	))))));
-	// console.log(order);
 	graph.addNodesFrom(Array(Math.max(order + 1, data.length)).fill(1).map((v, i) => i));
 	data.forEach((negs, v) => negs.forEach(rawU => {
 		const u = Array.isArray(rawU) ? rawU[0] : rawU;
@@ -28,6 +27,17 @@ export const createFrom = (className, data) => create(className, graph => {
 			}
 		);
 	}));
+}).export();
+
+export const createGeom = data => create('UndirectedGraph', graph => {
+	graph.addNodesFrom(data.reduce((acc, cr, i) => {
+		acc[`${i}`] = {
+			x: cr[0],
+			y: cr[1]
+		};
+
+		return acc;
+	}, {}));
 }).export();
 
 export const adjacencyListify = g => {
@@ -43,10 +53,28 @@ export const adjacencyListify = g => {
 	return out;
 };
 
+export const geometrys = [
+	{
+		suits: ['TSP_DP', 'TSP_GR', 'TSP_PRIM'],
+		data: [
+			{
+				name: '4 TSP',
+				canvas: createGeom([
+					[0, 0],
+					[100, 50],
+					[150, -200],
+					[-25, -75],
+					[-40, 80]
+				])
+			},
+		]
+	},
+];
+
 export const graphs = [
 	{
 		suits: ['BFS', 'DFS'],
-		graphs: [
+		data: [
 			{
 				name: 'Undirected Cyclic',
 				graph: createFrom('UndirectedGraph', [
@@ -75,7 +103,7 @@ export const graphs = [
 	},
 	{
 		suits: ['Djikstra', 'BFS', 'DFS'],
-		graphs: [
+		data: [
 			{
 				name: 'Unbalanced Binary Tree Weighted',
 				graph: createFrom('DirectedGraph', [
@@ -102,7 +130,7 @@ export const graphs = [
 	},
 	{
 		suits: ['Prim', 'Djikstra', 'Kruskal', 'BFS', 'DFS'],
-		graphs: [
+		data: [
 			{
 				name: 'Undirected Cyclic Weighted',
 				graph: createFrom('UndirectedGraph', [
@@ -137,7 +165,7 @@ export const graphs = [
 	},
 	{
 		suits: ['BFS', 'DFS', 'SCC'],
-		graphs: [
+		data: [
 			{
 				name: 'Directed Cyclic 4 SCCs',
 				graph: createFrom('DirectedGraph', [
@@ -179,7 +207,7 @@ export const graphs = [
 	},
 	{
 		suits: ['TopologicalIndegree', 'TopologicalDFS', 'BFS', 'DFS'],
-		graphs: [
+		data: [
 			{
 				name: 'Unbalanced Binary Tree',
 				graph: createFrom('DirectedGraph', [
@@ -223,7 +251,7 @@ export const graphs = [
 	},
 	// {
 	// 	suits: ['BST'],
-	// 	graphs: [
+	// 	data: [
 	// 		{
 	// 			name: 'Balanced Tree',
 	// 			graph: create('DirectedGraph', graph => {
@@ -247,15 +275,14 @@ export const graphs = [
 ];
 
 const predicate = (type, suits) => suits.includes(type);
-const flatGraphs = flatten(graphs.map(v => v.graphs));
 
-export const suitingGraphs = alg => flatten(graphs.map(v => (
+export const suitingGraphs = (alg, db = graphs) => flatten(db.map(v => (
 	predicate(alg, v.suits)
-		? v.graphs
+		? v.data
 		: []
 )));
 
-export const randomGraph = (alg = false) => {
+export const randomGraph = (alg = false, db = graphs) => {
 	if (alg) {
 		const sample = _sample(suitingGraphs(alg));
 		if (sample) {
@@ -263,5 +290,5 @@ export const randomGraph = (alg = false) => {
 		}
 	}
 
-	return _sample(flatGraphs);
+	return _sample(flatten(db.map(v => v.data)));
 };

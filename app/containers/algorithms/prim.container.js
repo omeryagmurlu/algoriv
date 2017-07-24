@@ -1,6 +1,6 @@
 import Algorithm from 'app/features/algorithm-helpers';
 import _sample from 'lodash.sample';
-import { vis2array, DataStructures, graphologyImportFix as gimport, visCreator } from 'app/utils';
+import { vis2array, graphologyImportFix as gimport, visCreator, MinPriq } from 'app/utils';
 
 const Prim = Algorithm('Prim', 'graph');
 
@@ -62,15 +62,7 @@ Prim.logic = ({ graph: gNonParse }, snipe) => {
 		snipe();
 	};
 
-	const pq = new DataStructures.PriorityQueue((a, b) => {
-		if (a.weight > b.weight) { // MIN HEAP
-			return -1;
-		}
-		if (a.weight < b.weight) {
-			return 1;
-		}
-		return 0;
-	});
+	const pq = MinPriq();
 
 	snap([], undefined);
 	snap([0], `Starting MST-Prim from arbitrary node ${starting}`, starting);

@@ -37,15 +37,39 @@ export const GraphModule = Modules.Graph = exporter(
 	})
 );
 
+const colorAdd = (nodesList, edgesList) => {
+	const ret = new ColorList();
+	nodesList.forEach(nodes => ret.pushNodes(Array.isArray(nodes) ? nodes : [nodes]));
+	edgesList.forEach(edges => ret.pushEdges(Array.isArray(edges) ? edges : [edges]));
+	return ret;
+};
+
+export const GeometryModule = Modules.Geometry = exporter(
+	(nodesList, edgesList, optData) => {
+		const clist = colorAdd(nodesList, edgesList);
+		return {
+			colors: clist,
+			geometry: optData,
+		};
+	},
+	() => typee('geometry', 'main'),
+	(GEO, STARTVERTEX) => input => ({
+		geometry: input[GEO].value,
+		updateGeometry: input[GEO].update,
+		canRemoveThisNode: v => !(input[STARTVERTEX] && v === input[STARTVERTEX].value)
+	})
+);
+
 export const TableModule = Modules.Table = exporter(
 	// convert columns to rows
-	columnsData => ({
+	(columnsData, optColumns) => ({
 		data: Array(columnsData.reduce((acc, v) => Math.max(acc, v.length), 0)).fill(1).map((_, i) =>
 			columnsData.reduce((acc, v) => {
 				acc.push(v[i]);
 				return acc;
 			}, [])
-		)
+		),
+		columns: optColumns
 	}),
 	(columns, height = 150, width = undefined) => typee('table', 'right', {
 		height,
@@ -115,6 +139,24 @@ export const ExampleGraphsModule = Modules.ExampleGraphs = exporter(
 	})
 );
 
+export const ExampleGeometrysModule = Modules.ExampleGeometrys = exporter(
+	ExamplesModule.snap,
+	(graphs, ...rest) => ExamplesModule.module('Geometry', graphs.map(({ name, canvas }) => ({
+		name,
+		data: canvas
+	})), undefined, ...rest),
+	(GEO, STARTVERTEX) => input => ({
+		getCurrentInput: () => input[GEO].value,
+		updateInput: (newGraph) => {
+			const cont = () => input[GEO].update(newGraph);
+			if (input[STARTVERTEX]) {
+				return input[STARTVERTEX].update('0', cont);
+			}
+			cont();
+		}
+	})
+);
+
 export const DescriptionModule = Modules.Description = exporter(
 	() => ({}),
 	(text) => typee('description', 'left', { text })
@@ -122,9 +164,7 @@ export const DescriptionModule = Modules.Description = exporter(
 
 export const RefinedGraphModule = Modules.RefinedGraph = exporter(
 	(nodesList, edgesList, glyphs = [], ...params) => {
-		const clist = new ColorList();
-		nodesList.forEach(nodes => clist.pushNodes(Array.isArray(nodes) ? nodes : [nodes]));
-		edgesList.forEach(edges => clist.pushEdges(Array.isArray(edges) ? edges : [edges]));
+		const clist = colorAdd(nodesList, edgesList);
 
 		return GraphModule.snap(clist, glyphs.map(v => _mapValues(v, labelizer)), ...params);
 	},

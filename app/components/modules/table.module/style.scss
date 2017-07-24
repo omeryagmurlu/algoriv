@@ -14,5 +14,9 @@
 		tbody {
 			display: block;
 		}
+
+		* {
+			text-overflow: clip !important;
+		}
 	}
 }

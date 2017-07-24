@@ -2,7 +2,55 @@ import _pickBy from 'lodash.pickby';
 import graphology from 'graphology';
 import _isNil from 'lodash.isnil';
 import { themes } from 'app/styles/themes.json';
+import chroma from 'chroma-js';
 import Buckets from 'buckets-js';
+
+export const connectAllNodes = (graph) => graph.nodes().forEach(node1 => {
+	graph.nodes().filter(x => x !== node1).forEach(node2 => {
+		if (!graph.hasEdge(node1, node2)) {
+			graph.addEdgeWithKey(`${node1} ${node2}`, node1, node2, {
+				weight: Math.round(Math.sqrt(((graph.getNodeAttribute(node1, 'y') - graph.getNodeAttribute(node2, 'y')) ** 2)
+					+ ((graph.getNodeAttribute(node2, 'x') - graph.getNodeAttribute(node1, 'x')) ** 2)))
+			});
+		}
+	});
+});
+
+export const MinPriq = () => new DataStructures.PriorityQueue((a, b) => {
+	if (a.weight > b.weight) { // MIN HEAP
+		return -1;
+	}
+	if (a.weight < b.weight) {
+		return 1;
+	}
+	return 0;
+});
+
+const grayScale = chroma.scale();
+
+export const griddyTable = (cols, rows, data, origin = '') => [[rows, ...data], [origin].concat(cols)];
+
+export const optGrayscaler = (app, v) => {
+	if (app.settings('options')('grayscale-visualizations').get()) {
+		return grayScale(1 - chroma(v).luminance()).hex();
+	}
+
+	return v;
+};
+
+export const generateColorWheel = (app, col) => {
+	const colorsDP = {};
+	const sideColorsRaw = (count) => {
+		if (colorsDP[count]) {
+			return colorsDP[count];
+		}
+		return (colorsDP[count] = Array(count).fill(1).map((_, i) =>
+			col.set('hsl.h', `+${(360 / (count + 1)) * (i + 1)}`).hex(),
+		));
+	};
+
+	return (...p) => sideColorsRaw(...p).map(v => optGrayscaler(app, v));
+};
 
 export const visCreator = (graph) => graph.nodes().reduce((acc, v) => {
 	acc[v] = false;
@@ -108,7 +156,7 @@ export const graphologyOptions = {
 };
 
 export const graphologyImportFix = obj => {
-	const type = obj.edges.find(o => o.undirected) ? 'UndirectedGraph' : 'DirectedGraph';
+	const type = obj.edges.find(o => !o.undirected) ? 'DirectedGraph' : 'UndirectedGraph';
 	const graph = new graphology[type](graphologyOptions);
 	graph.import(obj);
 	if (graph.type === 'undirected') {

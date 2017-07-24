@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
+import { ColorList, themeVars, generateColorWheel, optGrayscaler } from 'app/utils';
 import _mapValues from 'lodash.mapvalues';
-import { ColorList, themeVars } from 'app/utils';
 
 const glyphPositionEnum = [
 	'top-left',
@@ -15,7 +15,6 @@ const defGlyph = {
 	draw: false
 };
 
-const grayScale = chroma.scale();
 
 const appearanceStuff = (instance) => {
 	let temp = {
@@ -53,14 +52,6 @@ const appearanceStuff = (instance) => {
 		};
 	};
 
-	const postProcessColors = v => {
-		if (instance.props.app.settings('options')('grayscale-visualizations').get()) {
-			return grayScale(1 - chroma(v).luminance()).hex();
-		}
-
-		return v;
-	};
-
 	const theme = (key) => themeVars(instance.props.theme)(key);
 
 	const mainColorsRaw = {
@@ -71,18 +62,8 @@ const appearanceStuff = (instance) => {
 	const backgroundColor = theme('backgroundColor');
 	const saturatedDefaultColor = chroma(mainColorsRaw.default).saturate(2);
 
-	const colorsDP = {};
-	const sideColorsRaw = (count) => {
-		if (colorsDP[count]) {
-			return colorsDP[count];
-		}
-		return (colorsDP[count] = Array(count).fill(1).map((_, i) =>
-			saturatedDefaultColor.set('hsl.h', `+${(360 / (count + 1)) * (i + 1)}`).hex(),
-		));
-	};
-
-	const mainColors = _mapValues(mainColorsRaw, postProcessColors);
-	const sideColors = (...p) => sideColorsRaw(...p).map(postProcessColors);
+	const mainColors = _mapValues(mainColorsRaw, v => optGrayscaler(instance.props.app, v));
+	const sideColors = generateColorWheel(instance.props.app, saturatedDefaultColor);
 
 	const colorizeThing = (thing, color, type) => {
 		setTemp(type, thing, 'col', color);

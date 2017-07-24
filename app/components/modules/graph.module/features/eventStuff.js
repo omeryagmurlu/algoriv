@@ -1,13 +1,14 @@
 import { getRandomInt, graphologyOptions as gO } from 'app/utils';
 
-const eventStuff = (instance) => {
-	const notify = graph => instance.props.updateGraph(
-		graph.export()
-	);
+const eventStuff = (instance, Clas) => {
+	const notify = graph => {
+		instance.graph = graph;
+		instance.props.updateGraph(graph.export());
+	};
 
 	const commonWork = fn => e => {
 		if (e.data.captor.ctrlKey) {
-			return fn(e, instance.graph);
+			return fn(e, Clas.parseGraph(instance.props));
 		}
 	};
 

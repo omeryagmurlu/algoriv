@@ -8,6 +8,9 @@ import Kruskal from 'app/containers/algorithms/kruskal.container';
 import TopologicalDFS from 'app/containers/algorithms/topological_dfs.container';
 import TopologicalIndegree from 'app/containers/algorithms/topological_indegree.container';
 // import BST from 'app/containers/algorithms/bst.container';
+import TSP_DP from 'app/containers/algorithms/tspdp.container';
+import TSP_GR from 'app/containers/algorithms/tspgr.container';
+import TSP_PRIM from 'app/containers/algorithms/tspprim.container';
 
 export const AlgorithmsMap = {
 	Djikstra: {
@@ -50,6 +53,21 @@ export const AlgorithmsMap = {
 		desc: 'Sort topologically using Indegree Array',
 		view: TopologicalIndegree
 	},
+	TSP_DP: {
+		name: 'Travelling Salesman (DP)',
+		desc: 'Dynamic Programming Approach for TSP',
+		view: TSP_DP
+	},
+	TSP_GR: {
+		name: 'Travelling Salesman (Greedy)',
+		desc: 'Greedy Approach for TSP',
+		view: TSP_GR
+	},
+	TSP_PRIM: {
+		name: 'Travelling Salesman Approximation (MST Prim)',
+		desc: 'Approximate TSP using MST Prim',
+		view: TSP_PRIM
+	},
 	// BST: {
 	// 	name: 'Binary Search Tree',
 	// 	desc: 'Visualise how a Binary Search Tree works',
@@ -86,6 +104,14 @@ export const AlgorithmsList = [
 		title: 'Strongly Connected Components',
 		algorithms: [
 			AlgorithmsMap.SCC,
+		]
+	},
+	{
+		title: 'Travelling Salesman',
+		algorithms: [
+			AlgorithmsMap.TSP_DP,
+			AlgorithmsMap.TSP_GR,
+			AlgorithmsMap.TSP_PRIM,
 		]
 	},
 	// {
