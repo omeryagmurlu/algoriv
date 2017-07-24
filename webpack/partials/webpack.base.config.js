@@ -44,7 +44,7 @@ module.exports = new Config().merge({
 					{
 						loader: 'babel-loader',
 						options: {
-							presets: [['es2015', { modules: false }], 'react'],
+							presets: [['es2015', { modules: false }], 'react', 'es2016', 'es2017'],
 							plugins: ['transform-class-properties', 'transform-object-rest-spread', 'syntax-dynamic-import']
 						}
 					}

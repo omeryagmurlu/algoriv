@@ -54,7 +54,7 @@ module.exports = Object.assign({}, new Config().extend({
 					{
 						loader: 'babel-loader',
 						options: {
-							presets: [['es2015'], 'react'],
+							presets: [['es2015'], 'react', 'es2016', 'es2017'],
 							plugins: ['transform-class-properties', 'transform-object-rest-spread', 'syntax-dynamic-import']
 						}
 					}
