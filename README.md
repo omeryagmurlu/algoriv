@@ -2,6 +2,12 @@
 
 A modular algorithm visualization software.
 
+Try the web app [here](https://omeryagmurlu.gitlab.io/algoriv)!
+
+![Overview](./ow.png)
+
+I developed this project during my second year in high school as part of the Technology Student Association Conference, Software Development Competition in 2016, where it ranked 8th place. You can find the accompanying report [here](https://github.com/omeryagmurlu/algoriv/blob/portfolio/Software-Development.pdf).
+
 ## Installation
 
 * [Linux](https://gitlab.com/omeryagmurlu/algoriv/builds/artifacts/master/browse/release?job=linux-binary)
